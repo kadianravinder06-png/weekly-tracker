@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Weekly Tracker</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        input {
+            padding: 10px;
+            margin: 5px;
+            width: 100px;
+        }
+
+        button {
+            padding: 10px 16px;
+            margin-top: 15px;
+            cursor: pointer;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 22px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="card">
+
+    <h1>Weekly Tracker</h1>
+
+    <p>Enter your goal percentages:</p>
+
+    <p>
+        Finish syllabus:
+        <input id="goal1" type="number" min="0" max="100" value="70">
+    </p>
+
+    <p>
+        Practice questions:
+        <input id="goal2" type="number" min="0" max="100" value="50">
+    </p>
+
+    <p>
+        Read books:
+        <input id="goal3" type="number" min="0" max="100" value="80">
+    </p>
+
+    <button onclick="calculate()">Calculate Average</button>
+
+    <div id="result"></div>
+
+</div>
+
+<script>
+
+function calculate() {
+
+    let goal1 = Number(document.getElementById("goal1").value);
+    let goal2 = Number(document.getElementById("goal2").value);
+    let goal3 = Number(document.getElementById("goal3").value);
+
+    let average = (goal1 + goal2 + goal3) / 3;
+
+    document.getElementById("result").innerText =
+        "Your Average = " + average.toFixed(2) + "%";
+}
+
+</script>
+
+</body>
+</html>
