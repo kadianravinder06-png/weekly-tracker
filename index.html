@@ -22,7 +22,7 @@
         }
 
         .container {
-            max-width: 700px;
+            max-width: 750px;
             margin: auto;
         }
 
@@ -50,10 +50,7 @@
             font-size: 16px;
         }
 
-        #week {
-            width: 100px;
-        }
-
+        #week,
         #rating {
             width: 100px;
         }
@@ -67,6 +64,7 @@
 
         .goal-name {
             flex: 1;
+            min-width: 0;
         }
 
         .goal-percent {
@@ -124,6 +122,22 @@
             font-style: italic;
         }
 
+        #radarContainer {
+            text-align: center;
+            overflow: hidden;
+        }
+
+        #radar {
+            width: 100%;
+            max-width: 550px;
+            height: auto;
+        }
+
+        .chart-label {
+            font-size: 13px;
+            fill: #222;
+        }
+
     </style>
 </head>
 
@@ -154,7 +168,14 @@
 
         <label>
             Weekly rating:
-            <input id="rating" type="number" min="0" max="10" step="0.1" placeholder="/10">
+            <input
+                id="rating"
+                type="number"
+                min="0"
+                max="10"
+                step="0.1"
+                placeholder="/10"
+            >
         </label>
 
     </div>
@@ -195,6 +216,26 @@
 
     </div>
 
+
+    <!-- RADAR CHART -->
+
+    <div class="card">
+
+        <h2>Weekly Shape</h2>
+
+        <div id="radarContainer">
+
+            <svg
+                id="radar"
+                viewBox="0 0 600 600"
+                xmlns="http://www.w3.org/2000/svg"
+            >
+            </svg>
+
+        </div>
+
+    </div>
+
 </div>
 
 
@@ -203,12 +244,16 @@
 let goals = [];
 
 
-// ADD A GOAL
+// ================================
+// ADD GOAL
+// ================================
 
 function addGoal(name = "", percentage = "") {
 
     if (goals.length >= 6) {
+
         alert("You can have a maximum of 6 goals.");
+
         return;
     }
 
@@ -221,23 +266,31 @@ function addGoal(name = "", percentage = "") {
 }
 
 
-// REMOVE A GOAL
+// ================================
+// REMOVE GOAL
+// ================================
 
 function removeGoal(index) {
 
     goals.splice(index, 1);
 
     renderGoals();
+
+    drawRadar();
 }
 
 
+// ================================
 // DISPLAY GOALS
+// ================================
 
 function renderGoals() {
 
-    const container = document.getElementById("goals");
+    const container =
+        document.getElementById("goals");
 
     container.innerHTML = "";
+
 
     if (goals.length === 0) {
 
@@ -250,7 +303,8 @@ function renderGoals() {
 
     goals.forEach((goal, index) => {
 
-        const row = document.createElement("div");
+        const row =
+            document.createElement("div");
 
         row.className = "goal-row";
 
@@ -261,7 +315,7 @@ function renderGoals() {
                 class="goal-name"
                 type="text"
                 placeholder="Goal name"
-                value="${goal.name}"
+                value="${escapeHTML(goal.name)}"
                 oninput="updateGoalName(${index}, this.value)"
             >
 
@@ -290,25 +344,29 @@ function renderGoals() {
 }
 
 
+// ================================
 // UPDATE GOAL NAME
+// ================================
 
 function updateGoalName(index, value) {
 
     goals[index].name = value;
-
 }
 
 
-// UPDATE GOAL PERCENTAGE
+// ================================
+// UPDATE PERCENTAGE
+// ================================
 
 function updateGoalPercentage(index, value) {
 
     goals[index].percentage = value;
-
 }
 
 
+// ================================
 // CALCULATE
+// ================================
 
 function calculate() {
 
@@ -325,29 +383,44 @@ function calculate() {
 
     for (let goal of goals) {
 
-        let percentage = Number(goal.percentage);
+        let percentage =
+            Number(goal.percentage);
+
 
         if (isNaN(percentage)) {
             percentage = 0;
         }
 
+
+        // Keep percentages inside 0–100
+
+        percentage =
+            Math.max(0, Math.min(100, percentage));
+
+
         total += percentage;
     }
 
 
-    let average = total / goals.length;
+    let average =
+        total / goals.length;
 
 
     document.getElementById("result").innerHTML =
-        "Average = " + average.toFixed(2) + "%";
+        "Average = " +
+        average.toFixed(2) +
+        "%";
 
 
     showBelowAverage(average);
 
+    drawRadar();
 }
 
 
-// SHOW BELOW-AVERAGE GOALS
+// ================================
+// BELOW AVERAGE
+// ================================
 
 function showBelowAverage(average) {
 
@@ -355,20 +428,26 @@ function showBelowAverage(average) {
         document.getElementById("belowAverage");
 
 
-    let below = goals.filter(goal => {
-
-        return Number(goal.percentage) < average;
-
-    });
+    let below =
+        goals.filter(goal =>
+            Number(goal.percentage) < average
+        );
 
 
     if (below.length === 0) {
 
         container.innerHTML = `
+
             <div class="below-average">
+
                 <h3>Below Average</h3>
-                <p>No goals are below your Average.</p>
+
+                <p>
+                    No goals are below your Average.
+                </p>
+
             </div>
+
         `;
 
         return;
@@ -376,8 +455,11 @@ function showBelowAverage(average) {
 
 
     let html = `
+
         <div class="below-average">
+
             <h3>Below Average</h3>
+
     `;
 
 
@@ -388,10 +470,17 @@ function showBelowAverage(average) {
 
 
         html += `
+
             <p class="goal-warning">
-                ${goal.name || "Unnamed goal"}
-                — ${difference.toFixed(2)}% below Average
+
+                ${escapeHTML(goal.name || "Unnamed goal")}
+
+                —
+                ${difference.toFixed(2)}%
+                below Average
+
             </p>
+
         `;
 
     }
@@ -401,14 +490,409 @@ function showBelowAverage(average) {
 
 
     container.innerHTML = html;
+}
+
+
+// ================================
+// RADAR CHART
+// ================================
+
+function drawRadar() {
+
+    const svg =
+        document.getElementById("radar");
+
+
+    svg.innerHTML = "";
+
+
+    if (goals.length < 3) {
+
+        svg.innerHTML = `
+
+            <text
+                x="300"
+                y="300"
+                text-anchor="middle"
+                fill="#777"
+                font-size="16"
+            >
+                Add at least 3 goals
+                to see the radar chart.
+            </text>
+
+        `;
+
+        return;
+    }
+
+
+    const centerX = 300;
+    const centerY = 300;
+
+    const maxRadius = 190;
+
+    const count = goals.length;
+
+
+    // Draw grid
+
+    for (let level = 1; level <= 5; level++) {
+
+        const radius =
+            maxRadius * level / 5;
+
+
+        const points = [];
+
+
+        for (let i = 0; i < count; i++) {
+
+            const angle =
+                -Math.PI / 2 +
+                (2 * Math.PI * i / count);
+
+
+            const x =
+                centerX +
+                radius * Math.cos(angle);
+
+
+            const y =
+                centerY +
+                radius * Math.sin(angle);
+
+
+            points.push(`${x},${y}`);
+        }
+
+
+        const polygon =
+            document.createElementNS(
+                "http://www.w3.org/2000/svg",
+                "polygon"
+            );
+
+
+        polygon.setAttribute(
+            "points",
+            points.join(" ")
+        );
+
+
+        polygon.setAttribute(
+            "fill",
+            "none"
+        );
+
+
+        polygon.setAttribute(
+            "stroke",
+            "#ccc"
+        );
+
+
+        polygon.setAttribute(
+            "stroke-width",
+            "1"
+        );
+
+
+        svg.appendChild(polygon);
+    }
+
+
+    // Draw axes
+
+    goals.forEach((goal, i) => {
+
+        const angle =
+            -Math.PI / 2 +
+            (2 * Math.PI * i / count);
+
+
+        const x =
+            centerX +
+            maxRadius * Math.cos(angle);
+
+
+        const y =
+            centerY +
+            maxRadius * Math.sin(angle);
+
+
+        const line =
+            document.createElementNS(
+                "http://www.w3.org/2000/svg",
+                "line"
+            );
+
+
+        line.setAttribute("x1", centerX);
+        line.setAttribute("y1", centerY);
+        line.setAttribute("x2", x);
+        line.setAttribute("y2", y);
+
+        line.setAttribute(
+            "stroke",
+            "#ccc"
+        );
+
+
+        svg.appendChild(line);
+
+
+        // Label
+
+        const label =
+            document.createElementNS(
+                "http://www.w3.org/2000/svg",
+                "text"
+            );
+
+
+        const labelRadius =
+            maxRadius + 35;
+
+
+        const labelX =
+            centerX +
+            labelRadius * Math.cos(angle);
+
+
+        const labelY =
+            centerY +
+            labelRadius * Math.sin(angle);
+
+
+        label.setAttribute(
+            "x",
+            labelX
+        );
+
+
+        label.setAttribute(
+            "y",
+            labelY
+        );
+
+
+        label.setAttribute(
+            "text-anchor",
+            "middle"
+        );
+
+
+        label.setAttribute(
+            "class",
+            "chart-label"
+        );
+
+
+        label.textContent =
+            shorten(
+                goal.name ||
+                "Goal " + (i + 1)
+            );
+
+
+        svg.appendChild(label);
+
+    });
+
+
+    // Draw actual data
+
+    const dataPoints = [];
+
+
+    goals.forEach((goal, i) => {
+
+        let value =
+            Number(goal.percentage);
+
+
+        if (isNaN(value)) {
+            value = 0;
+        }
+
+
+        value =
+            Math.max(
+                0,
+                Math.min(100, value)
+            );
+
+
+        const radius =
+            maxRadius * value / 100;
+
+
+        const angle =
+            -Math.PI / 2 +
+            (2 * Math.PI * i / count);
+
+
+        const x =
+            centerX +
+            radius * Math.cos(angle);
+
+
+        const y =
+            centerY +
+            radius * Math.sin(angle);
+
+
+        dataPoints.push(`${x},${y}`);
+
+    });
+
+
+    const dataPolygon =
+        document.createElementNS(
+            "http://www.w3.org/2000/svg",
+            "polygon"
+        );
+
+
+    dataPolygon.setAttribute(
+        "points",
+        dataPoints.join(" ")
+    );
+
+
+    dataPolygon.setAttribute(
+        "fill",
+        "rgba(0, 100, 255, 0.15)"
+    );
+
+
+    dataPolygon.setAttribute(
+        "stroke",
+        "#0064ff"
+    );
+
+
+    dataPolygon.setAttribute(
+        "stroke-width",
+        "3"
+    );
+
+
+    svg.appendChild(dataPolygon);
+
+
+    // Draw points
+
+    goals.forEach((goal, i) => {
+
+        let value =
+            Number(goal.percentage);
+
+
+        if (isNaN(value)) {
+            value = 0;
+        }
+
+
+        value =
+            Math.max(
+                0,
+                Math.min(100, value)
+            );
+
+
+        const radius =
+            maxRadius * value / 100;
+
+
+        const angle =
+            -Math.PI / 2 +
+            (2 * Math.PI * i / count);
+
+
+        const x =
+            centerX +
+            radius * Math.cos(angle);
+
+
+        const y =
+            centerY +
+            radius * Math.sin(angle);
+
+
+        const circle =
+            document.createElementNS(
+                "http://www.w3.org/2000/svg",
+                "circle"
+            );
+
+
+        circle.setAttribute(
+            "cx",
+            x
+        );
+
+
+        circle.setAttribute(
+            "cy",
+            y
+        );
+
+
+        circle.setAttribute(
+            "r",
+            "5"
+        );
+
+
+        circle.setAttribute(
+            "fill",
+            "#0064ff"
+        );
+
+
+        svg.appendChild(circle);
+
+    });
 
 }
 
 
-// START WITH TWO EXAMPLE GOALS
+// ================================
+// TEXT HELPERS
+// ================================
+
+function shorten(text) {
+
+    if (text.length <= 15) {
+        return text;
+    }
+
+    return text.substring(0, 14) + "...";
+}
+
+
+function escapeHTML(text) {
+
+    return text
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+}
+
+
+// ================================
+// START WITH EXAMPLE GOALS
+// ================================
 
 addGoal("Finish syllabus", 70);
 addGoal("Practice questions", 50);
+addGoal("Read books", 80);
+
+drawRadar();
 
 </script>
 
