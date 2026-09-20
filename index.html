@@ -2,6 +2,7 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -90,9 +91,20 @@
             color: white;
         }
 
+        .save-button {
+            background: #222;
+            color: white;
+        }
+
         .remove-button {
             background: #eee;
             color: #b00020;
+        }
+
+        .history-button {
+            background: #eee;
+            color: #222;
+            margin-right: 5px;
         }
 
         .result {
@@ -117,6 +129,32 @@
             margin: 7px 0;
         }
 
+        .comparison {
+            margin-top: 15px;
+            padding: 15px;
+            background: #f4f4f4;
+            border-radius: 10px;
+        }
+
+        .improved {
+            color: #176b35;
+        }
+
+        .below-improvement {
+            color: #b00020;
+        }
+
+        .history-item {
+            padding: 12px;
+            margin-top: 10px;
+            background: #f4f4f4;
+            border-radius: 10px;
+        }
+
+        .history-item strong {
+            font-size: 17px;
+        }
+
         .empty {
             color: #777;
             font-style: italic;
@@ -139,6 +177,7 @@
         }
 
     </style>
+
 </head>
 
 
@@ -161,7 +200,12 @@
 
         <label>
             Week number:
-            <input id="week" type="number" min="1" value="1">
+            <input
+                id="week"
+                type="number"
+                min="1"
+                value="1"
+            >
         </label>
 
         <br><br>
@@ -189,14 +233,27 @@
 
         <div id="goals"></div>
 
-        <button class="add-button" onclick="addGoal()">
+        <button
+            class="add-button"
+            onclick="addGoal()"
+        >
             + Add Goal
         </button>
 
         <br>
 
-        <button class="calculate-button" onclick="calculate()">
+        <button
+            class="calculate-button"
+            onclick="calculate()"
+        >
             Calculate Week
+        </button>
+
+        <button
+            class="save-button"
+            onclick="saveWeek()"
+        >
+            Save Week
         </button>
 
     </div>
@@ -208,7 +265,10 @@
 
         <h2>Results</h2>
 
-        <div id="result" class="result">
+        <div
+            id="result"
+            class="result"
+        >
             Add your goals and calculate the week.
         </div>
 
@@ -217,7 +277,7 @@
     </div>
 
 
-    <!-- RADAR CHART -->
+    <!-- RADAR -->
 
     <div class="card">
 
@@ -236,39 +296,83 @@
 
     </div>
 
+
+    <!-- COMPARISON -->
+
+    <div class="card">
+
+        <h2>Cross-Week Comparison</h2>
+
+        <div id="comparison">
+
+            <p class="empty">
+                Save at least two weeks to compare them.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- HISTORY -->
+
+    <div class="card">
+
+        <h2>Week History</h2>
+
+        <div id="history"></div>
+
+    </div>
+
 </div>
 
 
 <script>
 
+
+// ==================================================
+// DATA
+// ==================================================
+
 let goals = [];
 
+let weeks = JSON.parse(
+    localStorage.getItem("weeklyTrackerWeeks")
+) || [];
 
-// ================================
+
+// ==================================================
 // ADD GOAL
-// ================================
+// ==================================================
 
 function addGoal(name = "", percentage = "") {
 
     if (goals.length >= 6) {
 
-        alert("You can have a maximum of 6 goals.");
+        alert(
+            "You can have a maximum of 6 goals."
+        );
 
         return;
     }
 
+
     goals.push({
+
         name: name,
+
         percentage: percentage
+
     });
+
 
     renderGoals();
 }
 
 
-// ================================
+// ==================================================
 // REMOVE GOAL
-// ================================
+// ==================================================
 
 function removeGoal(index) {
 
@@ -280,14 +384,15 @@ function removeGoal(index) {
 }
 
 
-// ================================
+// ==================================================
 // DISPLAY GOALS
-// ================================
+// ==================================================
 
 function renderGoals() {
 
     const container =
         document.getElementById("goals");
+
 
     container.innerHTML = "";
 
@@ -306,7 +411,9 @@ function renderGoals() {
         const row =
             document.createElement("div");
 
-        row.className = "goal-row";
+
+        row.className =
+            "goal-row";
 
 
         row.innerHTML = `
@@ -316,7 +423,10 @@ function renderGoals() {
                 type="text"
                 placeholder="Goal name"
                 value="${escapeHTML(goal.name)}"
-                oninput="updateGoalName(${index}, this.value)"
+                oninput="updateGoalName(
+                    ${index},
+                    this.value
+                )"
             >
 
             <input
@@ -326,7 +436,10 @@ function renderGoals() {
                 max="100"
                 placeholder="%"
                 value="${goal.percentage}"
-                oninput="updateGoalPercentage(${index}, this.value)"
+                oninput="updateGoalPercentage(
+                    ${index},
+                    this.value
+                )"
             >
 
             <button
@@ -338,41 +451,72 @@ function renderGoals() {
 
         `;
 
+
         container.appendChild(row);
 
     });
+
 }
 
 
-// ================================
+// ==================================================
 // UPDATE GOAL NAME
-// ================================
+// ==================================================
 
 function updateGoalName(index, value) {
 
     goals[index].name = value;
+
 }
 
 
-// ================================
-// UPDATE PERCENTAGE
-// ================================
+// ==================================================
+// UPDATE GOAL PERCENTAGE
+// ==================================================
 
 function updateGoalPercentage(index, value) {
 
     goals[index].percentage = value;
+
 }
 
 
-// ================================
+// ==================================================
+// GET CLEAN PERCENTAGE
+// ==================================================
+
+function getPercentage(goal) {
+
+    let value =
+        Number(goal.percentage);
+
+
+    if (isNaN(value)) {
+
+        value = 0;
+
+    }
+
+
+    return Math.max(
+        0,
+        Math.min(100, value)
+    );
+
+}
+
+
+// ==================================================
 // CALCULATE
-// ================================
+// ==================================================
 
 function calculate() {
 
     if (goals.length === 0) {
 
-        alert("Add at least one goal first.");
+        alert(
+            "Add at least one goal first."
+        );
 
         return;
     }
@@ -383,30 +527,20 @@ function calculate() {
 
     for (let goal of goals) {
 
-        let percentage =
-            Number(goal.percentage);
+        total +=
+            getPercentage(goal);
 
-
-        if (isNaN(percentage)) {
-            percentage = 0;
-        }
-
-
-        // Keep percentages inside 0–100
-
-        percentage =
-            Math.max(0, Math.min(100, percentage));
-
-
-        total += percentage;
     }
 
 
-    let average =
+    const average =
         total / goals.length;
 
 
-    document.getElementById("result").innerHTML =
+    document.getElementById(
+        "result"
+    ).innerHTML =
+
         "Average = " +
         average.toFixed(2) +
         "%";
@@ -415,23 +549,31 @@ function calculate() {
     showBelowAverage(average);
 
     drawRadar();
+
 }
 
 
-// ================================
+// ==================================================
 // BELOW AVERAGE
-// ================================
+// ==================================================
 
 function showBelowAverage(average) {
 
     const container =
-        document.getElementById("belowAverage");
-
-
-    let below =
-        goals.filter(goal =>
-            Number(goal.percentage) < average
+        document.getElementById(
+            "belowAverage"
         );
+
+
+    const below =
+        goals.filter(goal => {
+
+            return (
+                getPercentage(goal)
+                < average
+            );
+
+        });
 
 
     if (below.length === 0) {
@@ -443,7 +585,8 @@ function showBelowAverage(average) {
                 <h3>Below Average</h3>
 
                 <p>
-                    No goals are below your Average.
+                    No goals are below
+                    your Average.
                 </p>
 
             </div>
@@ -465,15 +608,19 @@ function showBelowAverage(average) {
 
     for (let goal of below) {
 
-        let difference =
-            average - Number(goal.percentage);
+        const difference =
+            average -
+            getPercentage(goal);
 
 
         html += `
 
             <p class="goal-warning">
 
-                ${escapeHTML(goal.name || "Unnamed goal")}
+                ${escapeHTML(
+                    goal.name ||
+                    "Unnamed goal"
+                )}
 
                 —
                 ${difference.toFixed(2)}%
@@ -489,18 +636,167 @@ function showBelowAverage(average) {
     html += "</div>";
 
 
-    container.innerHTML = html;
+    container.innerHTML =
+        html;
+
 }
 
 
-// ================================
+// ==================================================
+// SAVE WEEK
+// ==================================================
+
+function saveWeek() {
+
+    if (goals.length === 0) {
+
+        alert(
+            "Add at least one goal first."
+        );
+
+        return;
+    }
+
+
+    const weekNumber =
+        Number(
+            document.getElementById(
+                "week"
+            ).value
+        );
+
+
+    const rating =
+        Number(
+            document.getElementById(
+                "rating"
+            ).value
+        );
+
+
+    if (!weekNumber) {
+
+        alert(
+            "Enter a week number."
+        );
+
+        return;
+    }
+
+
+    const average =
+        goals.reduce(
+            (sum, goal) =>
+                sum + getPercentage(goal),
+            0
+        ) / goals.length;
+
+
+    const weekData = {
+
+        week: weekNumber,
+
+        rating:
+            isNaN(rating)
+            ? null
+            : rating,
+
+        average: average,
+
+        goals: goals.map(goal => ({
+
+            name: goal.name,
+
+            percentage:
+                getPercentage(goal)
+
+        }))
+
+    };
+
+
+    // Replace existing week
+    // if the same week number exists
+
+    const existingIndex =
+        weeks.findIndex(
+            savedWeek =>
+                savedWeek.week ===
+                weekNumber
+        );
+
+
+    if (existingIndex !== -1) {
+
+        const confirmReplace =
+            confirm(
+                "Week " +
+                weekNumber +
+                " already exists. Replace it?"
+            );
+
+
+        if (!confirmReplace) {
+
+            return;
+
+        }
+
+
+        weeks[existingIndex] =
+            weekData;
+
+    }
+
+    else {
+
+        weeks.push(
+            weekData
+        );
+
+    }
+
+
+    // Sort chronologically
+
+    weeks.sort(
+        (a, b) =>
+            a.week - b.week
+    );
+
+
+    // Save to browser
+
+    localStorage.setItem(
+        "weeklyTrackerWeeks",
+        JSON.stringify(weeks)
+    );
+
+
+    renderHistory();
+
+    updateComparison();
+
+
+    alert(
+        "Week " +
+        weekNumber +
+        " saved."
+    );
+
+}
+
+
+// ==================================================
 // RADAR CHART
-// ================================
+// ==================================================
 
 function drawRadar() {
 
     const svg =
-        document.getElementById("radar");
+        document.getElementById(
+            "radar"
+        );
 
 
     svg.innerHTML = "";
@@ -528,42 +824,63 @@ function drawRadar() {
 
 
     const centerX = 300;
+
     const centerY = 300;
 
     const maxRadius = 190;
 
-    const count = goals.length;
+    const count =
+        goals.length;
 
 
-    // Draw grid
+    // GRID
 
-    for (let level = 1; level <= 5; level++) {
+    for (
+        let level = 1;
+        level <= 5;
+        level++
+    ) {
 
         const radius =
-            maxRadius * level / 5;
+            maxRadius *
+            level / 5;
 
 
         const points = [];
 
 
-        for (let i = 0; i < count; i++) {
+        for (
+            let i = 0;
+            i < count;
+            i++
+        ) {
 
             const angle =
                 -Math.PI / 2 +
-                (2 * Math.PI * i / count);
+                (
+                    2 *
+                    Math.PI *
+                    i /
+                    count
+                );
 
 
             const x =
                 centerX +
-                radius * Math.cos(angle);
+                radius *
+                Math.cos(angle);
 
 
             const y =
                 centerY +
-                radius * Math.sin(angle);
+                radius *
+                Math.sin(angle);
 
 
-            points.push(`${x},${y}`);
+            points.push(
+                `${x},${y}`
+            );
+
         }
 
 
@@ -592,305 +909,756 @@ function drawRadar() {
         );
 
 
-        polygon.setAttribute(
-            "stroke-width",
-            "1"
+        svg.appendChild(
+            polygon
         );
 
-
-        svg.appendChild(polygon);
     }
 
 
-    // Draw axes
+    // AXES + LABELS
 
-    goals.forEach((goal, i) => {
+    goals.forEach(
+        (goal, i) => {
 
-        const angle =
-            -Math.PI / 2 +
-            (2 * Math.PI * i / count);
-
-
-        const x =
-            centerX +
-            maxRadius * Math.cos(angle);
-
-
-        const y =
-            centerY +
-            maxRadius * Math.sin(angle);
+            const angle =
+                -Math.PI / 2 +
+                (
+                    2 *
+                    Math.PI *
+                    i /
+                    count
+                );
 
 
-        const line =
-            document.createElementNS(
-                "http://www.w3.org/2000/svg",
-                "line"
+            const x =
+                centerX +
+                maxRadius *
+                Math.cos(angle);
+
+
+            const y =
+                centerY +
+                maxRadius *
+                Math.sin(angle);
+
+
+            const line =
+                document.createElementNS(
+                    "http://www.w3.org/2000/svg",
+                    "line"
+                );
+
+
+            line.setAttribute(
+                "x1",
+                centerX
             );
 
 
-        line.setAttribute("x1", centerX);
-        line.setAttribute("y1", centerY);
-        line.setAttribute("x2", x);
-        line.setAttribute("y2", y);
-
-        line.setAttribute(
-            "stroke",
-            "#ccc"
-        );
-
-
-        svg.appendChild(line);
-
-
-        // Label
-
-        const label =
-            document.createElementNS(
-                "http://www.w3.org/2000/svg",
-                "text"
+            line.setAttribute(
+                "y1",
+                centerY
             );
 
 
-        const labelRadius =
-            maxRadius + 35;
-
-
-        const labelX =
-            centerX +
-            labelRadius * Math.cos(angle);
-
-
-        const labelY =
-            centerY +
-            labelRadius * Math.sin(angle);
-
-
-        label.setAttribute(
-            "x",
-            labelX
-        );
-
-
-        label.setAttribute(
-            "y",
-            labelY
-        );
-
-
-        label.setAttribute(
-            "text-anchor",
-            "middle"
-        );
-
-
-        label.setAttribute(
-            "class",
-            "chart-label"
-        );
-
-
-        label.textContent =
-            shorten(
-                goal.name ||
-                "Goal " + (i + 1)
+            line.setAttribute(
+                "x2",
+                x
             );
 
 
-        svg.appendChild(label);
+            line.setAttribute(
+                "y2",
+                y
+            );
 
-    });
+
+            line.setAttribute(
+                "stroke",
+                "#ccc"
+            );
 
 
-    // Draw actual data
+            svg.appendChild(
+                line
+            );
+
+
+            const label =
+                document.createElementNS(
+                    "http://www.w3.org/2000/svg",
+                    "text"
+                );
+
+
+            const labelRadius =
+                maxRadius + 35;
+
+
+            const labelX =
+                centerX +
+                labelRadius *
+                Math.cos(angle);
+
+
+            const labelY =
+                centerY +
+                labelRadius *
+                Math.sin(angle);
+
+
+            label.setAttribute(
+                "x",
+                labelX
+            );
+
+
+            label.setAttribute(
+                "y",
+                labelY
+            );
+
+
+            label.setAttribute(
+                "text-anchor",
+                "middle"
+            );
+
+
+            label.setAttribute(
+                "class",
+                "chart-label"
+            );
+
+
+            label.textContent =
+                shorten(
+                    goal.name ||
+                    "Goal " +
+                    (i + 1)
+                );
+
+
+            svg.appendChild(
+                label
+            );
+
+        }
+    );
+
+
+    // DATA POLYGON
 
     const dataPoints = [];
 
 
-    goals.forEach((goal, i) => {
+    goals.forEach(
+        (goal, i) => {
 
-        let value =
-            Number(goal.percentage);
-
-
-        if (isNaN(value)) {
-            value = 0;
-        }
+            const value =
+                getPercentage(
+                    goal
+                );
 
 
-        value =
-            Math.max(
-                0,
-                Math.min(100, value)
+            const radius =
+                maxRadius *
+                value /
+                100;
+
+
+            const angle =
+                -Math.PI / 2 +
+                (
+                    2 *
+                    Math.PI *
+                    i /
+                    count
+                );
+
+
+            const x =
+                centerX +
+                radius *
+                Math.cos(angle);
+
+
+            const y =
+                centerY +
+                radius *
+                Math.sin(angle);
+
+
+            dataPoints.push(
+                `${x},${y}`
             );
 
-
-        const radius =
-            maxRadius * value / 100;
-
-
-        const angle =
-            -Math.PI / 2 +
-            (2 * Math.PI * i / count);
+        }
+    );
 
 
-        const x =
-            centerX +
-            radius * Math.cos(angle);
-
-
-        const y =
-            centerY +
-            radius * Math.sin(angle);
-
-
-        dataPoints.push(`${x},${y}`);
-
-    });
-
-
-    const dataPolygon =
+    const polygon =
         document.createElementNS(
             "http://www.w3.org/2000/svg",
             "polygon"
         );
 
 
-    dataPolygon.setAttribute(
+    polygon.setAttribute(
         "points",
         dataPoints.join(" ")
     );
 
 
-    dataPolygon.setAttribute(
+    polygon.setAttribute(
         "fill",
-        "rgba(0, 100, 255, 0.15)"
+        "rgba(0,100,255,0.15)"
     );
 
 
-    dataPolygon.setAttribute(
+    polygon.setAttribute(
         "stroke",
         "#0064ff"
     );
 
 
-    dataPolygon.setAttribute(
+    polygon.setAttribute(
         "stroke-width",
         "3"
     );
 
 
-    svg.appendChild(dataPolygon);
+    svg.appendChild(
+        polygon
+    );
 
 
-    // Draw points
+    // DATA POINTS
 
-    goals.forEach((goal, i) => {
+    goals.forEach(
+        (goal, i) => {
 
-        let value =
-            Number(goal.percentage);
+            const value =
+                getPercentage(
+                    goal
+                );
 
 
-        if (isNaN(value)) {
-            value = 0;
+            const radius =
+                maxRadius *
+                value /
+                100;
+
+
+            const angle =
+                -Math.PI / 2 +
+                (
+                    2 *
+                    Math.PI *
+                    i /
+                    count
+                );
+
+
+            const x =
+                centerX +
+                radius *
+                Math.cos(angle);
+
+
+            const y =
+                centerY +
+                radius *
+                Math.sin(angle);
+
+
+            const circle =
+                document.createElementNS(
+                    "http://www.w3.org/2000/svg",
+                    "circle"
+                );
+
+
+            circle.setAttribute(
+                "cx",
+                x
+            );
+
+
+            circle.setAttribute(
+                "cy",
+                y
+            );
+
+
+            circle.setAttribute(
+                "r",
+                "5"
+            );
+
+
+            circle.setAttribute(
+                "fill",
+                "#0064ff"
+            );
+
+
+            svg.appendChild(
+                circle
+            );
+
         }
-
-
-        value =
-            Math.max(
-                0,
-                Math.min(100, value)
-            );
-
-
-        const radius =
-            maxRadius * value / 100;
-
-
-        const angle =
-            -Math.PI / 2 +
-            (2 * Math.PI * i / count);
-
-
-        const x =
-            centerX +
-            radius * Math.cos(angle);
-
-
-        const y =
-            centerY +
-            radius * Math.sin(angle);
-
-
-        const circle =
-            document.createElementNS(
-                "http://www.w3.org/2000/svg",
-                "circle"
-            );
-
-
-        circle.setAttribute(
-            "cx",
-            x
-        );
-
-
-        circle.setAttribute(
-            "cy",
-            y
-        );
-
-
-        circle.setAttribute(
-            "r",
-            "5"
-        );
-
-
-        circle.setAttribute(
-            "fill",
-            "#0064ff"
-        );
-
-
-        svg.appendChild(circle);
-
-    });
+    );
 
 }
 
 
-// ================================
-// TEXT HELPERS
-// ================================
+// ==================================================
+// CROSS-WEEK COMPARISON
+// ==================================================
+
+function updateComparison() {
+
+    const container =
+        document.getElementById(
+            "comparison"
+        );
+
+
+    if (weeks.length < 2) {
+
+        container.innerHTML = `
+
+            <p class="empty">
+                Save at least two weeks
+                to compare them.
+            </p>
+
+        `;
+
+        return;
+    }
+
+
+    const current =
+        weeks[weeks.length - 1];
+
+
+    const previous =
+        weeks[weeks.length - 2];
+
+
+    const improveAverage =
+        current.average -
+        previous.average;
+
+
+    let html = `
+
+        <div class="comparison">
+
+            <p>
+                Comparing
+                <strong>
+                    Week ${current.week}
+                </strong>
+                with
+                <strong>
+                    Week ${previous.week}
+                </strong>
+            </p>
+
+            <p>
+                Previous Average:
+                ${previous.average.toFixed(2)}%
+            </p>
+
+            <p>
+                Current Average:
+                ${current.average.toFixed(2)}%
+            </p>
+
+            <p>
+                <strong>
+                    Improve Average:
+                    ${improveAverage >= 0 ? "+" : ""}
+                    ${improveAverage.toFixed(2)}%
+                </strong>
+            </p>
+
+            <hr>
+
+            <h3>
+                Goal-by-Goal Improvement
+            </h3>
+
+    `;
+
+
+    current.goals.forEach(
+        currentGoal => {
+
+            const previousGoal =
+                previous.goals.find(
+                    goal =>
+                        goal.name ===
+                        currentGoal.name
+                );
+
+
+            if (!previousGoal) {
+
+                html += `
+
+                    <p>
+                        <strong>
+                            ${escapeHTML(
+                                currentGoal.name ||
+                                "Unnamed goal"
+                            )}
+                        </strong>
+                        — No matching goal
+                        in previous week.
+                    </p>
+
+                `;
+
+                return;
+            }
+
+
+            const improvement =
+                currentGoal.percentage -
+                previousGoal.percentage;
+
+
+            const belowAverage =
+                improvement <
+                improveAverage;
+
+
+            const className =
+                belowAverage
+                ? "below-improvement"
+                : "improved";
+
+
+            html += `
+
+                <p class="${className}">
+
+                    <strong>
+                        ${escapeHTML(
+                            currentGoal.name ||
+                            "Unnamed goal"
+                        )}
+                    </strong>
+
+                    :
+                    ${improvement >= 0 ? "+" : ""}
+                    ${improvement.toFixed(2)}%
+
+                    ${
+                        belowAverage
+                        ? " — below Improve Average"
+                        : ""
+                    }
+
+                </p>
+
+            `;
+
+        }
+    );
+
+
+    html += `
+
+        </div>
+
+    `;
+
+
+    container.innerHTML =
+        html;
+
+}
+
+
+// ==================================================
+// HISTORY
+// ==================================================
+
+function renderHistory() {
+
+    const container =
+        document.getElementById(
+            "history"
+        );
+
+
+    container.innerHTML = "";
+
+
+    if (weeks.length === 0) {
+
+        container.innerHTML = `
+
+            <p class="empty">
+                No saved weeks yet.
+            </p>
+
+        `;
+
+        return;
+    }
+
+
+    // Newest first
+
+    const reversed =
+        [...weeks].reverse();
+
+
+    reversed.forEach(
+        savedWeek => {
+
+            const div =
+                document.createElement(
+                    "div"
+                );
+
+
+            div.className =
+                "history-item";
+
+
+            const ratingText =
+                savedWeek.rating === null
+                ? "Not rated"
+                : savedWeek.rating +
+                  "/10";
+
+
+            div.innerHTML = `
+
+                <strong>
+                    Week ${savedWeek.week}
+                </strong>
+
+                <br>
+
+                Average:
+                ${savedWeek.average.toFixed(2)}%
+
+                <br>
+
+                Rating:
+                ${ratingText}
+
+                <br>
+
+                <button
+                    class="history-button"
+                    onclick="loadWeek(
+                        ${savedWeek.week}
+                    )"
+                >
+                    Load
+                </button>
+
+                <button
+                    class="remove-button"
+                    onclick="deleteWeek(
+                        ${savedWeek.week}
+                    )"
+                >
+                    Delete
+                </button>
+
+            `;
+
+
+            container.appendChild(
+                div
+            );
+
+        }
+    );
+
+}
+
+
+// ==================================================
+// LOAD OLD WEEK
+// ==================================================
+
+function loadWeek(weekNumber) {
+
+    const savedWeek =
+        weeks.find(
+            week =>
+                week.week ===
+                weekNumber
+        );
+
+
+    if (!savedWeek) {
+
+        return;
+
+    }
+
+
+    document.getElementById(
+        "week"
+    ).value =
+        savedWeek.week;
+
+
+    document.getElementById(
+        "rating"
+    ).value =
+        savedWeek.rating === null
+        ? ""
+        : savedWeek.rating;
+
+
+    goals =
+        savedWeek.goals.map(
+            goal => ({
+
+                name:
+                    goal.name,
+
+                percentage:
+                    goal.percentage
+
+            })
+        );
+
+
+    renderGoals();
+
+    calculate();
+
+}
+
+
+// ==================================================
+// DELETE WEEK
+// ==================================================
+
+function deleteWeek(weekNumber) {
+
+    const confirmed =
+        confirm(
+            "Delete Week " +
+            weekNumber +
+            "?"
+        );
+
+
+    if (!confirmed) {
+
+        return;
+
+    }
+
+
+    weeks =
+        weeks.filter(
+            week =>
+                week.week !==
+                weekNumber
+        );
+
+
+    localStorage.setItem(
+        "weeklyTrackerWeeks",
+        JSON.stringify(weeks)
+    );
+
+
+    renderHistory();
+
+    updateComparison();
+
+}
+
+
+// ==================================================
+// HELPERS
+// ==================================================
 
 function shorten(text) {
 
     if (text.length <= 15) {
+
         return text;
+
     }
 
-    return text.substring(0, 14) + "...";
+
+    return (
+        text.substring(0, 14) +
+        "..."
+    );
+
 }
 
 
 function escapeHTML(text) {
 
     return text
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
+        .replaceAll(
+            "&",
+            "&amp;"
+        )
+        .replaceAll(
+            "<",
+            "&lt;"
+        )
+        .replaceAll(
+            ">",
+            "&gt;"
+        )
+        .replaceAll(
+            '"',
+            "&quot;"
+        )
+        .replaceAll(
+            "'",
+            "&#039;"
+        );
+
 }
 
 
-// ================================
-// START WITH EXAMPLE GOALS
-// ================================
+// ==================================================
+// STARTUP
+// ==================================================
 
-addGoal("Finish syllabus", 70);
-addGoal("Practice questions", 50);
-addGoal("Read books", 80);
+addGoal(
+    "Finish syllabus",
+    70
+);
+
+addGoal(
+    "Practice questions",
+    50
+);
+
+addGoal(
+    "Read books",
+    80
+);
+
+
+renderHistory();
+
+updateComparison();
 
 drawRadar();
 
