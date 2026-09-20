@@ -3,180 +3,192 @@
 
 <head>
 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Weekly Tracker</title>
+<title>Weekly Tracker</title>
 
-    <style>
+<style>
 
-        * {
-            box-sizing: border-box;
-        }
+* {
+    box-sizing: border-box;
+}
 
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background: #f4f5f7;
-            color: #222;
-        }
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background: #f4f5f7;
+    color: #222;
+}
 
-        .container {
-            max-width: 750px;
-            margin: auto;
-        }
+.container {
+    max-width: 750px;
+    margin: auto;
+}
 
-        h1 {
-            margin-bottom: 5px;
-        }
+h1 {
+    margin-bottom: 5px;
+}
 
-        .subtitle {
-            color: #666;
-            margin-top: 0;
-        }
+.subtitle {
+    color: #666;
+    margin-top: 0;
+}
 
-        .card {
-            background: white;
-            padding: 20px;
-            margin-top: 20px;
-            border-radius: 15px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-        }
+.card {
+    background: white;
+    padding: 20px;
+    margin-top: 20px;
+    border-radius: 15px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+}
 
-        input {
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            font-size: 16px;
-        }
+input {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 16px;
+}
 
-        #week,
-        #rating {
-            width: 100px;
-        }
+#week,
+#totalWeeks,
+#rating {
+    width: 100px;
+}
 
-        .goal-row {
-            display: flex;
-            gap: 8px;
-            margin: 10px 0;
-            align-items: center;
-        }
+.goal-row {
+    display: flex;
+    gap: 8px;
+    margin: 10px 0;
+    align-items: center;
+}
 
-        .goal-name {
-            flex: 1;
-            min-width: 0;
-        }
+.goal-name {
+    flex: 1;
+    min-width: 0;
+}
 
-        .goal-percent {
-            width: 90px;
-        }
+.goal-percent {
+    width: 90px;
+}
 
-        button {
-            border: none;
-            padding: 10px 15px;
-            border-radius: 8px;
-            font-size: 15px;
-            cursor: pointer;
-            margin-top: 10px;
-        }
+button {
+    border: none;
+    padding: 10px 15px;
+    border-radius: 8px;
+    font-size: 15px;
+    cursor: pointer;
+    margin-top: 10px;
+}
 
-        .add-button {
-            background: #222;
-            color: white;
-        }
+.add-button {
+    background: #222;
+    color: white;
+}
 
-        .calculate-button {
-            background: #333;
-            color: white;
-        }
+.calculate-button {
+    background: #333;
+    color: white;
+}
 
-        .save-button {
-            background: #222;
-            color: white;
-        }
+.save-button {
+    background: #222;
+    color: white;
+}
 
-        .remove-button {
-            background: #eee;
-            color: #b00020;
-        }
+.remove-button {
+    background: #eee;
+    color: #b00020;
+}
 
-        .history-button {
-            background: #eee;
-            color: #222;
-            margin-right: 5px;
-        }
+.history-button {
+    background: #eee;
+    color: #222;
+    margin-right: 5px;
+}
 
-        .result {
-            margin-top: 20px;
-            font-size: 20px;
-            font-weight: bold;
-        }
+.result {
+    margin-top: 20px;
+    font-size: 20px;
+    font-weight: bold;
+}
 
-        .below-average {
-            margin-top: 15px;
-            padding: 15px;
-            background: #fff0f0;
-            border-radius: 10px;
-        }
+.metric {
+    padding: 15px;
+    margin-top: 12px;
+    background: #f4f4f4;
+    border-radius: 10px;
+}
 
-        .below-average h3 {
-            margin-top: 0;
-        }
+.metric strong {
+    font-size: 19px;
+}
 
-        .goal-warning {
-            color: #b00020;
-            margin: 7px 0;
-        }
+.below-average {
+    margin-top: 15px;
+    padding: 15px;
+    background: #fff0f0;
+    border-radius: 10px;
+}
 
-        .comparison {
-            margin-top: 15px;
-            padding: 15px;
-            background: #f4f4f4;
-            border-radius: 10px;
-        }
+.below-average h3 {
+    margin-top: 0;
+}
 
-        .improved {
-            color: #176b35;
-        }
+.goal-warning {
+    color: #b00020;
+    margin: 7px 0;
+}
 
-        .below-improvement {
-            color: #b00020;
-        }
+.comparison {
+    margin-top: 15px;
+    padding: 15px;
+    background: #f4f4f4;
+    border-radius: 10px;
+}
 
-        .history-item {
-            padding: 12px;
-            margin-top: 10px;
-            background: #f4f4f4;
-            border-radius: 10px;
-        }
+.improved {
+    color: #176b35;
+}
 
-        .history-item strong {
-            font-size: 17px;
-        }
+.below-improvement {
+    color: #b00020;
+}
 
-        .empty {
-            color: #777;
-            font-style: italic;
-        }
+.history-item {
+    padding: 12px;
+    margin-top: 10px;
+    background: #f4f4f4;
+    border-radius: 10px;
+}
 
-        #radarContainer {
-            text-align: center;
-            overflow: hidden;
-        }
+.history-item strong {
+    font-size: 17px;
+}
 
-        #radar {
-            width: 100%;
-            max-width: 550px;
-            height: auto;
-        }
+.empty {
+    color: #777;
+    font-style: italic;
+}
 
-        .chart-label {
-            font-size: 13px;
-            fill: #222;
-        }
+#radarContainer {
+    text-align: center;
+    overflow: hidden;
+}
 
-    </style>
+#radar {
+    width: 100%;
+    max-width: 550px;
+    height: auto;
+}
+
+.chart-label {
+    font-size: 13px;
+    fill: #222;
+}
+
+</style>
 
 </head>
 
@@ -185,144 +197,178 @@
 
 <div class="container">
 
-    <h1>Weekly Tracker</h1>
+<h1>Weekly Tracker</h1>
 
-    <p class="subtitle">
-        Give your week a shape.
-    </p>
-
-
-    <!-- WEEK INFORMATION -->
-
-    <div class="card">
-
-        <h2>Week</h2>
-
-        <label>
-            Week number:
-            <input
-                id="week"
-                type="number"
-                min="1"
-                value="1"
-            >
-        </label>
-
-        <br><br>
-
-        <label>
-            Weekly rating:
-            <input
-                id="rating"
-                type="number"
-                min="0"
-                max="10"
-                step="0.1"
-                placeholder="/10"
-            >
-        </label>
-
-    </div>
+<p class="subtitle">
+Give your week a shape.
+</p>
 
 
-    <!-- GOALS -->
+<!-- PERIOD -->
 
-    <div class="card">
+<div class="card">
 
-        <h2>Goals</h2>
+<h2>Tracking Period</h2>
 
-        <div id="goals"></div>
+<label>
 
-        <button
-            class="add-button"
-            onclick="addGoal()"
-        >
-            + Add Goal
-        </button>
+Total weeks:
 
-        <br>
+<input
+    id="totalWeeks"
+    type="number"
+    min="1"
+    value="5"
+>
 
-        <button
-            class="calculate-button"
-            onclick="calculate()"
-        >
-            Calculate Week
-        </button>
+</label>
 
-        <button
-            class="save-button"
-            onclick="saveWeek()"
-        >
-            Save Week
-        </button>
+<p class="empty">
+Choose this once for the entire tracking period.
+</p>
 
-    </div>
+</div>
 
 
-    <!-- RESULTS -->
+<!-- WEEK -->
 
-    <div class="card">
+<div class="card">
 
-        <h2>Results</h2>
+<h2>Current Week</h2>
 
-        <div
-            id="result"
-            class="result"
-        >
-            Add your goals and calculate the week.
-        </div>
+<label>
 
-        <div id="belowAverage"></div>
+Week number:
 
-    </div>
+<input
+    id="week"
+    type="number"
+    min="1"
+    value="1"
+>
 
+</label>
 
-    <!-- RADAR -->
+<br><br>
 
-    <div class="card">
+<label>
 
-        <h2>Weekly Shape</h2>
+Weekly rating:
 
-        <div id="radarContainer">
+<input
+    id="rating"
+    type="number"
+    min="0"
+    max="10"
+    step="0.1"
+    placeholder="/10"
+>
 
-            <svg
-                id="radar"
-                viewBox="0 0 600 600"
-                xmlns="http://www.w3.org/2000/svg"
-            >
-            </svg>
+</label>
 
-        </div>
-
-    </div>
-
-
-    <!-- COMPARISON -->
-
-    <div class="card">
-
-        <h2>Cross-Week Comparison</h2>
-
-        <div id="comparison">
-
-            <p class="empty">
-                Save at least two weeks to compare them.
-            </p>
-
-        </div>
-
-    </div>
+</div>
 
 
-    <!-- HISTORY -->
+<!-- GOALS -->
 
-    <div class="card">
+<div class="card">
 
-        <h2>Week History</h2>
+<h2>Goals</h2>
 
-        <div id="history"></div>
+<div id="goals"></div>
 
-    </div>
+<button
+    class="add-button"
+    onclick="addGoal()"
+>
++ Add Goal
+</button>
+
+<br>
+
+<button
+    class="calculate-button"
+    onclick="calculate()"
+>
+Calculate Week
+</button>
+
+<button
+    class="save-button"
+    onclick="saveWeek()"
+>
+Save Week
+</button>
+
+</div>
+
+
+<!-- RESULTS -->
+
+<div class="card">
+
+<h2>Results</h2>
+
+<div
+    id="result"
+    class="result"
+>
+Add your goals and calculate the week.
+</div>
+
+<div id="belowAverage"></div>
+
+<div id="forecast"></div>
+
+</div>
+
+
+<!-- RADAR -->
+
+<div class="card">
+
+<h2>Weekly Shape</h2>
+
+<div id="radarContainer">
+
+<svg
+    id="radar"
+    viewBox="0 0 600 600"
+    xmlns="http://www.w3.org/2000/svg"
+>
+</svg>
+
+</div>
+
+</div>
+
+
+<!-- COMPARISON -->
+
+<div class="card">
+
+<h2>Cross-Week Comparison</h2>
+
+<div id="comparison">
+
+<p class="empty">
+Save at least two weeks to compare them.
+</p>
+
+</div>
+
+</div>
+
+
+<!-- HISTORY -->
+
+<div class="card">
+
+<h2>Week History</h2>
+
+<div id="history"></div>
+
+</div>
 
 </div>
 
@@ -336,16 +382,69 @@
 
 let goals = [];
 
-let weeks = JSON.parse(
-    localStorage.getItem("weeklyTrackerWeeks")
-) || [];
+let weeks =
+    JSON.parse(
+        localStorage.getItem(
+            "weeklyTrackerWeeks"
+        )
+    ) || [];
+
+
+// ==================================================
+// TRACKING PERIOD
+// ==================================================
+
+let totalWeeks =
+    Number(
+        localStorage.getItem(
+            "weeklyTrackerTotalWeeks"
+        )
+    ) || 5;
+
+
+document.getElementById(
+    "totalWeeks"
+).value = totalWeeks;
+
+
+// Save total weeks whenever changed
+
+document.getElementById(
+    "totalWeeks"
+).addEventListener(
+    "change",
+    function() {
+
+        let value =
+            Number(this.value);
+
+        if (value < 1) {
+            value = 1;
+        }
+
+        totalWeeks = value;
+
+        this.value = value;
+
+        localStorage.setItem(
+            "weeklyTrackerTotalWeeks",
+            totalWeeks
+        );
+
+        calculate();
+
+    }
+);
 
 
 // ==================================================
 // ADD GOAL
 // ==================================================
 
-function addGoal(name = "", percentage = "") {
+function addGoal(
+    name = "",
+    percentage = ""
+) {
 
     if (goals.length >= 6) {
 
@@ -356,7 +455,6 @@ function addGoal(name = "", percentage = "") {
         return;
     }
 
-
     goals.push({
 
         name: name,
@@ -365,8 +463,8 @@ function addGoal(name = "", percentage = "") {
 
     });
 
-
     renderGoals();
+
 }
 
 
@@ -381,6 +479,7 @@ function removeGoal(index) {
     renderGoals();
 
     drawRadar();
+
 }
 
 
@@ -391,8 +490,9 @@ function removeGoal(index) {
 function renderGoals() {
 
     const container =
-        document.getElementById("goals");
-
+        document.getElementById(
+            "goals"
+        );
 
     container.innerHTML = "";
 
@@ -406,55 +506,63 @@ function renderGoals() {
     }
 
 
-    goals.forEach((goal, index) => {
+    goals.forEach(
+        (goal, index) => {
 
-        const row =
-            document.createElement("div");
-
-
-        row.className =
-            "goal-row";
-
-
-        row.innerHTML = `
-
-            <input
-                class="goal-name"
-                type="text"
-                placeholder="Goal name"
-                value="${escapeHTML(goal.name)}"
-                oninput="updateGoalName(
-                    ${index},
-                    this.value
-                )"
-            >
-
-            <input
-                class="goal-percent"
-                type="number"
-                min="0"
-                max="100"
-                placeholder="%"
-                value="${goal.percentage}"
-                oninput="updateGoalPercentage(
-                    ${index},
-                    this.value
-                )"
-            >
-
-            <button
-                class="remove-button"
-                onclick="removeGoal(${index})"
-            >
-                Remove
-            </button>
-
-        `;
+            const row =
+                document.createElement(
+                    "div"
+                );
 
 
-        container.appendChild(row);
+            row.className =
+                "goal-row";
 
-    });
+
+            row.innerHTML = `
+
+                <input
+                    class="goal-name"
+                    type="text"
+                    placeholder="Goal name"
+                    value="${escapeHTML(
+                        goal.name
+                    )}"
+                    oninput="updateGoalName(
+                        ${index},
+                        this.value
+                    )"
+                >
+
+                <input
+                    class="goal-percent"
+                    type="number"
+                    min="0"
+                    max="100"
+                    placeholder="%"
+                    value="${goal.percentage}"
+                    oninput="updateGoalPercentage(
+                        ${index},
+                        this.value
+                    )"
+                >
+
+                <button
+                    class="remove-button"
+                    onclick="removeGoal(
+                        ${index}
+                    )"
+                >
+                    Remove
+                </button>
+
+            `;
+
+
+            container.appendChild(row);
+
+        }
+    );
 
 }
 
@@ -463,32 +571,42 @@ function renderGoals() {
 // UPDATE GOAL NAME
 // ==================================================
 
-function updateGoalName(index, value) {
+function updateGoalName(
+    index,
+    value
+) {
 
-    goals[index].name = value;
-
-}
-
-
-// ==================================================
-// UPDATE GOAL PERCENTAGE
-// ==================================================
-
-function updateGoalPercentage(index, value) {
-
-    goals[index].percentage = value;
+    goals[index].name =
+        value;
 
 }
 
 
 // ==================================================
-// GET CLEAN PERCENTAGE
+// UPDATE PERCENTAGE
+// ==================================================
+
+function updateGoalPercentage(
+    index,
+    value
+) {
+
+    goals[index].percentage =
+        value;
+
+}
+
+
+// ==================================================
+// GET PERCENTAGE
 // ==================================================
 
 function getPercentage(goal) {
 
     let value =
-        Number(goal.percentage);
+        Number(
+            goal.percentage
+        );
 
 
     if (isNaN(value)) {
@@ -500,7 +618,10 @@ function getPercentage(goal) {
 
     return Math.max(
         0,
-        Math.min(100, value)
+        Math.min(
+            100,
+            value
+        )
     );
 
 }
@@ -522,19 +643,18 @@ function calculate() {
     }
 
 
-    let total = 0;
-
-
-    for (let goal of goals) {
-
-        total +=
-            getPercentage(goal);
-
-    }
+    const total =
+        goals.reduce(
+            (sum, goal) =>
+                sum +
+                getPercentage(goal),
+            0
+        );
 
 
     const average =
-        total / goals.length;
+        total /
+        goals.length;
 
 
     document.getElementById(
@@ -546,9 +666,20 @@ function calculate() {
         "%";
 
 
-    showBelowAverage(average);
+    showBelowAverage(
+        average
+    );
+
 
     drawRadar();
+
+
+    calculateForecast(
+        average
+    );
+
+
+    updateComparison();
 
 }
 
@@ -557,7 +688,9 @@ function calculate() {
 // BELOW AVERAGE
 // ==================================================
 
-function showBelowAverage(average) {
+function showBelowAverage(
+    average
+) {
 
     const container =
         document.getElementById(
@@ -566,14 +699,11 @@ function showBelowAverage(average) {
 
 
     const below =
-        goals.filter(goal => {
-
-            return (
+        goals.filter(
+            goal =>
                 getPercentage(goal)
                 < average
-            );
-
-        });
+        );
 
 
     if (below.length === 0) {
@@ -606,31 +736,33 @@ function showBelowAverage(average) {
     `;
 
 
-    for (let goal of below) {
+    below.forEach(
+        goal => {
 
-        const difference =
-            average -
-            getPercentage(goal);
+            const difference =
+                average -
+                getPercentage(goal);
 
 
-        html += `
+            html += `
 
-            <p class="goal-warning">
+                <p class="goal-warning">
 
-                ${escapeHTML(
-                    goal.name ||
-                    "Unnamed goal"
-                )}
+                    ${escapeHTML(
+                        goal.name ||
+                        "Unnamed goal"
+                    )}
 
-                —
-                ${difference.toFixed(2)}%
-                below Average
+                    —
+                    ${difference.toFixed(2)}%
+                    below Average
 
-            </p>
+                </p>
 
-        `;
+            `;
 
-    }
+        }
+    );
 
 
     html += "</div>";
@@ -638,6 +770,110 @@ function showBelowAverage(average) {
 
     container.innerHTML =
         html;
+
+}
+
+
+// ==================================================
+// IDEAL IMPROVE AVERAGE
+// ==================================================
+
+function calculateForecast(
+    currentAverage
+) {
+
+    const currentWeek =
+        Number(
+            document.getElementById(
+                "week"
+            ).value
+        );
+
+
+    const remainingWeeks =
+        totalWeeks -
+        currentWeek;
+
+
+    const container =
+        document.getElementById(
+            "forecast"
+        );
+
+
+    // Already at the end
+
+    if (remainingWeeks <= 0) {
+
+        container.innerHTML = `
+
+            <div class="metric">
+
+                <strong>
+                    Tracking period complete
+                </strong>
+
+                <p>
+                    Current Average:
+                    ${currentAverage.toFixed(2)}%
+                </p>
+
+            </div>
+
+        `;
+
+        return;
+    }
+
+
+    const idealImproveAverage =
+        (
+            100 -
+            currentAverage
+        ) /
+        remainingWeeks;
+
+
+    container.innerHTML = `
+
+        <div class="metric">
+
+            <strong>
+                Ideal Improve Average
+            </strong>
+
+            <p>
+                You have
+                <strong>
+                    ${remainingWeeks}
+                </strong>
+                week(s) remaining.
+            </p>
+
+            <p>
+
+                Required average improvement
+                per remaining week:
+
+                <strong>
+                    ${idealImproveAverage.toFixed(2)}%
+                </strong>
+
+            </p>
+
+            <p class="empty">
+
+                This is the average weekly
+                improvement needed to reach
+                100% by the end of the
+                tracking period, assuming
+                the rate remains constant.
+
+            </p>
+
+        </div>
+
+    `;
 
 }
 
@@ -684,39 +920,59 @@ function saveWeek() {
     }
 
 
+    if (
+        weekNumber < 1 ||
+        weekNumber > totalWeeks
+    ) {
+
+        alert(
+            "Week number must be between 1 and " +
+            totalWeeks +
+            "."
+        );
+
+        return;
+    }
+
+
     const average =
         goals.reduce(
             (sum, goal) =>
-                sum + getPercentage(goal),
+                sum +
+                getPercentage(goal),
             0
-        ) / goals.length;
+        ) /
+        goals.length;
 
 
     const weekData = {
 
-        week: weekNumber,
+        week:
+            weekNumber,
 
         rating:
             isNaN(rating)
             ? null
             : rating,
 
-        average: average,
+        average:
+            average,
 
-        goals: goals.map(goal => ({
+        goals:
+            goals.map(
+                goal => ({
 
-            name: goal.name,
+                    name:
+                        goal.name,
 
-            percentage:
-                getPercentage(goal)
+                    percentage:
+                        getPercentage(goal)
 
-        }))
+                })
+            )
 
     };
 
-
-    // Replace existing week
-    // if the same week number exists
 
     const existingIndex =
         weeks.findIndex(
@@ -726,7 +982,9 @@ function saveWeek() {
         );
 
 
-    if (existingIndex !== -1) {
+    if (
+        existingIndex !== -1
+    ) {
 
         const confirmReplace =
             confirm(
@@ -743,8 +1001,9 @@ function saveWeek() {
         }
 
 
-        weeks[existingIndex] =
-            weekData;
+        weeks[
+            existingIndex
+        ] = weekData;
 
     }
 
@@ -757,25 +1016,28 @@ function saveWeek() {
     }
 
 
-    // Sort chronologically
-
     weeks.sort(
         (a, b) =>
-            a.week - b.week
+            a.week -
+            b.week
     );
 
 
-    // Save to browser
-
     localStorage.setItem(
         "weeklyTrackerWeeks",
-        JSON.stringify(weeks)
+        JSON.stringify(
+            weeks
+        )
     );
 
 
     renderHistory();
 
     updateComparison();
+
+    calculateForecast(
+        average
+    );
 
 
     alert(
@@ -788,7 +1050,274 @@ function saveWeek() {
 
 
 // ==================================================
-// RADAR CHART
+// CROSS-WEEK COMPARISON
+// ==================================================
+
+function updateComparison() {
+
+    const container =
+        document.getElementById(
+            "comparison"
+        );
+
+
+    if (weeks.length < 2) {
+
+        container.innerHTML = `
+
+            <p class="empty">
+                Save at least two weeks
+                to compare them.
+            </p>
+
+        `;
+
+        return;
+    }
+
+
+    const current =
+        weeks[
+            weeks.length - 1
+        ];
+
+
+    const previous =
+        weeks[
+            weeks.length - 2
+        ];
+
+
+    const improveAverage =
+        current.average -
+        previous.average;
+
+
+    const currentRemaining =
+        totalWeeks -
+        current.week;
+
+
+    let idealImproveAverage =
+        null;
+
+
+    if (
+        currentRemaining > 0
+    ) {
+
+        idealImproveAverage =
+            (
+                100 -
+                current.average
+            ) /
+            currentRemaining;
+
+    }
+
+
+    let deficit = null;
+
+
+    if (
+        idealImproveAverage !== null
+    ) {
+
+        deficit =
+            idealImproveAverage -
+            improveAverage;
+
+    }
+
+
+    let html = `
+
+        <div class="comparison">
+
+            <p>
+
+                Comparing
+                <strong>
+                    Week ${current.week}
+                </strong>
+
+                with
+
+                <strong>
+                    Week ${previous.week}
+                </strong>
+
+            </p>
+
+
+            <p>
+                Previous Average:
+                ${previous.average.toFixed(2)}%
+            </p>
+
+
+            <p>
+                Current Average:
+                ${current.average.toFixed(2)}%
+            </p>
+
+
+            <p>
+
+                <strong>
+                    Improve Average:
+                    ${improveAverage >= 0 ? "+" : ""}
+                    ${improveAverage.toFixed(2)}%
+                </strong>
+
+            </p>
+
+    `;
+
+
+    if (
+        idealImproveAverage !== null
+    ) {
+
+        html += `
+
+            <hr>
+
+            <p>
+
+                Ideal Improve Average:
+                <strong>
+                    ${idealImproveAverage.toFixed(2)}%
+                </strong>
+
+            </p>
+
+
+            <p>
+
+                Deficit:
+                <strong>
+                    ${deficit >= 0 ? "+" : ""}
+                    ${deficit.toFixed(2)}%
+                </strong>
+
+            </p>
+
+        `;
+
+    }
+
+
+    html += `
+
+            <hr>
+
+            <h3>
+                Goal-by-Goal Improvement
+            </h3>
+
+    `;
+
+
+    current.goals.forEach(
+        currentGoal => {
+
+            const previousGoal =
+                previous.goals.find(
+                    goal =>
+                        goal.name ===
+                        currentGoal.name
+                );
+
+
+            if (!previousGoal) {
+
+                html += `
+
+                    <p>
+
+                        <strong>
+                            ${escapeHTML(
+                                currentGoal.name ||
+                                "Unnamed goal"
+                            )}
+                        </strong>
+
+                        —
+                        No matching goal
+                        in previous week.
+
+                    </p>
+
+                `;
+
+                return;
+            }
+
+
+            const improvement =
+                currentGoal.percentage -
+                previousGoal.percentage;
+
+
+            const belowAverage =
+                improvement <
+                improveAverage;
+
+
+            const className =
+                belowAverage
+                ? "below-improvement"
+                : "improved";
+
+
+            html += `
+
+                <p
+                    class="${className}"
+                >
+
+                    <strong>
+                        ${escapeHTML(
+                            currentGoal.name ||
+                            "Unnamed goal"
+                        )}
+                    </strong>
+
+                    :
+
+                    ${improvement >= 0 ? "+" : ""}
+                    ${improvement.toFixed(2)}%
+
+                    ${
+                        belowAverage
+                        ? " — below Improve Average"
+                        : ""
+                    }
+
+                </p>
+
+            `;
+
+        }
+    );
+
+
+    html += `
+
+        </div>
+
+    `;
+
+
+    container.innerHTML =
+        html;
+
+}
+
+
+// ==================================================
+// RADAR
 // ==================================================
 
 function drawRadar() {
@@ -833,7 +1362,7 @@ function drawRadar() {
         goals.length;
 
 
-    // GRID
+    // Grid
 
     for (
         let level = 1;
@@ -843,7 +1372,8 @@ function drawRadar() {
 
         const radius =
             maxRadius *
-            level / 5;
+            level /
+            5;
 
 
         const points = [];
@@ -916,7 +1446,7 @@ function drawRadar() {
     }
 
 
-    // AXES + LABELS
+    // Axes and labels
 
     goals.forEach(
         (goal, i) => {
@@ -955,24 +1485,20 @@ function drawRadar() {
                 centerX
             );
 
-
             line.setAttribute(
                 "y1",
                 centerY
             );
-
 
             line.setAttribute(
                 "x2",
                 x
             );
 
-
             line.setAttribute(
                 "y2",
                 y
             );
-
 
             line.setAttribute(
                 "stroke",
@@ -996,27 +1522,19 @@ function drawRadar() {
                 maxRadius + 35;
 
 
-            const labelX =
-                centerX +
-                labelRadius *
-                Math.cos(angle);
-
-
-            const labelY =
-                centerY +
-                labelRadius *
-                Math.sin(angle);
-
-
             label.setAttribute(
                 "x",
-                labelX
+                centerX +
+                labelRadius *
+                Math.cos(angle)
             );
 
 
             label.setAttribute(
                 "y",
-                labelY
+                centerY +
+                labelRadius *
+                Math.sin(angle)
             );
 
 
@@ -1048,7 +1566,7 @@ function drawRadar() {
     );
 
 
-    // DATA POLYGON
+    // Data polygon
 
     const dataPoints = [];
 
@@ -1133,256 +1651,6 @@ function drawRadar() {
         polygon
     );
 
-
-    // DATA POINTS
-
-    goals.forEach(
-        (goal, i) => {
-
-            const value =
-                getPercentage(
-                    goal
-                );
-
-
-            const radius =
-                maxRadius *
-                value /
-                100;
-
-
-            const angle =
-                -Math.PI / 2 +
-                (
-                    2 *
-                    Math.PI *
-                    i /
-                    count
-                );
-
-
-            const x =
-                centerX +
-                radius *
-                Math.cos(angle);
-
-
-            const y =
-                centerY +
-                radius *
-                Math.sin(angle);
-
-
-            const circle =
-                document.createElementNS(
-                    "http://www.w3.org/2000/svg",
-                    "circle"
-                );
-
-
-            circle.setAttribute(
-                "cx",
-                x
-            );
-
-
-            circle.setAttribute(
-                "cy",
-                y
-            );
-
-
-            circle.setAttribute(
-                "r",
-                "5"
-            );
-
-
-            circle.setAttribute(
-                "fill",
-                "#0064ff"
-            );
-
-
-            svg.appendChild(
-                circle
-            );
-
-        }
-    );
-
-}
-
-
-// ==================================================
-// CROSS-WEEK COMPARISON
-// ==================================================
-
-function updateComparison() {
-
-    const container =
-        document.getElementById(
-            "comparison"
-        );
-
-
-    if (weeks.length < 2) {
-
-        container.innerHTML = `
-
-            <p class="empty">
-                Save at least two weeks
-                to compare them.
-            </p>
-
-        `;
-
-        return;
-    }
-
-
-    const current =
-        weeks[weeks.length - 1];
-
-
-    const previous =
-        weeks[weeks.length - 2];
-
-
-    const improveAverage =
-        current.average -
-        previous.average;
-
-
-    let html = `
-
-        <div class="comparison">
-
-            <p>
-                Comparing
-                <strong>
-                    Week ${current.week}
-                </strong>
-                with
-                <strong>
-                    Week ${previous.week}
-                </strong>
-            </p>
-
-            <p>
-                Previous Average:
-                ${previous.average.toFixed(2)}%
-            </p>
-
-            <p>
-                Current Average:
-                ${current.average.toFixed(2)}%
-            </p>
-
-            <p>
-                <strong>
-                    Improve Average:
-                    ${improveAverage >= 0 ? "+" : ""}
-                    ${improveAverage.toFixed(2)}%
-                </strong>
-            </p>
-
-            <hr>
-
-            <h3>
-                Goal-by-Goal Improvement
-            </h3>
-
-    `;
-
-
-    current.goals.forEach(
-        currentGoal => {
-
-            const previousGoal =
-                previous.goals.find(
-                    goal =>
-                        goal.name ===
-                        currentGoal.name
-                );
-
-
-            if (!previousGoal) {
-
-                html += `
-
-                    <p>
-                        <strong>
-                            ${escapeHTML(
-                                currentGoal.name ||
-                                "Unnamed goal"
-                            )}
-                        </strong>
-                        — No matching goal
-                        in previous week.
-                    </p>
-
-                `;
-
-                return;
-            }
-
-
-            const improvement =
-                currentGoal.percentage -
-                previousGoal.percentage;
-
-
-            const belowAverage =
-                improvement <
-                improveAverage;
-
-
-            const className =
-                belowAverage
-                ? "below-improvement"
-                : "improved";
-
-
-            html += `
-
-                <p class="${className}">
-
-                    <strong>
-                        ${escapeHTML(
-                            currentGoal.name ||
-                            "Unnamed goal"
-                        )}
-                    </strong>
-
-                    :
-                    ${improvement >= 0 ? "+" : ""}
-                    ${improvement.toFixed(2)}%
-
-                    ${
-                        belowAverage
-                        ? " — below Improve Average"
-                        : ""
-                    }
-
-                </p>
-
-            `;
-
-        }
-    );
-
-
-    html += `
-
-        </div>
-
-    `;
-
-
-    container.innerHTML =
-        html;
-
 }
 
 
@@ -1415,86 +1683,84 @@ function renderHistory() {
     }
 
 
-    // Newest first
+    [...weeks]
+        .reverse()
+        .forEach(
+            savedWeek => {
 
-    const reversed =
-        [...weeks].reverse();
+                const div =
+                    document.createElement(
+                        "div"
+                    );
 
 
-    reversed.forEach(
-        savedWeek => {
+                div.className =
+                    "history-item";
 
-            const div =
-                document.createElement(
-                    "div"
+
+                const ratingText =
+                    savedWeek.rating === null
+                    ? "Not rated"
+                    : savedWeek.rating +
+                      "/10";
+
+
+                div.innerHTML = `
+
+                    <strong>
+                        Week ${savedWeek.week}
+                    </strong>
+
+                    <br>
+
+                    Average:
+                    ${savedWeek.average.toFixed(2)}%
+
+                    <br>
+
+                    Rating:
+                    ${ratingText}
+
+                    <br>
+
+                    <button
+                        class="history-button"
+                        onclick="loadWeek(
+                            ${savedWeek.week}
+                        )"
+                    >
+                        Load
+                    </button>
+
+                    <button
+                        class="remove-button"
+                        onclick="deleteWeek(
+                            ${savedWeek.week}
+                        )"
+                    >
+                        Delete
+                    </button>
+
+                `;
+
+
+                container.appendChild(
+                    div
                 );
 
-
-            div.className =
-                "history-item";
-
-
-            const ratingText =
-                savedWeek.rating === null
-                ? "Not rated"
-                : savedWeek.rating +
-                  "/10";
-
-
-            div.innerHTML = `
-
-                <strong>
-                    Week ${savedWeek.week}
-                </strong>
-
-                <br>
-
-                Average:
-                ${savedWeek.average.toFixed(2)}%
-
-                <br>
-
-                Rating:
-                ${ratingText}
-
-                <br>
-
-                <button
-                    class="history-button"
-                    onclick="loadWeek(
-                        ${savedWeek.week}
-                    )"
-                >
-                    Load
-                </button>
-
-                <button
-                    class="remove-button"
-                    onclick="deleteWeek(
-                        ${savedWeek.week}
-                    )"
-                >
-                    Delete
-                </button>
-
-            `;
-
-
-            container.appendChild(
-                div
-            );
-
-        }
-    );
+            }
+        );
 
 }
 
 
 // ==================================================
-// LOAD OLD WEEK
+// LOAD WEEK
 // ==================================================
 
-function loadWeek(weekNumber) {
+function loadWeek(
+    weekNumber
+) {
 
     const savedWeek =
         weeks.find(
@@ -1550,7 +1816,9 @@ function loadWeek(weekNumber) {
 // DELETE WEEK
 // ==================================================
 
-function deleteWeek(weekNumber) {
+function deleteWeek(
+    weekNumber
+) {
 
     const confirmed =
         confirm(
@@ -1577,7 +1845,9 @@ function deleteWeek(weekNumber) {
 
     localStorage.setItem(
         "weeklyTrackerWeeks",
-        JSON.stringify(weeks)
+        JSON.stringify(
+            weeks
+        )
     );
 
 
@@ -1661,6 +1931,8 @@ renderHistory();
 updateComparison();
 
 drawRadar();
+
+calculate();
 
 </script>
 
