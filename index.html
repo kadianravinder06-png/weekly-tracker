@@ -1,88 +1,417 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Weekly Tracker</title>
 
     <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
         body {
             font-family: Arial, sans-serif;
-            max-width: 600px;
-            margin: 40px auto;
+            margin: 0;
             padding: 20px;
-            background: #f5f5f5;
+            background: #f4f5f7;
+            color: #222;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: auto;
+        }
+
+        h1 {
+            margin-bottom: 5px;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-top: 0;
         }
 
         .card {
             background: white;
-            padding: 25px;
+            padding: 20px;
+            margin-top: 20px;
             border-radius: 15px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
         }
 
         input {
             padding: 10px;
-            margin: 5px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        #week {
             width: 100px;
         }
 
-        button {
-            padding: 10px 16px;
-            margin-top: 15px;
-            cursor: pointer;
+        #rating {
+            width: 100px;
         }
 
-        #result {
+        .goal-row {
+            display: flex;
+            gap: 8px;
+            margin: 10px 0;
+            align-items: center;
+        }
+
+        .goal-name {
+            flex: 1;
+        }
+
+        .goal-percent {
+            width: 90px;
+        }
+
+        button {
+            border: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 15px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .add-button {
+            background: #222;
+            color: white;
+        }
+
+        .calculate-button {
+            background: #333;
+            color: white;
+        }
+
+        .remove-button {
+            background: #eee;
+            color: #b00020;
+        }
+
+        .result {
             margin-top: 20px;
-            font-size: 22px;
+            font-size: 20px;
             font-weight: bold;
         }
+
+        .below-average {
+            margin-top: 15px;
+            padding: 15px;
+            background: #fff0f0;
+            border-radius: 10px;
+        }
+
+        .below-average h3 {
+            margin-top: 0;
+        }
+
+        .goal-warning {
+            color: #b00020;
+            margin: 7px 0;
+        }
+
+        .empty {
+            color: #777;
+            font-style: italic;
+        }
+
     </style>
 </head>
 
+
 <body>
 
-<div class="card">
+<div class="container">
 
     <h1>Weekly Tracker</h1>
 
-    <p>Enter your goal percentages:</p>
-
-    <p>
-        Finish syllabus:
-        <input id="goal1" type="number" min="0" max="100" value="70">
+    <p class="subtitle">
+        Give your week a shape.
     </p>
 
-    <p>
-        Practice questions:
-        <input id="goal2" type="number" min="0" max="100" value="50">
-    </p>
 
-    <p>
-        Read books:
-        <input id="goal3" type="number" min="0" max="100" value="80">
-    </p>
+    <!-- WEEK INFORMATION -->
 
-    <button onclick="calculate()">Calculate Average</button>
+    <div class="card">
 
-    <div id="result"></div>
+        <h2>Week</h2>
+
+        <label>
+            Week number:
+            <input id="week" type="number" min="1" value="1">
+        </label>
+
+        <br><br>
+
+        <label>
+            Weekly rating:
+            <input id="rating" type="number" min="0" max="10" step="0.1" placeholder="/10">
+        </label>
+
+    </div>
+
+
+    <!-- GOALS -->
+
+    <div class="card">
+
+        <h2>Goals</h2>
+
+        <div id="goals"></div>
+
+        <button class="add-button" onclick="addGoal()">
+            + Add Goal
+        </button>
+
+        <br>
+
+        <button class="calculate-button" onclick="calculate()">
+            Calculate Week
+        </button>
+
+    </div>
+
+
+    <!-- RESULTS -->
+
+    <div class="card">
+
+        <h2>Results</h2>
+
+        <div id="result" class="result">
+            Add your goals and calculate the week.
+        </div>
+
+        <div id="belowAverage"></div>
+
+    </div>
 
 </div>
 
+
 <script>
+
+let goals = [];
+
+
+// ADD A GOAL
+
+function addGoal(name = "", percentage = "") {
+
+    if (goals.length >= 6) {
+        alert("You can have a maximum of 6 goals.");
+        return;
+    }
+
+    goals.push({
+        name: name,
+        percentage: percentage
+    });
+
+    renderGoals();
+}
+
+
+// REMOVE A GOAL
+
+function removeGoal(index) {
+
+    goals.splice(index, 1);
+
+    renderGoals();
+}
+
+
+// DISPLAY GOALS
+
+function renderGoals() {
+
+    const container = document.getElementById("goals");
+
+    container.innerHTML = "";
+
+    if (goals.length === 0) {
+
+        container.innerHTML =
+            '<p class="empty">No goals added yet.</p>';
+
+        return;
+    }
+
+
+    goals.forEach((goal, index) => {
+
+        const row = document.createElement("div");
+
+        row.className = "goal-row";
+
+
+        row.innerHTML = `
+
+            <input
+                class="goal-name"
+                type="text"
+                placeholder="Goal name"
+                value="${goal.name}"
+                oninput="updateGoalName(${index}, this.value)"
+            >
+
+            <input
+                class="goal-percent"
+                type="number"
+                min="0"
+                max="100"
+                placeholder="%"
+                value="${goal.percentage}"
+                oninput="updateGoalPercentage(${index}, this.value)"
+            >
+
+            <button
+                class="remove-button"
+                onclick="removeGoal(${index})"
+            >
+                Remove
+            </button>
+
+        `;
+
+        container.appendChild(row);
+
+    });
+}
+
+
+// UPDATE GOAL NAME
+
+function updateGoalName(index, value) {
+
+    goals[index].name = value;
+
+}
+
+
+// UPDATE GOAL PERCENTAGE
+
+function updateGoalPercentage(index, value) {
+
+    goals[index].percentage = value;
+
+}
+
+
+// CALCULATE
 
 function calculate() {
 
-    let goal1 = Number(document.getElementById("goal1").value);
-    let goal2 = Number(document.getElementById("goal2").value);
-    let goal3 = Number(document.getElementById("goal3").value);
+    if (goals.length === 0) {
 
-    let average = (goal1 + goal2 + goal3) / 3;
+        alert("Add at least one goal first.");
 
-    document.getElementById("result").innerText =
-        "Your Average = " + average.toFixed(2) + "%";
+        return;
+    }
+
+
+    let total = 0;
+
+
+    for (let goal of goals) {
+
+        let percentage = Number(goal.percentage);
+
+        if (isNaN(percentage)) {
+            percentage = 0;
+        }
+
+        total += percentage;
+    }
+
+
+    let average = total / goals.length;
+
+
+    document.getElementById("result").innerHTML =
+        "Average = " + average.toFixed(2) + "%";
+
+
+    showBelowAverage(average);
+
 }
+
+
+// SHOW BELOW-AVERAGE GOALS
+
+function showBelowAverage(average) {
+
+    const container =
+        document.getElementById("belowAverage");
+
+
+    let below = goals.filter(goal => {
+
+        return Number(goal.percentage) < average;
+
+    });
+
+
+    if (below.length === 0) {
+
+        container.innerHTML = `
+            <div class="below-average">
+                <h3>Below Average</h3>
+                <p>No goals are below your Average.</p>
+            </div>
+        `;
+
+        return;
+    }
+
+
+    let html = `
+        <div class="below-average">
+            <h3>Below Average</h3>
+    `;
+
+
+    for (let goal of below) {
+
+        let difference =
+            average - Number(goal.percentage);
+
+
+        html += `
+            <p class="goal-warning">
+                ${goal.name || "Unnamed goal"}
+                — ${difference.toFixed(2)}% below Average
+            </p>
+        `;
+
+    }
+
+
+    html += "</div>";
+
+
+    container.innerHTML = html;
+
+}
+
+
+// START WITH TWO EXAMPLE GOALS
+
+addGoal("Finish syllabus", 70);
+addGoal("Practice questions", 50);
 
 </script>
 
 </body>
+
 </html>
