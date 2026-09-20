@@ -6,7 +6,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Weekly Tracker</title>
+<title>Weekly Growth Tracker</title>
 
 <style>
 
@@ -82,16 +82,8 @@ button {
     margin-top: 10px;
 }
 
-.add-button {
-    background: #222;
-    color: white;
-}
-
-.calculate-button {
-    background: #333;
-    color: white;
-}
-
+.add-button,
+.calculate-button,
 .save-button {
     background: #222;
     color: white;
@@ -114,57 +106,27 @@ button {
     font-weight: bold;
 }
 
-.metric {
+.metric,
+.comparison,
+.history-item,
+.below-average {
     padding: 15px;
     margin-top: 12px;
     background: #f4f4f4;
     border-radius: 10px;
 }
 
-.metric strong {
-    font-size: 19px;
-}
-
 .below-average {
-    margin-top: 15px;
-    padding: 15px;
     background: #fff0f0;
-    border-radius: 10px;
 }
 
-.below-average h3 {
-    margin-top: 0;
-}
-
-.goal-warning {
-    color: #b00020;
-    margin: 7px 0;
-}
-
-.comparison {
-    margin-top: 15px;
-    padding: 15px;
-    background: #f4f4f4;
-    border-radius: 10px;
-}
-
-.improved {
-    color: #176b35;
-}
-
+.goal-warning,
 .below-improvement {
     color: #b00020;
 }
 
-.history-item {
-    padding: 12px;
-    margin-top: 10px;
-    background: #f4f4f4;
-    border-radius: 10px;
-}
-
-.history-item strong {
-    font-size: 17px;
+.improved {
+    color: #176b35;
 }
 
 .empty {
@@ -197,14 +159,14 @@ button {
 
 <div class="container">
 
-<h1>Weekly Tracker</h1>
+<h1>Weekly Growth Tracker</h1>
 
 <p class="subtitle">
 Give your week a shape.
 </p>
 
 
-<!-- PERIOD -->
+<!-- TRACKING PERIOD -->
 
 <div class="card">
 
@@ -224,13 +186,13 @@ Total weeks:
 </label>
 
 <p class="empty">
-Choose this once for the entire tracking period.
+Choose the total number of weeks in your tracking period.
 </p>
 
 </div>
 
 
-<!-- WEEK -->
+<!-- CURRENT WEEK -->
 
 <div class="card">
 
@@ -309,10 +271,7 @@ Save Week
 
 <h2>Results</h2>
 
-<div
-    id="result"
-    class="result"
->
+<div id="result" class="result">
 Add your goals and calculate the week.
 </div>
 
@@ -343,7 +302,7 @@ Add your goals and calculate the week.
 </div>
 
 
-<!-- COMPARISON -->
+<!-- CROSS WEEK -->
 
 <div class="card">
 
@@ -390,10 +349,6 @@ let weeks =
     ) || [];
 
 
-// ==================================================
-// TRACKING PERIOD
-// ==================================================
-
 let totalWeeks =
     Number(
         localStorage.getItem(
@@ -407,7 +362,9 @@ document.getElementById(
 ).value = totalWeeks;
 
 
-// Save total weeks whenever changed
+// ==================================================
+// TOTAL WEEKS
+// ==================================================
 
 document.getElementById(
     "totalWeeks"
@@ -449,7 +406,7 @@ function addGoal(
     if (goals.length >= 6) {
 
         alert(
-            "You can have a maximum of 6 goals."
+            "Maximum 6 goals allowed."
         );
 
         return;
@@ -514,7 +471,6 @@ function renderGoals() {
                     "div"
                 );
 
-
             row.className =
                 "goal-row";
 
@@ -558,7 +514,6 @@ function renderGoals() {
 
             `;
 
-
             container.appendChild(row);
 
         }
@@ -568,7 +523,7 @@ function renderGoals() {
 
 
 // ==================================================
-// UPDATE GOAL NAME
+// UPDATE GOAL
 // ==================================================
 
 function updateGoalName(
@@ -576,23 +531,17 @@ function updateGoalName(
     value
 ) {
 
-    goals[index].name =
-        value;
+    goals[index].name = value;
 
 }
 
-
-// ==================================================
-// UPDATE PERCENTAGE
-// ==================================================
 
 function updateGoalPercentage(
     index,
     value
 ) {
 
-    goals[index].percentage =
-        value;
+    goals[index].percentage = value;
 
 }
 
@@ -608,13 +557,11 @@ function getPercentage(goal) {
             goal.percentage
         );
 
-
     if (isNaN(value)) {
 
         value = 0;
 
     }
-
 
     return Math.max(
         0,
@@ -628,7 +575,7 @@ function getPercentage(goal) {
 
 
 // ==================================================
-// CALCULATE
+// CALCULATE WEEK
 // ==================================================
 
 function calculate() {
@@ -671,12 +618,12 @@ function calculate() {
     );
 
 
-    drawRadar();
-
-
     calculateForecast(
         average
     );
+
+
+    drawRadar();
 
 
     updateComparison();
@@ -715,8 +662,7 @@ function showBelowAverage(
                 <h3>Below Average</h3>
 
                 <p>
-                    No goals are below
-                    your Average.
+                    No goals are below Average.
                 </p>
 
             </div>
@@ -767,7 +713,6 @@ function showBelowAverage(
 
     html += "</div>";
 
-
     container.innerHTML =
         html;
 
@@ -776,6 +721,35 @@ function showBelowAverage(
 
 // ==================================================
 // IDEAL IMPROVE AVERAGE
+// ==================================================
+
+function getIdealImproveAverage(
+    currentAverage,
+    currentWeek
+) {
+
+    const remainingWeeks =
+        totalWeeks -
+        currentWeek;
+
+
+    if (remainingWeeks <= 0) {
+
+        return null;
+
+    }
+
+
+    return (
+        100 -
+        currentAverage
+    ) / remainingWeeks;
+
+}
+
+
+// ==================================================
+// FORECAST
 // ==================================================
 
 function calculateForecast(
@@ -801,8 +775,6 @@ function calculateForecast(
         );
 
 
-    // Already at the end
-
     if (remainingWeeks <= 0) {
 
         container.innerHTML = `
@@ -826,12 +798,11 @@ function calculateForecast(
     }
 
 
-    const idealImproveAverage =
-        (
-            100 -
-            currentAverage
-        ) /
-        remainingWeeks;
+    const ideal =
+        getIdealImproveAverage(
+            currentAverage,
+            currentWeek
+        );
 
 
     container.innerHTML = `
@@ -843,20 +814,20 @@ function calculateForecast(
             </strong>
 
             <p>
-                You have
+
+                Weeks remaining:
                 <strong>
                     ${remainingWeeks}
                 </strong>
-                week(s) remaining.
+
             </p>
 
             <p>
 
-                Required average improvement
-                per remaining week:
+                Required improvement per week:
 
                 <strong>
-                    ${idealImproveAverage.toFixed(2)}%
+                    ${ideal.toFixed(2)}%
                 </strong>
 
             </p>
@@ -864,10 +835,9 @@ function calculateForecast(
             <p class="empty">
 
                 This is the average weekly
-                improvement needed to reach
-                100% by the end of the
-                tracking period, assuming
-                the rate remains constant.
+                improvement required to reach
+                100% by the end of the period,
+                assuming the rate remains constant.
 
             </p>
 
@@ -910,16 +880,6 @@ function saveWeek() {
         );
 
 
-    if (!weekNumber) {
-
-        alert(
-            "Enter a week number."
-        );
-
-        return;
-    }
-
-
     if (
         weekNumber < 1 ||
         weekNumber > totalWeeks
@@ -927,8 +887,7 @@ function saveWeek() {
 
         alert(
             "Week number must be between 1 and " +
-            totalWeeks +
-            "."
+            totalWeeks
         );
 
         return;
@@ -986,7 +945,7 @@ function saveWeek() {
         existingIndex !== -1
     ) {
 
-        const confirmReplace =
+        const replace =
             confirm(
                 "Week " +
                 weekNumber +
@@ -994,7 +953,7 @@ function saveWeek() {
             );
 
 
-        if (!confirmReplace) {
+        if (!replace) {
 
             return;
 
@@ -1088,33 +1047,23 @@ function updateComparison() {
         ];
 
 
+    // Improve Average
+
     const improveAverage =
         current.average -
         previous.average;
 
 
-    const currentRemaining =
-        totalWeeks -
-        current.week;
+    // Ideal Improve Average
+
+    const idealImproveAverage =
+        getIdealImproveAverage(
+            current.average,
+            current.week
+        );
 
 
-    let idealImproveAverage =
-        null;
-
-
-    if (
-        currentRemaining > 0
-    ) {
-
-        idealImproveAverage =
-            (
-                100 -
-                current.average
-            ) /
-            currentRemaining;
-
-    }
-
+    // Deficit
 
     let deficit = null;
 
@@ -1137,6 +1086,7 @@ function updateComparison() {
             <p>
 
                 Comparing
+
                 <strong>
                     Week ${current.week}
                 </strong>
@@ -1151,23 +1101,29 @@ function updateComparison() {
 
 
             <p>
+
                 Previous Average:
                 ${previous.average.toFixed(2)}%
+
             </p>
 
 
             <p>
+
                 Current Average:
                 ${current.average.toFixed(2)}%
+
             </p>
 
 
             <p>
 
                 <strong>
+
                     Improve Average:
                     ${improveAverage >= 0 ? "+" : ""}
                     ${improveAverage.toFixed(2)}%
+
                 </strong>
 
             </p>
@@ -1186,6 +1142,7 @@ function updateComparison() {
             <p>
 
                 Ideal Improve Average:
+
                 <strong>
                     ${idealImproveAverage.toFixed(2)}%
                 </strong>
@@ -1196,6 +1153,7 @@ function updateComparison() {
             <p>
 
                 Deficit:
+
                 <strong>
                     ${deficit >= 0 ? "+" : ""}
                     ${deficit.toFixed(2)}%
@@ -1203,21 +1161,18 @@ function updateComparison() {
 
             </p>
 
-        `;
-
-    }
-
-
-    html += `
-
             <hr>
 
             <h3>
                 Goal-by-Goal Improvement
             </h3>
 
-    `;
+        `;
 
+    }
+
+
+    // Individual goals
 
     current.goals.forEach(
         currentGoal => {
@@ -1260,22 +1215,25 @@ function updateComparison() {
                 previousGoal.percentage;
 
 
-            const belowAverage =
+            // IMPORTANT:
+            // Compare individual improvement
+            // with IDEAL improvement.
+
+            const belowIdeal =
+                idealImproveAverage !== null &&
                 improvement <
-                improveAverage;
+                idealImproveAverage;
 
 
             const className =
-                belowAverage
+                belowIdeal
                 ? "below-improvement"
                 : "improved";
 
 
             html += `
 
-                <p
-                    class="${className}"
-                >
+                <p class="${className}">
 
                     <strong>
                         ${escapeHTML(
@@ -1290,8 +1248,8 @@ function updateComparison() {
                     ${improvement.toFixed(2)}%
 
                     ${
-                        belowAverage
-                        ? " — below Improve Average"
+                        belowIdeal
+                        ? " — below Ideal Improve Average"
                         : ""
                     }
 
@@ -1317,7 +1275,7 @@ function updateComparison() {
 
 
 // ==================================================
-// RADAR
+// RADAR CHART
 // ==================================================
 
 function drawRadar() {
@@ -1342,8 +1300,10 @@ function drawRadar() {
                 fill="#777"
                 font-size="16"
             >
+
                 Add at least 3 goals
                 to see the radar chart.
+
             </text>
 
         `;
@@ -1881,7 +1841,7 @@ function shorten(text) {
 
 function escapeHTML(text) {
 
-    return text
+    return String(text)
         .replaceAll(
             "&",
             "&amp;"
