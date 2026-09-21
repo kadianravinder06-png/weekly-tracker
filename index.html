@@ -44,11 +44,19 @@ h1 {
     box-shadow: 0 2px 10px rgba(0,0,0,0.08);
 }
 
-input {
+input,
+textarea {
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 8px;
     font-size: 16px;
+}
+
+textarea {
+    width: 100%;
+    min-height: 100px;
+    resize: vertical;
+    font-family: Arial, sans-serif;
 }
 
 #week,
@@ -57,19 +65,22 @@ input {
     width: 100px;
 }
 
-.goal-row {
+.goal-row,
+.cause-row {
     display: flex;
     gap: 8px;
     margin: 10px 0;
     align-items: center;
 }
 
-.goal-name {
+.goal-name,
+.cause-name {
     flex: 1;
     min-width: 0;
 }
 
-.goal-percent {
+.goal-percent,
+.cause-percent {
     width: 90px;
 }
 
@@ -109,7 +120,8 @@ button {
 .metric,
 .comparison,
 .history-item,
-.below-average {
+.below-average,
+.reflection-box {
     padding: 15px;
     margin-top: 12px;
     background: #f4f4f4;
@@ -134,7 +146,18 @@ button {
     font-style: italic;
 }
 
-#radarContainer {
+.warning {
+    color: #b00020;
+    font-weight: bold;
+}
+
+.success {
+    color: #176b35;
+    font-weight: bold;
+}
+
+#radarContainer,
+#causeChartContainer {
     text-align: center;
     overflow: hidden;
 }
@@ -145,9 +168,26 @@ button {
     height: auto;
 }
 
+#causeChart {
+    width: 100%;
+    max-width: 500px;
+    height: auto;
+}
+
 .chart-label {
     font-size: 13px;
     fill: #222;
+}
+
+.small-label {
+    color: #666;
+    font-size: 14px;
+}
+
+hr {
+    border: none;
+    border-top: 1px solid #ddd;
+    margin: 20px 0;
 }
 
 </style>
@@ -302,6 +342,81 @@ Add your goals and calculate the week.
 </div>
 
 
+<!-- REFLECTION -->
+
+<div class="card">
+
+<h2>Weekly Reflection</h2>
+
+<p class="small-label">
+Reflect honestly on the week. If the week was unsatisfactory,
+identify the main causes.
+</p>
+
+<label>
+
+<strong>Reflection / Remorse</strong>
+
+</label>
+
+<br><br>
+
+<textarea
+    id="reflection"
+    placeholder="What went wrong? What do you feel could have been better?"
+></textarea>
+
+
+<hr>
+
+
+<h3>Root Causes</h3>
+
+<p class="small-label">
+
+If your week was unsatisfactory, add at least
+3 causes and assign their contribution.
+The total must equal 100%.
+
+</p>
+
+
+<div id="causes"></div>
+
+
+<button
+    class="add-button"
+    onclick="addCause()"
+>
++ Add Cause
+</button>
+
+
+<div id="causeTotal"></div>
+
+</div>
+
+
+<!-- CAUSE CHART -->
+
+<div class="card">
+
+<h2>Cause Breakdown</h2>
+
+<div id="causeChartContainer">
+
+<svg
+    id="causeChart"
+    viewBox="0 0 500 350"
+    xmlns="http://www.w3.org/2000/svg"
+>
+</svg>
+
+</div>
+
+</div>
+
+
 <!-- CROSS WEEK -->
 
 <div class="card">
@@ -340,6 +455,8 @@ Save at least two weeks to compare them.
 // ==================================================
 
 let goals = [];
+
+let causes = [];
 
 let weeks =
     JSON.parse(
@@ -628,6 +745,12 @@ function calculate() {
 
     updateComparison();
 
+
+    updateCauseTotal();
+
+
+    drawCauseChart();
+
 }
 
 
@@ -849,6 +972,288 @@ function calculateForecast(
 
 
 // ==================================================
+// ADD CAUSE
+// ==================================================
+
+function addCause(
+    name = "",
+    percentage = ""
+) {
+
+    causes.push({
+
+        name: name,
+
+        percentage: percentage
+
+    });
+
+
+    renderCauses();
+
+    updateCauseTotal();
+
+    drawCauseChart();
+
+}
+
+
+// ==================================================
+// REMOVE CAUSE
+// ==================================================
+
+function removeCause(index) {
+
+    causes.splice(
+        index,
+        1
+    );
+
+
+    renderCauses();
+
+    updateCauseTotal();
+
+    drawCauseChart();
+
+}
+
+
+// ==================================================
+// DISPLAY CAUSES
+// ==================================================
+
+function renderCauses() {
+
+    const container =
+        document.getElementById(
+            "causes"
+        );
+
+
+    container.innerHTML = "";
+
+
+    if (causes.length === 0) {
+
+        container.innerHTML = `
+
+            <p class="empty">
+
+                No causes added yet.
+
+            </p>
+
+        `;
+
+        return;
+    }
+
+
+    causes.forEach(
+        (cause, index) => {
+
+            const row =
+                document.createElement(
+                    "div"
+                );
+
+
+            row.className =
+                "cause-row";
+
+
+            row.innerHTML = `
+
+                <input
+                    class="cause-name"
+                    type="text"
+                    placeholder="Cause"
+                    value="${escapeHTML(
+                        cause.name
+                    )}"
+                    oninput="updateCauseName(
+                        ${index},
+                        this.value
+                    )"
+                >
+
+                <input
+                    class="cause-percent"
+                    type="number"
+                    min="0"
+                    max="100"
+                    placeholder="%"
+                    value="${cause.percentage}"
+                    oninput="updateCausePercentage(
+                        ${index},
+                        this.value
+                    )"
+                >
+
+                <button
+                    class="remove-button"
+                    onclick="removeCause(
+                        ${index}
+                    )"
+                >
+                    Remove
+                </button>
+
+            `;
+
+
+            container.appendChild(
+                row
+            );
+
+        }
+    );
+
+}
+
+
+// ==================================================
+// UPDATE CAUSE
+// ==================================================
+
+function updateCauseName(
+    index,
+    value
+) {
+
+    causes[index].name =
+        value;
+
+
+    drawCauseChart();
+
+}
+
+
+function updateCausePercentage(
+    index,
+    value
+) {
+
+    causes[index].percentage =
+        value;
+
+
+    updateCauseTotal();
+
+    drawCauseChart();
+
+}
+
+
+// ==================================================
+// CAUSE TOTAL
+// ==================================================
+
+function updateCauseTotal() {
+
+    const container =
+        document.getElementById(
+            "causeTotal"
+        );
+
+
+    if (causes.length === 0) {
+
+        container.innerHTML = "";
+
+        return;
+    }
+
+
+    const total =
+        causes.reduce(
+            (sum, cause) =>
+                sum +
+                getCausePercentage(
+                    cause
+                ),
+            0
+        );
+
+
+    const difference =
+        total - 100;
+
+
+    if (
+        Math.abs(difference) < 0.01
+    ) {
+
+        container.innerHTML = `
+
+            <p class="success">
+
+                Total contribution:
+                100%
+
+            </p>
+
+        `;
+
+    }
+
+    else {
+
+        container.innerHTML = `
+
+            <p class="warning">
+
+                Total contribution:
+                ${total.toFixed(2)}%
+
+                <br>
+
+                Must equal 100%.
+
+            </p>
+
+        `;
+
+    }
+
+}
+
+
+// ==================================================
+// GET CAUSE PERCENTAGE
+// ==================================================
+
+function getCausePercentage(
+    cause
+) {
+
+    let value =
+        Number(
+            cause.percentage
+        );
+
+
+    if (isNaN(value)) {
+
+        value = 0;
+
+    }
+
+
+    return Math.max(
+        0,
+        Math.min(
+            100,
+            value
+        )
+    );
+
+}
+
+
+// ==================================================
 // SAVE WEEK
 // ==================================================
 
@@ -904,6 +1309,34 @@ function saveWeek() {
         goals.length;
 
 
+    // Check causes
+
+    const causeTotal =
+        causes.reduce(
+            (sum, cause) =>
+                sum +
+                getCausePercentage(
+                    cause
+                ),
+            0
+        );
+
+
+    if (
+        causes.length > 0 &&
+        Math.abs(
+            causeTotal - 100
+        ) > 0.01
+    ) {
+
+        alert(
+            "Cause contributions must add up to 100%."
+        );
+
+        return;
+    }
+
+
     const weekData = {
 
         week:
@@ -916,6 +1349,26 @@ function saveWeek() {
 
         average:
             average,
+
+        reflection:
+            document.getElementById(
+                "reflection"
+            ).value,
+
+        causes:
+            causes.map(
+                cause => ({
+
+                    name:
+                        cause.name,
+
+                    percentage:
+                        getCausePercentage(
+                            cause
+                        )
+
+                })
+            ),
 
         goals:
             goals.map(
@@ -956,7 +1409,6 @@ function saveWeek() {
         if (!replace) {
 
             return;
-
         }
 
 
@@ -1025,8 +1477,10 @@ function updateComparison() {
         container.innerHTML = `
 
             <p class="empty">
+
                 Save at least two weeks
                 to compare them.
+
             </p>
 
         `;
@@ -1047,14 +1501,10 @@ function updateComparison() {
         ];
 
 
-    // Improve Average
-
     const improveAverage =
         current.average -
         previous.average;
 
-
-    // Ideal Improve Average
 
     const idealImproveAverage =
         getIdealImproveAverage(
@@ -1062,8 +1512,6 @@ function updateComparison() {
             current.week
         );
 
-
-    // Deficit
 
     let deficit = null;
 
@@ -1172,8 +1620,6 @@ function updateComparison() {
     }
 
 
-    // Individual goals
-
     current.goals.forEach(
         currentGoal => {
 
@@ -1214,10 +1660,6 @@ function updateComparison() {
                 currentGoal.percentage -
                 previousGoal.percentage;
 
-
-            // IMPORTANT:
-            // Compare individual improvement
-            // with IDEAL improvement.
 
             const belowIdeal =
                 idealImproveAverage !== null &&
@@ -1322,8 +1764,6 @@ function drawRadar() {
         goals.length;
 
 
-    // Grid
-
     for (
         let level = 1;
         level <= 5;
@@ -1405,8 +1845,6 @@ function drawRadar() {
 
     }
 
-
-    // Axes and labels
 
     goals.forEach(
         (goal, i) => {
@@ -1526,8 +1964,6 @@ function drawRadar() {
     );
 
 
-    // Data polygon
-
     const dataPoints = [];
 
 
@@ -1615,6 +2051,349 @@ function drawRadar() {
 
 
 // ==================================================
+// CAUSE PIE CHART
+// ==================================================
+
+function drawCauseChart() {
+
+    const svg =
+        document.getElementById(
+            "causeChart"
+        );
+
+
+    svg.innerHTML = "";
+
+
+    if (causes.length === 0) {
+
+        svg.innerHTML = `
+
+            <text
+                x="250"
+                y="175"
+                text-anchor="middle"
+                fill="#777"
+                font-size="16"
+            >
+
+                Add causes to see
+                the breakdown.
+
+            </text>
+
+        `;
+
+        return;
+    }
+
+
+    const total =
+        causes.reduce(
+            (sum, cause) =>
+                sum +
+                getCausePercentage(
+                    cause
+                ),
+            0
+        );
+
+
+    if (total === 0) {
+
+        svg.innerHTML = `
+
+            <text
+                x="250"
+                y="175"
+                text-anchor="middle"
+                fill="#777"
+                font-size="16"
+            >
+
+                Enter cause percentages
+                to see the chart.
+
+            </text>
+
+        `;
+
+        return;
+    }
+
+
+    const centerX = 250;
+
+    const centerY = 170;
+
+    const radius = 100;
+
+
+    let currentAngle =
+        -Math.PI / 2;
+
+
+    causes.forEach(
+        cause => {
+
+            const percentage =
+                getCausePercentage(
+                    cause
+                );
+
+
+            if (percentage <= 0) {
+
+                return;
+
+            }
+
+
+            const sliceAngle =
+                (
+                    percentage /
+                    total
+                ) *
+                2 *
+                Math.PI;
+
+
+            const endAngle =
+                currentAngle +
+                sliceAngle;
+
+
+            const x1 =
+                centerX +
+                radius *
+                Math.cos(
+                    currentAngle
+                );
+
+
+            const y1 =
+                centerY +
+                radius *
+                Math.sin(
+                    currentAngle
+                );
+
+
+            const x2 =
+                centerX +
+                radius *
+                Math.cos(
+                    endAngle
+                );
+
+
+            const y2 =
+                centerY +
+                radius *
+                Math.sin(
+                    endAngle
+                );
+
+
+            const largeArc =
+                sliceAngle >
+                Math.PI
+                ? 1
+                : 0;
+
+
+            const path =
+                document.createElementNS(
+                    "http://www.w3.org/2000/svg",
+                    "path"
+                );
+
+
+            const d = `
+
+                M ${centerX} ${centerY}
+
+                L ${x1} ${y1}
+
+                A ${radius} ${radius}
+                0 ${largeArc} 1
+                ${x2} ${y2}
+
+                Z
+
+            `;
+
+
+            path.setAttribute(
+                "d",
+                d
+            );
+
+
+            path.setAttribute(
+                "fill",
+                getChartColor(
+                    causes.indexOf(cause)
+                )
+            );
+
+
+            path.setAttribute(
+                "stroke",
+                "white"
+            );
+
+
+            path.setAttribute(
+                "stroke-width",
+                "2"
+            );
+
+
+            svg.appendChild(
+                path
+            );
+
+
+            currentAngle =
+                endAngle;
+
+        }
+    );
+
+
+    // Legend
+
+    causes.forEach(
+        (cause, index) => {
+
+            const y =
+                300 +
+                index * 22;
+
+
+            const rect =
+                document.createElementNS(
+                    "http://www.w3.org/2000/svg",
+                    "rect"
+                );
+
+
+            rect.setAttribute(
+                "x",
+                70
+            );
+
+
+            rect.setAttribute(
+                "y",
+                y - 12
+            );
+
+
+            rect.setAttribute(
+                "width",
+                14
+            );
+
+
+            rect.setAttribute(
+                "height",
+                14
+            );
+
+
+            rect.setAttribute(
+                "fill",
+                getChartColor(index)
+            );
+
+
+            svg.appendChild(
+                rect
+            );
+
+
+            const text =
+                document.createElementNS(
+                    "http://www.w3.org/2000/svg",
+                    "text"
+                );
+
+
+            text.setAttribute(
+                "x",
+                92
+            );
+
+
+            text.setAttribute(
+                "y",
+                y
+            );
+
+
+            text.setAttribute(
+                "font-size",
+                "13"
+            );
+
+
+            text.textContent =
+
+                (
+                    cause.name ||
+                    "Unnamed cause"
+                ) +
+
+                " — " +
+
+                getCausePercentage(
+                    cause
+                ).toFixed(1) +
+
+                "%";
+
+
+            svg.appendChild(
+                text
+            );
+
+        }
+    );
+
+}
+
+
+// ==================================================
+// CHART COLORS
+// ==================================================
+
+function getChartColor(index) {
+
+    const colors = [
+
+        "#222222",
+        "#555555",
+        "#888888",
+        "#aaaaaa",
+        "#cccccc",
+        "#777777",
+        "#444444",
+        "#999999"
+
+    ];
+
+
+    return colors[
+        index %
+        colors.length
+    ];
+
+}
+
+
+// ==================================================
 // HISTORY
 // ==================================================
 
@@ -1665,6 +2444,12 @@ function renderHistory() {
                       "/10";
 
 
+                const causeCount =
+                    savedWeek.causes
+                    ? savedWeek.causes.length
+                    : 0;
+
+
                 div.innerHTML = `
 
                     <strong>
@@ -1680,6 +2465,11 @@ function renderHistory() {
 
                     Rating:
                     ${ratingText}
+
+                    <br>
+
+                    Causes recorded:
+                    ${causeCount}
 
                     <br>
 
@@ -1751,6 +2541,12 @@ function loadWeek(
         : savedWeek.rating;
 
 
+    document.getElementById(
+        "reflection"
+    ).value =
+        savedWeek.reflection || "";
+
+
     goals =
         savedWeek.goals.map(
             goal => ({
@@ -1765,9 +2561,30 @@ function loadWeek(
         );
 
 
+    causes =
+        (savedWeek.causes || [])
+        .map(
+            cause => ({
+
+                name:
+                    cause.name,
+
+                percentage:
+                    cause.percentage
+
+            })
+        );
+
+
     renderGoals();
 
+    renderCauses();
+
     calculate();
+
+    updateCauseTotal();
+
+    drawCauseChart();
 
 }
 
@@ -1891,6 +2708,8 @@ renderHistory();
 updateComparison();
 
 drawRadar();
+
+drawCauseChart();
 
 calculate();
 
