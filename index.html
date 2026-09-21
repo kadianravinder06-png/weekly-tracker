@@ -123,12 +123,27 @@
     .toggle-button {
         background: #444;
     }
+
+    .damage-row {
+        padding: 12px;
+        margin: 8px 0;
+        background: #f0f0f0;
+        border-radius: 8px;
+    }
+
+    .damage-total {
+        padding: 12px;
+        margin-top: 12px;
+        border-top: 2px solid #222;
+        font-weight: bold;
+    }
 </style>
 </head>
 
 <body>
 
 <h1>Weekly Growth Tracker</h1>
+
 
 <div class="card">
     <h2>Tracking Period</h2>
@@ -246,6 +261,32 @@
 
 
 <div class="card">
+    <h2>Damage Analysis</h2>
+
+    <p class="small">
+        Damage = Cause Percentage × Deficit
+    </p>
+
+    <div id="damageResults">
+        <p>No damage calculated yet.</p>
+    </div>
+</div>
+
+
+<div class="card">
+    <h2>Accumulated Damage</h2>
+
+    <p class="small">
+        Total damage caused by each root cause across all saved weeks.
+    </p>
+
+    <div id="accumulatedDamage">
+        <p>No saved damage data yet.</p>
+    </div>
+</div>
+
+
+<div class="card">
     <h2>Radar Chart</h2>
     <canvas id="radarChart"></canvas>
 </div>
@@ -267,23 +308,34 @@
 
 let goals = [];
 let causes = [];
+
 let radarChart = null;
 let causeChart = null;
 
-let weeks = JSON.parse(localStorage.getItem("weeklyTrackerWeeks")) || [];
+let weeks =
+    JSON.parse(
+        localStorage.getItem("weeklyTrackerWeeks")
+    ) || [];
 
 let totalWeeks =
-    Number(localStorage.getItem("weeklyTrackerTotalWeeks")) || 5;
+    Number(
+        localStorage.getItem("weeklyTrackerTotalWeeks")
+    ) || 5;
 
-document.getElementById("totalWeeks").value = totalWeeks;
+document.getElementById("totalWeeks").value =
+    totalWeeks;
 
 
-/* ---------------- GOALS ---------------- */
+/* =========================
+   GOALS
+========================= */
 
 function addGoal(name = "", percentage = 0) {
 
     if (goals.length >= 6) {
+
         alert("You can have no more than 6 goals.");
+
         return;
     }
 
@@ -306,13 +358,15 @@ function removeGoal(index) {
 
 function renderGoals() {
 
-    const container = document.getElementById("goals");
+    const container =
+        document.getElementById("goals");
 
     container.innerHTML = "";
 
     goals.forEach((goal, index) => {
 
-        const div = document.createElement("div");
+        const div =
+            document.createElement("div");
 
         div.className = "goal";
 
@@ -342,14 +396,12 @@ function renderGoals() {
 
         container.appendChild(div);
     });
-
 }
 
 
 function updateGoalName(index, value) {
 
     goals[index].name = value;
-
 }
 
 
@@ -358,14 +410,16 @@ function updateGoalPercentage(index, value) {
     let percentage = Number(value);
 
     if (percentage < 0) percentage = 0;
+
     if (percentage > 100) percentage = 100;
 
     goals[index].percentage = percentage;
-
 }
 
 
-/* ---------------- CAUSES ---------------- */
+/* =========================
+   CAUSES
+========================= */
 
 function addCause(name = "", percentage = 0) {
 
@@ -375,7 +429,6 @@ function addCause(name = "", percentage = 0) {
     });
 
     renderCauses();
-
 }
 
 
@@ -384,19 +437,20 @@ function removeCause(index) {
     causes.splice(index, 1);
 
     renderCauses();
-
 }
 
 
 function renderCauses() {
 
-    const container = document.getElementById("causes");
+    const container =
+        document.getElementById("causes");
 
     container.innerHTML = "";
 
     causes.forEach((cause, index) => {
 
-        const div = document.createElement("div");
+        const div =
+            document.createElement("div");
 
         div.className = "cause";
 
@@ -425,18 +479,15 @@ function renderCauses() {
         `;
 
         container.appendChild(div);
-
     });
 
     updateCauseTotal();
-
 }
 
 
 function updateCauseName(index, value) {
 
     causes[index].name = value;
-
 }
 
 
@@ -445,21 +496,23 @@ function updateCausePercentage(index, value) {
     let percentage = Number(value);
 
     if (percentage < 0) percentage = 0;
+
     if (percentage > 100) percentage = 100;
 
     causes[index].percentage = percentage;
 
     updateCauseTotal();
-
 }
 
 
 function updateCauseTotal() {
 
-    const total = causes.reduce(
-        (sum, cause) => sum + Number(cause.percentage || 0),
-        0
-    );
+    const total =
+        causes.reduce(
+            (sum, cause) =>
+                sum + Number(cause.percentage || 0),
+            0
+        );
 
     document.getElementById("causeTotal").textContent =
         total.toFixed(1) + "%";
@@ -474,21 +527,26 @@ function updateCauseTotal() {
     } else if (Math.abs(total - 100) < 0.01) {
 
         warning.textContent = "";
-        document.getElementById("causeTotal").className = "success";
+
+        document
+            .getElementById("causeTotal")
+            .className = "success";
 
     } else {
 
         warning.textContent =
             "Cause percentages must total 100%.";
 
-        document.getElementById("causeTotal").className = "warning";
-
+        document
+            .getElementById("causeTotal")
+            .className = "warning";
     }
-
 }
 
 
-/* ---------------- PIE CHART TOGGLE ---------------- */
+/* =========================
+   PIE CHART
+========================= */
 
 function toggleCauseChart() {
 
@@ -502,7 +560,8 @@ function toggleCauseChart() {
 
         card.style.display = "block";
 
-        button.textContent = "Hide pie chart";
+        button.textContent =
+            "Hide pie chart";
 
         drawCauseChart();
 
@@ -510,14 +569,63 @@ function toggleCauseChart() {
 
         card.style.display = "none";
 
-        button.textContent = "Show pie chart";
-
+        button.textContent =
+            "Show pie chart";
     }
-
 }
 
 
-/* ---------------- CALCULATIONS ---------------- */
+function drawCauseChart() {
+
+    const canvas =
+        document.getElementById("causeChart");
+
+    if (causeChart) {
+
+        causeChart.destroy();
+    }
+
+    if (causes.length === 0) {
+
+        return;
+    }
+
+    causeChart =
+        new Chart(canvas, {
+
+            type: "pie",
+
+            data: {
+
+                labels:
+                    causes.map(
+                        cause =>
+                            cause.name ||
+                            "Unnamed cause"
+                    ),
+
+                datasets: [{
+
+                    data:
+                        causes.map(
+                            cause =>
+                                cause.percentage
+                        ),
+
+                    borderWidth: 1
+                }]
+            },
+
+            options: {
+                responsive: true
+            }
+        });
+}
+
+
+/* =========================
+   CALCULATIONS
+========================= */
 
 function calculate() {
 
@@ -526,7 +634,6 @@ function calculate() {
         alert("Add at least one goal.");
 
         return;
-
     }
 
     const average =
@@ -542,11 +649,15 @@ function calculate() {
 
 
     const weekNumber =
-        Number(document.getElementById("weekNumber").value);
+        Number(
+            document.getElementById("weekNumber").value
+        );
 
 
     totalWeeks =
-        Number(document.getElementById("totalWeeks").value);
+        Number(
+            document.getElementById("totalWeeks").value
+        );
 
 
     localStorage.setItem(
@@ -556,16 +667,20 @@ function calculate() {
 
 
     const weeksRemaining =
-        Math.max(totalWeeks - weekNumber, 0);
+        Math.max(
+            totalWeeks - weekNumber,
+            0
+        );
 
 
     let idealImprove = 0;
 
+
     if (weeksRemaining > 0) {
 
         idealImprove =
-            (100 - average) / weeksRemaining;
-
+            (100 - average) /
+            weeksRemaining;
     }
 
 
@@ -583,25 +698,34 @@ function calculate() {
     if (previousWeek) {
 
         improveAverage =
-            average - Number(previousWeek.average);
+            average -
+            Number(previousWeek.average);
 
-        document.getElementById("improveAverage").textContent =
+
+        document.getElementById(
+            "improveAverage"
+        ).textContent =
             (improveAverage >= 0 ? "+" : "") +
             improveAverage.toFixed(2) +
             "%";
 
     } else {
 
-        document.getElementById("improveAverage").textContent =
-            "N/A";
-
+        document.getElementById(
+            "improveAverage"
+        ).textContent = "N/A";
     }
+
+
+    let deficit = null;
 
 
     if (improveAverage !== null) {
 
-        const deficit =
-            idealImprove - improveAverage;
+        deficit =
+            idealImprove -
+            improveAverage;
+
 
         document.getElementById("deficit").textContent =
             (deficit >= 0 ? "+" : "") +
@@ -612,7 +736,6 @@ function calculate() {
 
         document.getElementById("deficit").textContent =
             "N/A";
-
     }
 
 
@@ -629,19 +752,29 @@ function calculate() {
     );
 
 
+    calculateDamage(deficit);
+
+
+    calculateAccumulatedDamage();
+
+
     drawRadarChart();
 
 
     if (
-        document.getElementById("causeChartCard").style.display !== "none"
+        document.getElementById(
+            "causeChartCard"
+        ).style.display !== "none"
     ) {
 
         drawCauseChart();
-
     }
-
 }
 
+
+/* =========================
+   RESULTS
+========================= */
 
 function renderResults(
     average,
@@ -662,7 +795,8 @@ function renderResults(
         div.className = "goal";
 
         const difference =
-            goal.percentage - average;
+            goal.percentage -
+            average;
 
 
         if (difference < 0) {
@@ -670,7 +804,10 @@ function renderResults(
             div.classList.add("below");
 
             div.innerHTML = `
-                <strong>${escapeHTML(goal.name)}</strong><br>
+                <strong>
+                    ${escapeHTML(goal.name)}
+                </strong>
+                <br>
                 ${goal.percentage}% —
                 ${Math.abs(difference).toFixed(2)}%
                 below average
@@ -679,20 +816,22 @@ function renderResults(
         } else {
 
             div.innerHTML = `
-                <strong>${escapeHTML(goal.name)}</strong><br>
+                <strong>
+                    ${escapeHTML(goal.name)}
+                </strong>
+                <br>
                 ${goal.percentage}%
             `;
-
         }
 
         container.appendChild(div);
-
     });
-
 }
 
 
-/* ---------------- COMPARISON ---------------- */
+/* =========================
+   CROSS-WEEK COMPARISON
+========================= */
 
 function getPreviousWeek(currentWeek) {
 
@@ -703,11 +842,12 @@ function getPreviousWeek(currentWeek) {
                 Number(currentWeek)
         );
 
+
     if (previousWeeks.length === 0) {
 
         return null;
-
     }
+
 
     previousWeeks.sort(
         (a, b) =>
@@ -715,8 +855,8 @@ function getPreviousWeek(currentWeek) {
             Number(a.weekNumber)
     );
 
-    return previousWeeks[0];
 
+    return previousWeeks[0];
 }
 
 
@@ -726,9 +866,12 @@ function renderComparison(
 ) {
 
     const container =
-        document.getElementById("comparison");
+        document.getElementById(
+            "comparison"
+        );
 
     container.innerHTML = "";
+
 
     if (!previousWeek) {
 
@@ -736,7 +879,6 @@ function renderComparison(
             "<p>No previous week available.</p>";
 
         return;
-
     }
 
 
@@ -744,8 +886,10 @@ function renderComparison(
 
         const previousGoal =
             previousWeek.goals.find(
-                g => g.name === goal.name
+                g =>
+                    g.name === goal.name
             );
+
 
         const div =
             document.createElement("div");
@@ -756,14 +900,16 @@ function renderComparison(
         if (!previousGoal) {
 
             div.innerHTML = `
-                <strong>${escapeHTML(goal.name)}</strong><br>
+                <strong>
+                    ${escapeHTML(goal.name)}
+                </strong>
+                <br>
                 No matching goal in previous week.
             `;
 
             container.appendChild(div);
 
             return;
-
         }
 
 
@@ -772,25 +918,23 @@ function renderComparison(
             Number(previousGoal.percentage);
 
 
-        /*
-            Important rule:
-
-            Highlight the goal if its improvement
-            is below the IDEAL IMPROVE AVERAGE,
-            not merely below the actual Improve Average.
-        */
-
         if (improvement < idealImprove) {
 
             div.classList.add("below");
-
         }
 
 
         div.innerHTML = `
-            <strong>${escapeHTML(goal.name)}</strong><br>
-            Previous: ${previousGoal.percentage}%<br>
-            Current: ${goal.percentage}%<br>
+            <strong>
+                ${escapeHTML(goal.name)}
+            </strong>
+            <br>
+            Previous:
+            ${previousGoal.percentage}%
+            <br>
+            Current:
+            ${goal.percentage}%
+            <br>
             Improved Percentage:
             ${improvement >= 0 ? "+" : ""}
             ${improvement.toFixed(2)}%
@@ -801,137 +945,357 @@ function renderComparison(
 
 
         container.appendChild(div);
-
     });
-
 }
 
 
-/* ---------------- RADAR CHART ---------------- */
+/* =========================
+   DAMAGE
+========================= */
+
+function calculateDamage(deficit) {
+
+    const container =
+        document.getElementById(
+            "damageResults"
+        );
+
+    container.innerHTML = "";
+
+
+    if (deficit === null) {
+
+        container.innerHTML = `
+            <p>
+                Damage cannot be calculated until
+                there is a previous week.
+            </p>
+        `;
+
+        return;
+    }
+
+
+    if (causes.length === 0) {
+
+        container.innerHTML = `
+            <p>
+                Add root causes to calculate damage.
+            </p>
+        `;
+
+        return;
+    }
+
+
+    causes.forEach(cause => {
+
+        const contribution =
+            Number(cause.percentage || 0);
+
+
+        const damage =
+            (contribution / 100) *
+            deficit;
+
+
+        const div =
+            document.createElement("div");
+
+        div.className =
+            "damage-row";
+
+
+        div.innerHTML = `
+            <strong>
+                ${escapeHTML(
+                    cause.name ||
+                    "Unnamed cause"
+                )}
+            </strong>
+
+            <br>
+
+            Cause contribution:
+            ${contribution.toFixed(2)}%
+
+            <br>
+
+            Damage:
+            ${damage.toFixed(2)}
+        `;
+
+
+        container.appendChild(div);
+    });
+
+
+    const totalDamage =
+        causes.reduce(
+            (sum, cause) =>
+                sum +
+                (
+                    Number(cause.percentage || 0) /
+                    100
+                ) *
+                deficit,
+            0
+        );
+
+
+    const total =
+        document.createElement("div");
+
+    total.className =
+        "damage-total";
+
+
+    total.innerHTML = `
+        Total Damage:
+        ${totalDamage.toFixed(2)}
+    `;
+
+
+    container.appendChild(total);
+}
+
+
+/* =========================
+   ACCUMULATED DAMAGE
+========================= */
+
+function calculateAccumulatedDamage() {
+
+    const container =
+        document.getElementById(
+            "accumulatedDamage"
+        );
+
+    container.innerHTML = "";
+
+
+    const accumulated = {};
+
+
+    weeks.forEach(week => {
+
+        const weekNumber =
+            Number(week.weekNumber);
+
+
+        const previousWeeks =
+            weeks.filter(
+                w =>
+                    Number(w.weekNumber) <
+                    weekNumber
+            );
+
+
+        let previousWeek = null;
+
+
+        if (previousWeeks.length > 0) {
+
+            previousWeeks.sort(
+                (a, b) =>
+                    Number(b.weekNumber) -
+                    Number(a.weekNumber)
+            );
+
+            previousWeek =
+                previousWeeks[0];
+        }
+
+
+        if (!previousWeek) {
+
+            return;
+        }
+
+
+        const average =
+            Number(week.average);
+
+
+        const weeksRemaining =
+            Math.max(
+                totalWeeks -
+                weekNumber,
+                0
+            );
+
+
+        let idealImprove = 0;
+
+
+        if (weeksRemaining > 0) {
+
+            idealImprove =
+                (100 - average) /
+                weeksRemaining;
+        }
+
+
+        const improveAverage =
+            average -
+            Number(previousWeek.average);
+
+
+        const deficit =
+            idealImprove -
+            improveAverage;
+
+
+        (week.causes || []).forEach(
+            cause => {
+
+                const name =
+                    cause.name ||
+                    "Unnamed cause";
+
+
+                const damage =
+                    (
+                        Number(
+                            cause.percentage || 0
+                        ) / 100
+                    ) *
+                    deficit;
+
+
+                if (!accumulated[name]) {
+
+                    accumulated[name] = 0;
+                }
+
+
+                accumulated[name] += damage;
+            }
+        );
+    });
+
+
+    const names =
+        Object.keys(accumulated);
+
+
+    if (names.length === 0) {
+
+        container.innerHTML = `
+            <p>
+                No accumulated damage available yet.
+            </p>
+        `;
+
+        return;
+    }
+
+
+    names.sort(
+        (a, b) =>
+            accumulated[b] -
+            accumulated[a]
+    );
+
+
+    names.forEach(name => {
+
+        const div =
+            document.createElement("div");
+
+        div.className =
+            "damage-row";
+
+
+        div.innerHTML = `
+            <strong>
+                ${escapeHTML(name)}
+            </strong>
+            <br>
+            Accumulated Damage:
+            ${accumulated[name].toFixed(2)}
+        `;
+
+
+        container.appendChild(div);
+    });
+}
+
+
+/* =========================
+   RADAR CHART
+========================= */
 
 function drawRadarChart() {
 
     const canvas =
-        document.getElementById("radarChart");
+        document.getElementById(
+            "radarChart"
+        );
+
 
     if (radarChart) {
 
         radarChart.destroy();
-
     }
 
 
     if (goals.length === 0) {
 
         return;
-
     }
 
 
     radarChart =
-        new Chart(canvas, {
+        new Chart(
+            canvas,
+            {
 
-            type: "radar",
+                type: "radar",
 
-            data: {
+                data: {
 
-                labels:
-                    goals.map(goal => goal.name),
-
-                datasets: [{
-
-                    label: "Current Week",
-
-                    data:
+                    labels:
                         goals.map(
-                            goal => goal.percentage
+                            goal =>
+                                goal.name
                         ),
 
-                    borderWidth: 2
+                    datasets: [{
 
-                }]
+                        label:
+                            "Current Week",
 
-            },
+                        data:
+                            goals.map(
+                                goal =>
+                                    goal.percentage
+                            ),
 
-            options: {
+                        borderWidth: 2
+                    }]
+                },
 
-                scales: {
+                options: {
 
-                    r: {
+                    scales: {
 
-                        min: 0,
+                        r: {
 
-                        max: 100
+                            min: 0,
 
+                            max: 100
+                        }
                     }
-
                 }
-
             }
-
-        });
-
+        );
 }
 
 
-/* ---------------- CAUSE PIE CHART ---------------- */
-
-function drawCauseChart() {
-
-    const canvas =
-        document.getElementById("causeChart");
-
-    if (causeChart) {
-
-        causeChart.destroy();
-
-    }
-
-
-    if (causes.length === 0) {
-
-        return;
-
-    }
-
-
-    causeChart =
-        new Chart(canvas, {
-
-            type: "pie",
-
-            data: {
-
-                labels:
-                    causes.map(
-                        cause => cause.name || "Unnamed cause"
-                    ),
-
-                datasets: [{
-
-                    data:
-                        causes.map(
-                            cause => cause.percentage
-                        ),
-
-                    borderWidth: 1
-
-                }]
-
-            },
-
-            options: {
-
-                responsive: true
-
-            }
-
-        });
-
-}
-
-
-/* ---------------- SAVE WEEK ---------------- */
+/* =========================
+   SAVE WEEK
+========================= */
 
 function saveWeek() {
 
@@ -940,33 +1304,44 @@ function saveWeek() {
         alert("Add at least one goal.");
 
         return;
-
     }
 
 
     const average =
         goals.reduce(
             (sum, goal) =>
-                sum + Number(goal.percentage || 0),
+                sum +
+                Number(
+                    goal.percentage || 0
+                ),
             0
         ) / goals.length;
 
 
     const weekNumber =
-        Number(document.getElementById("weekNumber").value);
+        Number(
+            document.getElementById(
+                "weekNumber"
+            ).value
+        );
 
 
     const causeTotal =
         causes.reduce(
             (sum, cause) =>
-                sum + Number(cause.percentage || 0),
+                sum +
+                Number(
+                    cause.percentage || 0
+                ),
             0
         );
 
 
     if (
         causes.length > 0 &&
-        Math.abs(causeTotal - 100) > 0.01
+        Math.abs(
+            causeTotal - 100
+        ) > 0.01
     ) {
 
         alert(
@@ -974,17 +1349,19 @@ function saveWeek() {
         );
 
         return;
-
     }
 
 
     const weekData = {
 
-        weekNumber: weekNumber,
+        weekNumber:
+            weekNumber,
 
         rating:
             Number(
-                document.getElementById("rating").value
+                document.getElementById(
+                    "rating"
+                ).value
             ),
 
         goals:
@@ -992,10 +1369,13 @@ function saveWeek() {
                 JSON.stringify(goals)
             ),
 
-        average: average,
+        average:
+            average,
 
         reflection:
-            document.getElementById("reflection").value,
+            document.getElementById(
+                "reflection"
+            ).value,
 
         causes:
             JSON.parse(
@@ -1003,27 +1383,29 @@ function saveWeek() {
             ),
 
         showCauseChart:
-            document.getElementById("causeChartCard").style.display !== "none"
-
+            document.getElementById(
+                "causeChartCard"
+            ).style.display !== "none"
     };
 
 
     const existingIndex =
         weeks.findIndex(
             week =>
-                Number(week.weekNumber) ===
-                weekNumber
+                Number(
+                    week.weekNumber
+                ) === weekNumber
         );
 
 
     if (existingIndex >= 0) {
 
-        weeks[existingIndex] = weekData;
+        weeks[existingIndex] =
+            weekData;
 
     } else {
 
         weeks.push(weekData);
-
     }
 
 
@@ -1042,43 +1424,57 @@ function saveWeek() {
 
     alert("Week saved.");
 
+
     renderHistory();
 
     calculate();
-
 }
 
 
-/* ---------------- LOAD WEEK ---------------- */
+/* =========================
+   LOAD WEEK
+========================= */
 
 function loadWeek(index) {
 
-    const week = weeks[index];
+    const week =
+        weeks[index];
+
 
     if (!week) return;
 
 
-    document.getElementById("weekNumber").value =
+    document.getElementById(
+        "weekNumber"
+    ).value =
         week.weekNumber;
 
 
-    document.getElementById("rating").value =
+    document.getElementById(
+        "rating"
+    ).value =
         week.rating ?? "";
 
 
-    document.getElementById("reflection").value =
+    document.getElementById(
+        "reflection"
+    ).value =
         week.reflection || "";
 
 
     goals =
         JSON.parse(
-            JSON.stringify(week.goals || [])
+            JSON.stringify(
+                week.goals || []
+            )
         );
 
 
     causes =
         JSON.parse(
-            JSON.stringify(week.causes || [])
+            JSON.stringify(
+                week.causes || []
+            )
         );
 
 
@@ -1092,35 +1488,42 @@ function loadWeek(index) {
 
 
     const card =
-        document.getElementById("causeChartCard");
+        document.getElementById(
+            "causeChartCard"
+        );
+
 
     const button =
-        document.getElementById("causeChartButton");
+        document.getElementById(
+            "causeChartButton"
+        );
 
 
     if (showChart) {
 
-        card.style.display = "block";
+        card.style.display =
+            "block";
 
         button.textContent =
             "Hide pie chart";
 
     } else {
 
-        card.style.display = "none";
+        card.style.display =
+            "none";
 
         button.textContent =
             "Show pie chart";
-
     }
 
 
     calculate();
-
 }
 
 
-/* ---------------- DELETE WEEK ---------------- */
+/* =========================
+   DELETE WEEK
+========================= */
 
 function deleteWeek(index) {
 
@@ -1131,11 +1534,13 @@ function deleteWeek(index) {
     ) {
 
         return;
-
     }
 
 
-    weeks.splice(index, 1);
+    weeks.splice(
+        index,
+        1
+    );
 
 
     localStorage.setItem(
@@ -1146,15 +1551,20 @@ function deleteWeek(index) {
 
     renderHistory();
 
+    calculateAccumulatedDamage();
 }
 
 
-/* ---------------- HISTORY ---------------- */
+/* =========================
+   HISTORY
+========================= */
 
 function renderHistory() {
 
     const container =
-        document.getElementById("history");
+        document.getElementById(
+            "history"
+        );
 
     container.innerHTML = "";
 
@@ -1165,67 +1575,95 @@ function renderHistory() {
             "<p>No saved weeks yet.</p>";
 
         return;
-
     }
 
 
-    weeks.forEach((week, index) => {
+    weeks.forEach(
+        (week, index) => {
 
-        const div =
-            document.createElement("div");
+            const div =
+                document.createElement(
+                    "div"
+                );
 
-        div.className =
-            "history-item";
-
-
-        div.innerHTML = `
-            <strong>Week ${week.weekNumber}</strong><br>
-
-            Average:
-            ${Number(week.average).toFixed(2)}%
-
-            <br>
-
-            Rating:
-            ${week.rating ?? "N/A"}/10
-
-            <br><br>
-
-            <button onclick="loadWeek(${index})">
-                Load
-            </button>
-
-            <button
-                class="remove"
-                onclick="deleteWeek(${index})"
-            >
-                Delete
-            </button>
-        `;
+            div.className =
+                "history-item";
 
 
-        container.appendChild(div);
+            div.innerHTML = `
+                <strong>
+                    Week ${week.weekNumber}
+                </strong>
+                <br>
 
-    });
+                Average:
+                ${Number(
+                    week.average
+                ).toFixed(2)}%
 
+                <br>
+
+                Rating:
+                ${week.rating ?? "N/A"}/10
+
+                <br><br>
+
+                <button
+                    onclick="loadWeek(${index})"
+                >
+                    Load
+                </button>
+
+                <button
+                    class="remove"
+                    onclick="deleteWeek(${index})"
+                >
+                    Delete
+                </button>
+            `;
+
+
+            container.appendChild(
+                div
+            );
+        }
+    );
 }
 
 
-/* ---------------- UTILITIES ---------------- */
+/* =========================
+   UTILITY
+========================= */
 
 function escapeHTML(text) {
 
     return String(text)
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;")
-        .replace(/'/g, "&#039;");
-
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
 }
 
 
-/* ---------------- INITIAL SETUP ---------------- */
+/* =========================
+   INITIAL SETUP
+========================= */
 
 document
     .getElementById("totalWeeks")
@@ -1234,7 +1672,9 @@ document
         function() {
 
             totalWeeks =
-                Number(this.value);
+                Number(
+                    this.value
+                );
 
             localStorage.setItem(
                 "weeklyTrackerTotalWeeks",
@@ -1242,28 +1682,30 @@ document
             );
 
             calculate();
-
         }
     );
 
 
-/*
-    Start with two example goals if
-    there is no current working data.
-*/
-
 if (goals.length === 0) {
 
-    addGoal("Example Goal 1", 50);
+    addGoal(
+        "Example Goal 1",
+        50
+    );
 
-    addGoal("Example Goal 2", 70);
-
+    addGoal(
+        "Example Goal 2",
+        70
+    );
 }
 
 
 renderGoals();
+
 renderCauses();
+
 renderHistory();
+
 calculate();
 
 </script>
