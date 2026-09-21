@@ -18,28 +18,19 @@
     --blue:#67b8ef;
     --blue-soft:#8fcdf3;
     --black:#0c0d0f;
-
     --warning:#e8c58e;
     --warning-bg:#3a3226;
-
     --damage:#cf7d7d;
     --damage-bg:#382729;
-
     --surplus:#9ed0a1;
     --surplus-bg:#28372b;
-
     --border:#343a42;
-
     --radius:14px;
 }
 
-*{
-    box-sizing:border-box;
-}
+*{box-sizing:border-box}
 
-html{
-    scroll-behavior:smooth;
-}
+html{scroll-behavior:smooth}
 
 body{
     margin:0;
@@ -49,29 +40,15 @@ body{
     line-height:1.5;
 }
 
-button,
-input,
-textarea{
-    font:inherit;
-}
-
-button{
-    cursor:pointer;
-}
-
-
-/* =========================
-   TOP BAR
-========================= */
+button,input,textarea{font:inherit}
+button{cursor:pointer}
 
 .topbar{
     position:sticky;
     top:0;
     z-index:1000;
-
     background:rgba(23,25,28,.94);
     backdrop-filter:blur(14px);
-
     border-bottom:1px solid var(--border);
 }
 
@@ -79,7 +56,6 @@ button{
     max-width:1180px;
     margin:auto;
     padding:12px 20px;
-
     display:flex;
     align-items:center;
     justify-content:space-between;
@@ -104,34 +80,23 @@ button{
     max-width:1180px;
     margin:auto;
     padding:0 20px 11px;
-
     display:flex;
     gap:8px;
     overflow-x:auto;
     scrollbar-width:none;
 }
 
-.nav::-webkit-scrollbar{
-    display:none;
-}
+.nav::-webkit-scrollbar{display:none}
 
 .nav a{
     flex:0 0 auto;
-
     padding:7px 12px;
-
     text-decoration:none;
     color:var(--muted);
-
     border:1px solid transparent;
     border-radius:999px;
-
     font-size:13px;
-
-    transition:
-        background .2s ease,
-        color .2s ease,
-        border-color .2s ease;
+    transition:.2s ease;
 }
 
 .nav a:hover{
@@ -140,20 +105,13 @@ button{
     border-color:var(--border);
 }
 
-
-/* =========================
-   MAIN
-========================= */
-
 main{
     max-width:1180px;
     margin:auto;
     padding:24px 20px 70px;
 }
 
-.hero{
-    padding:22px 0 12px;
-}
+.hero{padding:22px 0 12px}
 
 .hero h1{
     margin:0;
@@ -166,26 +124,18 @@ main{
     color:var(--muted);
 }
 
-
-/* =========================
-   CARDS
-========================= */
-
 .card{
     background:var(--surface);
     border:1px solid var(--border);
     border-radius:var(--radius);
     padding:22px;
     margin:18px 0;
-
-    box-shadow:
-        0 8px 28px rgba(0,0,0,.16);
+    box-shadow:0 8px 28px rgba(0,0,0,.16);
 }
 
 .card h2{
     margin:0 0 16px;
     font-size:18px;
-    letter-spacing:.1px;
 }
 
 .section-label{
@@ -201,15 +151,9 @@ main{
     color:var(--muted);
 }
 
-
-/* =========================
-   DASHBOARD GRID
-========================= */
-
 .stats-grid{
     display:grid;
-    grid-template-columns:
-        repeat(4,minmax(0,1fr));
+    grid-template-columns:repeat(4,minmax(0,1fr));
     gap:12px;
 }
 
@@ -231,45 +175,25 @@ main{
     font-weight:700;
 }
 
-.stat-blue .stat-value{
-    color:var(--blue);
-}
+.stat-blue .stat-value{color:var(--blue)}
 
-
-/* =========================
-   FORM ELEMENTS
-========================= */
-
-input,
-textarea{
+input,textarea{
     background:var(--surface-2);
     color:var(--text);
-
     border:1px solid var(--border);
     border-radius:10px;
-
     padding:10px 12px;
-
     outline:none;
-
-    transition:
-        border-color .2s ease,
-        box-shadow .2s ease;
+    transition:.2s ease;
 }
 
-input:focus,
-textarea:focus{
+input:focus,textarea:focus{
     border-color:var(--blue);
     box-shadow:0 0 0 2px rgba(103,184,239,.12);
 }
 
-input[type="number"]{
-    width:95px;
-}
-
-input[type="text"]{
-    width:min(100%,460px);
-}
+input[type="number"]{width:95px}
+input[type="text"]{width:min(100%,460px)}
 
 textarea{
     width:100%;
@@ -277,26 +201,14 @@ textarea{
     resize:vertical;
 }
 
-
-/* =========================
-   BUTTONS
-========================= */
-
 button{
     border:0;
     border-radius:999px;
-
     padding:10px 16px;
-
     background:var(--blue);
     color:#071118;
-
     font-weight:700;
-
-    transition:
-        transform .15s ease,
-        opacity .2s ease,
-        background .2s ease;
+    transition:.15s ease;
 }
 
 button:hover{
@@ -304,9 +216,7 @@ button:hover{
     transform:translateY(-1px);
 }
 
-button:active{
-    transform:translateY(0);
-}
+button:active{transform:translateY(0)}
 
 .secondary-button{
     background:var(--surface-3);
@@ -325,15 +235,17 @@ button:active{
     border:1px solid var(--border);
 }
 
-
-/* =========================
-   TRACKING PERIOD
-========================= */
+.end-session-button{
+    width:100%;
+    padding:15px 20px;
+    font-size:15px;
+    background:var(--blue);
+    margin-top:8px;
+}
 
 .period-grid{
     display:grid;
-    grid-template-columns:
-        repeat(3,minmax(0,1fr));
+    grid-template-columns:repeat(3,minmax(0,1fr));
     gap:12px;
 }
 
@@ -348,15 +260,9 @@ button:active{
     font-size:13px;
 }
 
-
-/* =========================
-   GOALS
-========================= */
-
 .goal{
     padding:15px;
     margin:10px 0;
-
     background:var(--surface-2);
     border:1px solid var(--border);
     border-radius:12px;
@@ -383,49 +289,30 @@ button:active{
 .progress-track{
     width:100%;
     height:9px;
-
     background:#121417;
     border-radius:999px;
-
-    margin:10px 0 10px;
-
+    margin:10px 0;
     overflow:hidden;
 }
 
 .progress-fill{
     height:100%;
     border-radius:999px;
-
     background:var(--blue);
-
     width:0;
-
-    transition:
-        width .7s cubic-bezier(.22,.61,.36,1);
+    transition:width .7s cubic-bezier(.22,.61,.36,1);
 }
 
 .goal-meta{
     display:flex;
     justify-content:space-between;
     gap:12px;
-
     color:var(--muted);
     font-size:12px;
 }
 
-
-/* =========================
-   BELOW TARGET
-========================= */
-
 .below{
-    background:
-        linear-gradient(
-            90deg,
-            rgba(232,197,142,.10),
-            transparent
-        );
-
+    background:linear-gradient(90deg,rgba(232,197,142,.10),transparent);
     border-left:4px solid var(--warning);
 }
 
@@ -439,33 +326,15 @@ button:active{
     font-weight:700;
 }
 
-
-/* =========================
-   REFLECTION
-========================= */
-
 .reflection-area{
-    font-family:
-        Georgia,
-        "Times New Roman",
-        serif;
-
+    font-family:Georgia,"Times New Roman",serif;
     font-size:17px;
     line-height:1.7;
-
     color:#e9e2d8;
-
     background:#1d2024;
 }
 
-.reflection-area::placeholder{
-    color:#777b80;
-}
-
-
-/* =========================
-   CAUSES
-========================= */
+.reflection-area::placeholder{color:#777b80}
 
 .cause{
     margin:10px 0;
@@ -475,14 +344,7 @@ button:active{
     flex-wrap:wrap;
 }
 
-.cause-total{
-    margin-top:12px;
-}
-
-
-/* =========================
-   CHARTS
-========================= */
+.cause-total{margin-top:12px}
 
 .chart-container{
     width:100%;
@@ -490,40 +352,24 @@ button:active{
     margin:16px auto 4px;
 }
 
-.radar-container{
-    max-width:620px;
-}
+.radar-container{max-width:620px}
 
-canvas{
-    width:100% !important;
-}
-
-
-/* =========================
-   DAMAGE
-========================= */
+canvas{width:100%!important}
 
 .damage-row{
     padding:13px;
     margin:9px 0;
-
     background:var(--surface-2);
-
     border:1px solid var(--border);
     border-radius:10px;
 }
 
-.damage-row strong{
-    font-size:14px;
-}
+.damage-row strong{font-size:14px}
 
 .damage-total{
     padding:15px;
-
     margin-top:14px;
-
     border-top:1px solid var(--border);
-
     font-weight:700;
 }
 
@@ -547,11 +393,6 @@ canvas{
     font-weight:700;
 }
 
-
-/* =========================
-   TIMELINE
-========================= */
-
 .timeline{
     position:relative;
     margin-top:8px;
@@ -560,14 +401,11 @@ canvas{
 
 .timeline::before{
     content:"";
-
     position:absolute;
     left:8px;
     top:4px;
     bottom:4px;
-
     width:1px;
-
     background:var(--border);
 }
 
@@ -578,19 +416,13 @@ canvas{
 
 .timeline-dot{
     position:absolute;
-
     left:-22px;
     top:4px;
-
     width:11px;
     height:11px;
-
     border-radius:50%;
-
     background:var(--blue);
-
-    box-shadow:
-        0 0 0 4px var(--bg);
+    box-shadow:0 0 0 4px var(--bg);
 }
 
 .timeline-card{
@@ -606,19 +438,12 @@ canvas{
     gap:12px;
 }
 
-.timeline-week{
-    font-weight:700;
-}
+.timeline-week{font-weight:700}
 
 .timeline-average{
     color:var(--blue-soft);
     font-weight:700;
 }
-
-
-/* =========================
-   HISTORY BUTTONS
-========================= */
 
 .history-actions{
     display:flex;
@@ -627,43 +452,86 @@ canvas{
     margin-top:11px;
 }
 
-
-/* =========================
-   DIVIDER
-========================= */
-
 hr{
     border:0;
     border-top:1px solid var(--border);
     margin:22px 0;
 }
 
+#importFile{display:none}
+
 
 /* =========================
-   RESPONSIVE
+   HOME SCREEN
 ========================= */
 
+#homeScreen{
+    min-height:calc(100vh - 76px);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:space-between;
+    padding:9vh 20px 28px;
+    text-align:center;
+}
+
+.home-week{
+    font-size:clamp(38px,8vw,70px);
+    font-weight:700;
+    letter-spacing:-2px;
+}
+
+.home-middle{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:20px;
+}
+
+.home-middle button{
+    min-width:220px;
+    padding:14px 24px;
+    font-size:15px;
+}
+
+.home-quote{
+    font-size:10px;
+    color:#656b72;
+    letter-spacing:.5px;
+    max-width:420px;
+}
+
+#appInterface{display:none}
+
+#previousWeekScreen{
+    display:none;
+    max-width:1180px;
+    margin:auto;
+    padding:30px 20px 70px;
+}
+
+.readonly-banner{
+    background:var(--surface-2);
+    border:1px solid var(--border);
+    border-left:4px solid var(--blue);
+    border-radius:10px;
+    padding:13px 15px;
+    color:var(--muted);
+    font-size:13px;
+}
+
 @media(max-width:850px){
-
     .stats-grid{
-        grid-template-columns:
-            repeat(2,minmax(0,1fr));
+        grid-template-columns:repeat(2,minmax(0,1fr));
     }
 
-    .period-grid{
-        grid-template-columns:1fr;
-    }
+    .period-grid{grid-template-columns:1fr}
 }
 
 @media(max-width:560px){
+    main{padding:18px 13px 50px}
 
-    main{
-        padding:18px 13px 50px;
-    }
-
-    .topbar-inner{
-        padding:10px 13px;
-    }
+    .topbar-inner{padding:10px 13px}
 
     .nav{
         padding-left:13px;
@@ -675,83 +543,126 @@ hr{
         border-radius:12px;
     }
 
-    .stats-grid{
-        grid-template-columns:1fr 1fr;
-    }
+    .stats-grid{grid-template-columns:1fr 1fr}
 
-    .stat{
-        padding:13px;
-    }
+    .stat{padding:13px}
 
-    .stat-value{
-        font-size:21px;
-    }
+    .stat-value{font-size:21px}
 
-    .goal-top{
-        align-items:flex-start;
-    }
+    .goal-top{align-items:flex-start}
 
-    input[type="text"]{
-        width:100%;
-    }
+    input[type="text"]{width:100%}
 
     .cause{
         flex-direction:column;
         align-items:stretch;
     }
 
-    .cause input[type="number"]{
-        width:95px;
+    .cause input[type="number"]{width:95px}
+
+    #homeScreen{
+        min-height:calc(100vh - 65px);
+        padding:11vh 15px 22px;
     }
-}
-
-
-/* =========================
-   FILE INPUT
-========================= */
-
-#importFile{
-    display:none;
 }
 </style>
 </head>
 
 <body>
 
-
 <header class="topbar">
 
     <div class="topbar-inner">
 
-        <div class="brand">
-            WEEKLY GROWTH TRACKER
-        </div>
+        <div class="brand">WEEKLY GROWTH TRACKER</div>
 
-        <div
-            id="currentWeekIndicator"
-            class="current-week">
+        <div id="currentWeekIndicator" class="current-week">
             WEEK 1 / 5
         </div>
 
     </div>
 
-
     <nav class="nav">
-
         <a href="#dashboard">Dashboard</a>
         <a href="#goalsSection">Goals</a>
         <a href="#reflectionSection">Reflection</a>
         <a href="#analysisSection">Analysis</a>
         <a href="#historySection">History</a>
         <a href="#backupSection">Backup</a>
-
     </nav>
 
 </header>
 
 
-<main>
+<!-- =========================
+     HOME SCREEN
+========================= -->
 
+<section id="homeScreen">
+
+    <div
+        id="homeWeek"
+        class="home-week">
+        WEEK 1 PASSED
+    </div>
+
+    <div class="home-middle">
+
+        <button onclick="startNewWeek()">
+            Evaluate New Week
+        </button>
+
+        <button
+            class="secondary-button"
+            onclick="showPreviousWeeks()">
+            View Previous Week
+        </button>
+
+    </div>
+
+    <div class="home-quote">
+        Measure. Reflect. Improve.
+    </div>
+
+</section>
+
+
+<!-- =========================
+     PREVIOUS WEEK SCREEN
+========================= -->
+
+<section id="previousWeekScreen">
+
+    <div class="hero">
+        <h1>Previous Weeks</h1>
+        <p>Review your completed weeks.</p>
+    </div>
+
+    <div class="readonly-banner">
+        Previous weeks are shown for review. Your current session is not changed.
+    </div>
+
+    <div
+        id="previousWeeksContent"
+        class="card">
+    </div>
+
+    <button
+        class="secondary-button"
+        onclick="returnHome()">
+        Back to Home
+    </button>
+
+</section>
+
+
+<!-- =========================
+     APP INTERFACE
+========================= -->
+
+<div id="appInterface">
+
+<main>
 
 <section class="hero">
 
@@ -764,71 +675,28 @@ hr{
 </section>
 
 
-<!-- =========================
-     DASHBOARD
-========================= -->
-
 <section id="dashboard">
 
 <div class="stats-grid">
 
     <div class="stat stat-blue">
-
-        <div class="stat-label">
-            CURRENT WEEK
-        </div>
-
-        <div
-            id="dashboardWeek"
-            class="stat-value">
-            1 / 5
-        </div>
-
+        <div class="stat-label">CURRENT WEEK</div>
+        <div id="dashboardWeek" class="stat-value">1 / 5</div>
     </div>
 
-
     <div class="stat">
-
-        <div class="stat-label">
-            AVERAGE
-        </div>
-
-        <div
-            id="dashboardAverage"
-            class="stat-value">
-            0%
-        </div>
-
+        <div class="stat-label">AVERAGE</div>
+        <div id="dashboardAverage" class="stat-value">0%</div>
     </div>
 
-
     <div class="stat">
-
-        <div class="stat-label">
-            IMPROVE AVERAGE
-        </div>
-
-        <div
-            id="dashboardImprove"
-            class="stat-value">
-            N/A
-        </div>
-
+        <div class="stat-label">IMPROVE AVERAGE</div>
+        <div id="dashboardImprove" class="stat-value">N/A</div>
     </div>
 
-
     <div class="stat">
-
-        <div class="stat-label">
-            WEEKLY RATING
-        </div>
-
-        <div
-            id="dashboardRating"
-            class="stat-value">
-            Unrated
-        </div>
-
+        <div class="stat-label">WEEKLY RATING</div>
+        <div id="dashboardRating" class="stat-value">Unrated</div>
     </div>
 
 </div>
@@ -836,67 +704,27 @@ hr{
 </section>
 
 
-<!-- =========================
-     TRACKING PERIOD
-========================= -->
-
 <section class="card">
 
-    <div class="section-label">
-        Tracking period
-    </div>
+    <div class="section-label">Tracking period</div>
 
     <h2>Week setup</h2>
 
     <div class="period-grid">
 
         <div class="field">
-
-            <label for="totalWeeks">
-                Total weeks
-            </label>
-
-            <input
-                type="number"
-                id="totalWeeks"
-                min="1"
-                value="5"
-            >
-
+            <label for="totalWeeks">Total weeks</label>
+            <input type="number" id="totalWeeks" min="1" value="5">
         </div>
 
-
         <div class="field">
-
-            <label for="weekNumber">
-                Current week
-            </label>
-
-            <input
-                type="number"
-                id="weekNumber"
-                min="1"
-                value="1"
-            >
-
+            <label for="weekNumber">Current week</label>
+            <input type="number" id="weekNumber" min="1" value="1">
         </div>
 
-
         <div class="field">
-
-            <label for="rating">
-                Weekly rating
-            </label>
-
-            <input
-                type="number"
-                id="rating"
-                min="0"
-                max="10"
-                step="0.1"
-                placeholder="0–10"
-            >
-
+            <label for="rating">Weekly rating</label>
+            <input type="number" id="rating" min="0" max="10" step="0.1" placeholder="0–10">
         </div>
 
     </div>
@@ -904,42 +732,24 @@ hr{
 </section>
 
 
-<!-- =========================
-     GOALS
-========================= -->
+<section id="goalsSection" class="card">
 
-<section
-    id="goalsSection"
-    class="card">
-
-    <div class="section-label">
-        Progress
-    </div>
+    <div class="section-label">Progress</div>
 
     <h2>Goals</h2>
 
     <div id="goals"></div>
 
-    <button onclick="addGoal()">
-        Add Goal
-    </button>
+    <button onclick="addGoal()">Add Goal</button>
 
-    <p class="small">
-        Maximum 6 goals.
-    </p>
+    <p class="small">Maximum 6 goals.</p>
 
 </section>
 
 
-<!-- =========================
-     RESULTS
-========================= -->
-
 <section class="card">
 
-    <div class="section-label">
-        Current week
-    </div>
+    <div class="section-label">Current week</div>
 
     <h2>Results</h2>
 
@@ -950,75 +760,34 @@ hr{
     <div class="stats-grid">
 
         <div class="stat">
-
-            <div class="stat-label">
-                Average
-            </div>
-
-            <div
-                id="average"
-                class="stat-value">
-                0%
-            </div>
-
+            <div class="stat-label">Average</div>
+            <div id="average" class="stat-value">0%</div>
         </div>
 
-
         <div class="stat">
-
-            <div class="stat-label">
-                Ideal Improve Average
-            </div>
-
-            <div
-                id="idealImprove"
-                class="stat-value">
-                0%
-            </div>
-
+            <div class="stat-label">Ideal Improve Average</div>
+            <div id="idealImprove" class="stat-value">0%</div>
         </div>
 
-
         <div class="stat">
-
-            <div class="stat-label">
-                Improve Average
-            </div>
-
-            <div
-                id="improveAverage"
-                class="stat-value">
-                N/A
-            </div>
-
+            <div class="stat-label">Improve Average</div>
+            <div id="improveAverage" class="stat-value">N/A</div>
         </div>
 
-
         <div class="stat">
-
-            <div class="stat-label">
-                Deficit
-            </div>
-
-            <div
-                id="deficit"
-                class="stat-value">
-                N/A
-            </div>
-
+            <div class="stat-label">Deficit</div>
+            <div id="deficit" class="stat-value">N/A</div>
         </div>
 
     </div>
 
     <div style="margin-top:16px;display:flex;gap:8px;flex-wrap:wrap;">
 
-        <button onclick="calculate()">
-            Calculate
-        </button>
+        <button onclick="calculate()">Calculate</button>
 
         <button
             class="secondary-button"
-            onclick="saveWeek()">
+            onclick="saveWeek(false)">
             Save Week
         </button>
 
@@ -1027,17 +796,9 @@ hr{
 </section>
 
 
-<!-- =========================
-     REFLECTION
-========================= -->
+<section id="reflectionSection" class="card">
 
-<section
-    id="reflectionSection"
-    class="card">
-
-    <div class="section-label">
-        Reflection
-    </div>
+    <div class="section-label">Reflection</div>
 
     <h2>Weekly Reflection</h2>
 
@@ -1049,15 +810,9 @@ hr{
 </section>
 
 
-<!-- =========================
-     ROOT CAUSES
-========================= -->
-
 <section class="card">
 
-    <div class="section-label">
-        Remorse
-    </div>
+    <div class="section-label">Remorse</div>
 
     <h2>Root Causes</h2>
 
@@ -1068,67 +823,41 @@ hr{
 
     <div id="causes"></div>
 
-    <button onclick="addCause()">
-        Add Cause
-    </button>
+    <button onclick="addCause()">Add Cause</button>
 
     <div class="cause-total">
-
         Cause total:
-        <strong id="causeTotal">
-            0%
-        </strong>
-
+        <strong id="causeTotal">0%</strong>
     </div>
 
-    <p
-        id="causeWarning"
-        class="warning">
-    </p>
+    <p id="causeWarning" class="warning"></p>
 
     <button
         id="causeChartButton"
         class="toggle-button"
         onclick="toggleCauseChart()">
-
         Show pie chart
-
     </button>
 
 </section>
 
 
-<section
-    id="causeChartCard"
-    class="card"
-    style="display:none">
+<section id="causeChartCard" class="card" style="display:none">
 
-    <div class="section-label">
-        Breakdown
-    </div>
+    <div class="section-label">Breakdown</div>
 
     <h2>Cause Breakdown</h2>
 
     <div class="chart-container">
-
         <canvas id="causeChart"></canvas>
-
     </div>
 
 </section>
 
 
-<!-- =========================
-     ANALYSIS
-========================= -->
+<section id="analysisSection" class="card">
 
-<section
-    id="analysisSection"
-    class="card">
-
-    <div class="section-label">
-        Analysis
-    </div>
+    <div class="section-label">Analysis</div>
 
     <h2>Cross-Week Comparison</h2>
 
@@ -1139,9 +868,7 @@ hr{
 
 <section class="card">
 
-    <div class="section-label">
-        Required pace
-    </div>
+    <div class="section-label">Required pace</div>
 
     <h2>Improve Average vs Ideal Improve Average</h2>
 
@@ -1151,9 +878,7 @@ hr{
     </p>
 
     <div class="chart-container">
-
         <canvas id="improveCompareChart"></canvas>
-
     </div>
 
 </section>
@@ -1161,30 +886,20 @@ hr{
 
 <section class="card">
 
-    <div class="section-label">
-        Current structure
-    </div>
+    <div class="section-label">Current structure</div>
 
     <h2>Radar Chart</h2>
 
     <div class="chart-container radar-container">
-
         <canvas id="radarChart"></canvas>
-
     </div>
 
 </section>
 
 
-<!-- =========================
-     DAMAGE
-========================= -->
-
 <section class="card">
 
-    <div class="section-label">
-        Root-cause impact
-    </div>
+    <div class="section-label">Root-cause impact</div>
 
     <h2>Damage Analysis</h2>
 
@@ -1193,11 +908,7 @@ hr{
     </p>
 
     <div id="damageResults">
-
-        <p class="small">
-            No damage calculated yet.
-        </p>
-
+        <p class="small">No damage calculated yet.</p>
     </div>
 
 </section>
@@ -1205,9 +916,7 @@ hr{
 
 <section class="card">
 
-    <div class="section-label">
-        Across weeks
-    </div>
+    <div class="section-label">Across weeks</div>
 
     <h2>Accumulated Damage</h2>
 
@@ -1217,34 +926,20 @@ hr{
     </p>
 
     <div id="accumulatedDamage">
-
-        <p class="small">
-            No saved damage data yet.
-        </p>
-
+        <p class="small">No saved damage data yet.</p>
     </div>
 
 </section>
 
 
-<!-- =========================
-     HISTORY
-========================= -->
+<section id="historySection" class="card">
 
-<section
-    id="historySection"
-    class="card">
-
-    <div class="section-label">
-        History
-    </div>
+    <div class="section-label">History</div>
 
     <h2>Progress Timeline</h2>
 
     <div class="chart-container">
-
         <canvas id="averageTrendChart"></canvas>
-
     </div>
 
     <div id="historyTimeline"></div>
@@ -1252,17 +947,9 @@ hr{
 </section>
 
 
-<!-- =========================
-     BACKUP
-========================= -->
+<section id="backupSection" class="card">
 
-<section
-    id="backupSection"
-    class="card">
-
-    <div class="section-label">
-        Data
-    </div>
+    <div class="section-label">Data</div>
 
     <h2>Backup</h2>
 
@@ -1273,16 +960,12 @@ hr{
 
     <div style="display:flex;gap:8px;flex-wrap:wrap;">
 
-        <button onclick="exportData()">
-            Export Data
-        </button>
+        <button onclick="exportData()">Export Data</button>
 
         <button
             class="secondary-button"
             onclick="document.getElementById('importFile').click()">
-
             Import Data
-
         </button>
 
     </div>
@@ -1297,7 +980,31 @@ hr{
 </section>
 
 
+<!-- THIS IS NOW THE LAST ACTION OF A SESSION -->
+
+<section class="card">
+
+    <div class="section-label">Finish</div>
+
+    <h2>Complete This Week</h2>
+
+    <p class="small">
+        Once every detail of this week has been entered,
+        end the session. Your week will be saved and you
+        will return to the home screen.
+    </p>
+
+    <button
+        class="end-session-button"
+        onclick="endSession()">
+        End This Session
+    </button>
+
+</section>
+
 </main>
+
+</div>
 
 
 <script>
@@ -1320,8 +1027,7 @@ Number(
     localStorage.getItem("weeklyTrackerTotalWeeks")
 )||5;
 
-document.getElementById("totalWeeks").value=
-totalWeeks;
+let sessionActive=false;
 
 
 /* =========================
@@ -1334,17 +1040,11 @@ function createId(){
         window.crypto &&
         typeof window.crypto.randomUUID==="function"
     ){
-
         return window.crypto.randomUUID();
-
     }
 
-    return "goal-"+
-        Date.now()+
-        "-"+
-        Math.random()
-            .toString(36)
-            .slice(2,10);
+    return "goal-"+Date.now()+"-"+Math.random()
+        .toString(36).slice(2,10);
 }
 
 
@@ -1360,6 +1060,376 @@ function escapeHTML(text){
 
 
 /* =========================
+   HOME / SESSION FLOW
+========================= */
+
+function getHighestCompletedWeek(){
+
+    if(weeks.length===0)
+        return 0;
+
+    return Math.max(
+        ...weeks.map(
+            week=>Number(week.weekNumber)||0
+        )
+    );
+}
+
+
+function updateHomeScreen(){
+
+    const completed=getHighestCompletedWeek();
+
+    const homeWeek=
+        document.getElementById("homeWeek");
+
+    if(completed===0){
+
+        homeWeek.textContent=
+            "NO WEEK COMPLETED";
+
+    }else{
+
+        homeWeek.textContent=
+            "WEEK "+completed+" PASSED";
+
+    }
+}
+
+
+function returnHome(){
+
+    sessionActive=false;
+
+    document.getElementById(
+        "appInterface"
+    ).style.display="none";
+
+    document.getElementById(
+        "previousWeekScreen"
+    ).style.display="none";
+
+    document.getElementById(
+        "homeScreen"
+    ).style.display="flex";
+
+    updateHomeScreen();
+
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
+}
+
+
+function startNewWeek(){
+
+    const completed=getHighestCompletedWeek();
+
+    if(
+        completed>=totalWeeks &&
+        completed>0
+    ){
+
+        alert(
+            "All weeks in the current tracking period have been completed."
+        );
+
+        return;
+    }
+
+
+    sessionActive=true;
+
+    const nextWeek=
+        completed+1;
+
+
+    /*
+       Carry forward only the structure of the goals.
+       All weekly evaluation data is cleared.
+    */
+
+    if(weeks.length>0){
+
+        const latest=
+            [...weeks].sort(
+                (a,b)=>
+                    Number(b.weekNumber)-
+                    Number(a.weekNumber)
+            )[0];
+
+
+        goals=
+            (latest.goals||[])
+            .slice(0,6)
+            .map(
+                goal=>({
+
+                    id:
+                        goal.id||
+                        createId(),
+
+                    name:
+                        goal.name||"",
+
+                    percentage:0
+
+                })
+            );
+
+    }else{
+
+        goals=[];
+
+        addGoal(
+            "Example Goal 1",
+            0
+        );
+
+        addGoal(
+            "Example Goal 2",
+            0
+        );
+
+    }
+
+
+    causes=[];
+
+
+    document.getElementById(
+        "weekNumber"
+    ).value=
+        nextWeek;
+
+
+    document.getElementById(
+        "totalWeeks"
+    ).value=
+        totalWeeks;
+
+
+    document.getElementById(
+        "rating"
+    ).value="";
+
+
+    document.getElementById(
+        "reflection"
+    ).value="";
+
+
+    document.getElementById(
+        "causeChartCard"
+    ).style.display="none";
+
+
+    document.getElementById(
+        "causeChartButton"
+    ).textContent=
+        "Show pie chart";
+
+
+    renderGoals();
+    renderCauses();
+
+    document.getElementById(
+        "appInterface"
+    ).style.display="block";
+
+    document.getElementById(
+        "previousWeekScreen"
+    ).style.display="none";
+
+    document.getElementById(
+        "homeScreen"
+    ).style.display="none";
+
+
+    updateWeekIndicator();
+
+    calculate();
+
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
+}
+
+
+function showPreviousWeeks(){
+
+    const container=
+        document.getElementById(
+            "previousWeeksContent"
+        );
+
+    container.innerHTML="";
+
+
+    if(weeks.length===0){
+
+        container.innerHTML=`
+            <p class="small">
+                No previous week has been completed yet.
+            </p>
+        `;
+
+    }else{
+
+        const sorted=
+            [...weeks].sort(
+                (a,b)=>
+                    Number(b.weekNumber)-
+                    Number(a.weekNumber)
+            );
+
+
+        sorted.forEach(
+            week=>{
+
+                const div=
+                    document.createElement("div");
+
+                div.className="timeline-card";
+
+                const ratingText=
+                    week.rating===null||
+                    week.rating===undefined
+                    ?
+                    "Unrated"
+                    :
+                    Number(week.rating).toFixed(1)+"/10";
+
+
+                div.style.marginBottom="12px";
+
+
+                div.innerHTML=`
+
+                    <div class="timeline-title">
+
+                        <span class="timeline-week">
+                            Week ${week.weekNumber}
+                        </span>
+
+                        <span class="timeline-average">
+                            ${Number(
+                                week.average
+                            ).toFixed(1)}%
+                        </span>
+
+                    </div>
+
+                    <p class="small">
+                        Rating: ${ratingText}
+                    </p>
+
+                    <div class="history-actions">
+
+                        <button
+                            onclick="
+                                viewPreviousWeek(
+                                    ${weeks.indexOf(week)}
+                                )
+                            ">
+                            View
+                        </button>
+
+                    </div>
+                `;
+
+                container.appendChild(div);
+
+            }
+        );
+
+    }
+
+
+    document.getElementById(
+        "homeScreen"
+    ).style.display="none";
+
+    document.getElementById(
+        "appInterface"
+    ).style.display="none";
+
+    document.getElementById(
+        "previousWeekScreen"
+    ).style.display="block";
+
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
+}
+
+
+function viewPreviousWeek(index){
+
+    const week=weeks[index];
+
+    if(!week)
+        return;
+
+
+    /*
+       Display the old week inside the existing interface,
+       but make it read-only.
+    */
+
+    sessionActive=false;
+
+    document.getElementById(
+        "previousWeekScreen"
+    ).style.display="none";
+
+    document.getElementById(
+        "homeScreen"
+    ).style.display="none";
+
+    document.getElementById(
+        "appInterface"
+    ).style.display="block";
+
+
+    loadWeek(index,true);
+
+}
+
+
+function endSession(){
+
+    if(!saveWeek(true))
+        return;
+
+    sessionActive=false;
+
+    updateHomeScreen();
+
+    document.getElementById(
+        "appInterface"
+    ).style.display="none";
+
+    document.getElementById(
+        "previousWeekScreen"
+    ).style.display="none";
+
+    document.getElementById(
+        "homeScreen"
+    ).style.display="flex";
+
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
+
+}
+
+
+/* =========================
    WEEK INDICATOR
 ========================= */
 
@@ -1367,18 +1437,20 @@ function updateWeekIndicator(){
 
     const week=
         Number(
-            document.getElementById("weekNumber").value
+            document.getElementById(
+                "weekNumber"
+            ).value
         );
 
+
     const text=
-        "WEEK "+
-        week+
-        " / "+
-        totalWeeks;
+        "WEEK "+week+" / "+totalWeeks;
+
 
     document.getElementById(
         "currentWeekIndicator"
     ).textContent=text;
+
 
     document.getElementById(
         "dashboardWeek"
@@ -1405,6 +1477,7 @@ function addGoal(
         return;
     }
 
+
     goals.push({
 
         id:createId(),
@@ -1413,11 +1486,15 @@ function addGoal(
 
     });
 
+
     renderGoals();
 }
 
 
 function removeGoal(index){
+
+    if(!sessionActive)
+        return;
 
     goals.splice(index,1);
 
@@ -1427,34 +1504,32 @@ function removeGoal(index){
 }
 
 
-function updateGoalName(
-    index,
-    value
-){
+function updateGoalName(index,value){
+
+    if(!sessionActive)
+        return;
 
     goals[index].name=value;
 }
 
 
-function updateGoalPercentage(
-    index,
-    value
-){
+function updateGoalPercentage(index,value){
 
-    let percentage=
-        Number(value);
+    if(!sessionActive)
+        return;
+
+    let percentage=Number(value);
 
     if(!Number.isFinite(percentage))
         percentage=0;
 
-    percentage=
-        Math.max(
-            0,
-            Math.min(100,percentage)
-        );
+    percentage=Math.max(
+        0,
+        Math.min(100,percentage)
+    );
 
-    goals[index].percentage=
-        percentage;
+    goals[index].percentage=percentage;
+
 
     const input=
         document.getElementById(
@@ -1475,6 +1550,7 @@ function renderGoals(){
 
     container.innerHTML="";
 
+
     goals.forEach(
         (goal,index)=>{
 
@@ -1483,26 +1559,25 @@ function renderGoals(){
 
             div.className="goal";
 
+
             div.innerHTML=`
 
                 <div class="goal-top">
 
                     <div class="goal-name">
                         ${escapeHTML(
-                            goal.name ||
+                            goal.name||
                             "Unnamed goal"
                         )}
                     </div>
 
-                    <div
-                        class="goal-percent">
+                    <div class="goal-percent">
                         ${Number(
                             goal.percentage||0
                         ).toFixed(0)}%
                     </div>
 
                 </div>
-
 
                 <div class="progress-track">
 
@@ -1521,16 +1596,17 @@ function renderGoals(){
 
                 </div>
 
-
                 <div class="goal-meta">
 
                     <span>
+
                         <input
                             type="text"
                             placeholder="Goal name"
                             value="${escapeHTML(
                                 goal.name
                             )}"
+                            ${sessionActive?"":"disabled"}
                             onchange="
                                 updateGoalName(
                                     ${index},
@@ -1539,8 +1615,8 @@ function renderGoals(){
                                 renderGoals();
                             "
                         >
-                    </span>
 
+                    </span>
 
                     <span>
 
@@ -1550,6 +1626,7 @@ function renderGoals(){
                             min="0"
                             max="100"
                             value="${goal.percentage}"
+                            ${sessionActive?"":"disabled"}
                             onchange="
                                 updateGoalPercentage(
                                     ${index},
@@ -1559,13 +1636,21 @@ function renderGoals(){
                         >
                         %
 
-                        <button
-                            class="remove"
-                            onclick="
-                                removeGoal(${index})
-                            ">
-                            Remove
-                        </button>
+                        ${
+                            sessionActive
+                            ?
+                            `
+                            <button
+                                class="remove"
+                                onclick="
+                                    removeGoal(${index})
+                                ">
+                                Remove
+                            </button>
+                            `
+                            :
+                            ""
+                        }
 
                     </span>
 
@@ -1573,6 +1658,7 @@ function renderGoals(){
             `;
 
             container.appendChild(div);
+
         }
     );
 }
@@ -1582,16 +1668,14 @@ function renderGoals(){
    CAUSES
 ========================= */
 
-function addCause(
-    name="",
-    percentage=0
-){
+function addCause(name="",percentage=0){
+
+    if(!sessionActive)
+        return;
 
     causes.push({
-
         name:name,
         percentage:percentage
-
     });
 
     renderCauses();
@@ -1599,6 +1683,9 @@ function addCause(
 
 
 function removeCause(index){
+
+    if(!sessionActive)
+        return;
 
     causes.splice(index,1);
 
@@ -1608,34 +1695,32 @@ function removeCause(index){
 }
 
 
-function updateCauseName(
-    index,
-    value
-){
+function updateCauseName(index,value){
+
+    if(!sessionActive)
+        return;
 
     causes[index].name=value;
 }
 
 
-function updateCausePercentage(
-    index,
-    value
-){
+function updateCausePercentage(index,value){
 
-    let percentage=
-        Number(value);
+    if(!sessionActive)
+        return;
+
+    let percentage=Number(value);
 
     if(!Number.isFinite(percentage))
         percentage=0;
 
-    percentage=
-        Math.max(
-            0,
-            Math.min(100,percentage)
-        );
+    percentage=Math.max(
+        0,
+        Math.min(100,percentage)
+    );
 
-    causes[index].percentage=
-        percentage;
+    causes[index].percentage=percentage;
+
 
     const input=
         document.getElementById(
@@ -1646,7 +1731,6 @@ function updateCausePercentage(
         input.value=percentage;
 
     updateCauseTotal();
-
     calculate();
 }
 
@@ -1658,6 +1742,7 @@ function renderCauses(){
 
     container.innerHTML="";
 
+
     causes.forEach(
         (cause,index)=>{
 
@@ -1665,6 +1750,7 @@ function renderCauses(){
                 document.createElement("div");
 
             div.className="cause";
+
 
             div.innerHTML=`
 
@@ -1674,6 +1760,7 @@ function renderCauses(){
                     value="${escapeHTML(
                         cause.name
                     )}"
+                    ${sessionActive?"":"disabled"}
                     onchange="
                         updateCauseName(
                             ${index},
@@ -1682,13 +1769,13 @@ function renderCauses(){
                     "
                 >
 
-
                 <input
                     id="causePercentage${index}"
                     type="number"
                     min="0"
                     max="100"
                     value="${cause.percentage}"
+                    ${sessionActive?"":"disabled"}
                     onchange="
                         updateCausePercentage(
                             ${index},
@@ -1697,19 +1784,28 @@ function renderCauses(){
                     "
                 > %
 
-
-                <button
-                    class="remove"
-                    onclick="
-                        removeCause(${index})
-                    ">
-                    Remove
-                </button>
+                ${
+                    sessionActive
+                    ?
+                    `
+                    <button
+                        class="remove"
+                        onclick="
+                            removeCause(${index})
+                        ">
+                        Remove
+                    </button>
+                    `
+                    :
+                    ""
+                }
             `;
 
             container.appendChild(div);
+
         }
     );
+
 
     updateCauseTotal();
 }
@@ -1725,40 +1821,36 @@ function updateCauseTotal(){
             0
         );
 
+
     const totalElement=
-        document.getElementById(
-            "causeTotal"
-        );
+        document.getElementById("causeTotal");
 
     const warning=
-        document.getElementById(
-            "causeWarning"
-        );
+        document.getElementById("causeWarning");
+
 
     totalElement.textContent=
         total.toFixed(1)+"%";
 
     totalElement.className="";
 
+
     if(causes.length===0){
 
         warning.textContent="";
 
-    }else if(
-        Math.abs(total-100)<0.01
-    ){
+    }else if(Math.abs(total-100)<.01){
 
         warning.textContent="";
-        totalElement.className=
-            "success";
+
+        totalElement.className="success";
 
     }else{
 
         warning.textContent=
             "Cause percentages must total 100%.";
 
-        totalElement.className=
-            "warning";
+        totalElement.className="warning";
     }
 }
 
@@ -1768,6 +1860,9 @@ function updateCauseTotal(){
 ========================= */
 
 function toggleCauseChart(){
+
+    if(!sessionActive)
+        return;
 
     const card=
         document.getElementById(
@@ -1779,14 +1874,12 @@ function toggleCauseChart(){
             "causeChartButton"
         );
 
-    if(
-        card.style.display==="none"
-    ){
+
+    if(card.style.display==="none"){
 
         card.style.display="block";
 
-        button.textContent=
-            "Hide pie chart";
+        button.textContent="Hide pie chart";
 
         drawCauseChart();
 
@@ -1794,8 +1887,7 @@ function toggleCauseChart(){
 
         card.style.display="none";
 
-        button.textContent=
-            "Show pie chart";
+        button.textContent="Show pie chart";
     }
 }
 
@@ -1803,9 +1895,7 @@ function toggleCauseChart(){
 function drawCauseChart(){
 
     const canvas=
-        document.getElementById(
-            "causeChart"
-        );
+        document.getElementById("causeChart");
 
     if(causeChart)
         causeChart.destroy();
@@ -1813,15 +1903,14 @@ function drawCauseChart(){
     if(causes.length===0)
         return;
 
+
     causeChart=
         new Chart(
             canvas,
             {
-
                 type:"pie",
 
                 data:{
-
                     labels:
                         causes.map(
                             c=>
@@ -1830,7 +1919,6 @@ function drawCauseChart(){
                         ),
 
                     datasets:[{
-
                         data:
                             causes.map(
                                 c=>
@@ -1838,20 +1926,13 @@ function drawCauseChart(){
                                         c.percentage||0
                                     )
                             ),
-
                         borderWidth:1
-
                     }]
                 },
 
                 options:{
-
                     responsive:true,
-
-                    animation:{
-                        duration:700
-                    }
-
+                    animation:{duration:700}
                 }
             }
         );
@@ -1873,14 +1954,15 @@ function calculate(){
         return;
     }
 
+
     const average=
         goals.reduce(
             (sum,g)=>
                 sum+
                 Number(g.percentage||0),
             0
-        )/
-        goals.length;
+        )/goals.length;
+
 
     document.getElementById(
         "average"
@@ -1913,12 +1995,10 @@ function calculate(){
 
     let idealImprove=0;
 
-    if(weeksRemaining>0){
 
+    if(weeksRemaining>0)
         idealImprove=
-            (100-average)/
-            weeksRemaining;
-    }
+            (100-average)/weeksRemaining;
 
 
     document.getElementById(
@@ -1928,27 +2008,23 @@ function calculate(){
 
 
     const previousWeek=
-        getPreviousWeek(
-            weekNumber
-        );
+        getPreviousWeek(weekNumber);
 
 
     let improveAverage=null;
+
 
     if(previousWeek){
 
         improveAverage=
             average-
-            Number(
-                previousWeek.average
-            );
+            Number(previousWeek.average);
 
         document.getElementById(
             "improveAverage"
         ).textContent=
             (improveAverage>=0?"+":"")+
-            improveAverage.toFixed(2)+
-            "%";
+            improveAverage.toFixed(2)+"%";
 
     }else{
 
@@ -1960,6 +2036,7 @@ function calculate(){
 
     let deficit=null;
 
+
     if(improveAverage!==null){
 
         deficit=
@@ -1970,8 +2047,7 @@ function calculate(){
             "deficit"
         ).textContent=
             (deficit>=0?"+":"")+
-            deficit.toFixed(2)+
-            "%";
+            deficit.toFixed(2)+"%";
 
     }else{
 
@@ -1986,29 +2062,16 @@ function calculate(){
         idealImprove
     );
 
-
     renderComparison(
         previousWeek,
         idealImprove
     );
 
-
-    calculateDamage(
-        deficit
-    );
-
-
+    calculateDamage(deficit);
     calculateAccumulatedDamage();
-
-
     drawRadarChart();
-
-
     drawAverageTrendChart();
-
-
     drawImproveCompareChart();
-
 
     updateDashboard(
         average,
@@ -2021,9 +2084,7 @@ function calculate(){
             "causeChartCard"
         ).style.display!=="none"
     ){
-
         drawCauseChart();
-
     }
 
 
@@ -2053,14 +2114,11 @@ function updateDashboard(
         ?"N/A"
         :
         (improveAverage>=0?"+":"")+
-        improveAverage.toFixed(1)+
-        "%";
+        improveAverage.toFixed(1)+"%";
 
 
     const ratingInput=
-        document.getElementById(
-            "rating"
-        ).value;
+        document.getElementById("rating").value;
 
 
     document.getElementById(
@@ -2068,7 +2126,8 @@ function updateDashboard(
     ).textContent=
         ratingInput.trim()===""
         ?"Unrated"
-        :Number(ratingInput).toFixed(1)+"/10";
+        :
+        Number(ratingInput).toFixed(1)+"/10";
 }
 
 
@@ -2082,33 +2141,27 @@ function renderResults(
 ){
 
     const container=
-        document.getElementById(
-            "results"
-        );
+        document.getElementById("results");
 
     container.innerHTML="";
+
 
     goals.forEach(
         goal=>{
 
             const div=
-                document.createElement(
-                    "div"
-                );
+                document.createElement("div");
 
             div.className="goal";
+
 
             const difference=
                 Number(goal.percentage||0)-
                 average;
 
 
-            if(difference<0){
-
-                div.classList.add(
-                    "below"
-                );
-            }
+            if(difference<0)
+                div.classList.add("below");
 
 
             div.innerHTML=`
@@ -2133,35 +2186,27 @@ function renderResults(
                 <div class="goal-meta">
 
                     <span>
-
                         ${
                             difference<0
-
                             ?
-
-                            Math.abs(
-                                difference
-                            ).toFixed(2)+
+                            Math.abs(difference)
+                                .toFixed(2)+
                             "% below average"
-
                             :
-
                             "At or above average"
                         }
-
                     </span>
 
                     <span>
-
                         Required:
                         ${idealImprove.toFixed(2)}%
-
                     </span>
 
                 </div>
             `;
 
             container.appendChild(div);
+
         }
     );
 }
@@ -2171,26 +2216,18 @@ function renderResults(
    PREVIOUS WEEK
 ========================= */
 
-function getPreviousWeek(
-    currentWeek
-){
+function getPreviousWeek(currentWeek){
 
     const previousWeeks=
         weeks.filter(
             week=>
-                Number(
-                    week.weekNumber
-                )<
+                Number(week.weekNumber)<
                 Number(currentWeek)
         );
 
 
-    if(
-        previousWeeks.length===0
-    ){
-
+    if(previousWeeks.length===0)
         return null;
-    }
 
 
     previousWeeks.sort(
@@ -2214,9 +2251,7 @@ function renderComparison(
 ){
 
     const container=
-        document.getElementById(
-            "comparison"
-        );
+        document.getElementById("comparison");
 
     container.innerHTML="";
 
@@ -2252,9 +2287,7 @@ function renderComparison(
 
 
             const div=
-                document.createElement(
-                    "div"
-                );
+                document.createElement("div");
 
             div.className="goal";
 
@@ -2264,18 +2297,14 @@ function renderComparison(
                 div.innerHTML=`
 
                     <div class="goal-name">
-
                         ${escapeHTML(
                             goal.name||
                             "Unnamed goal"
                         )}
-
                     </div>
 
                     <div class="goal-meta">
-
                         No matching goal in previous week.
-
                     </div>
 
                 `;
@@ -2291,15 +2320,8 @@ function renderComparison(
                 Number(previousGoal.percentage);
 
 
-            if(
-                improvement<
-                idealImprove
-            ){
-
-                div.classList.add(
-                    "below"
-                );
-            }
+            if(improvement<idealImprove)
+                div.classList.add("below");
 
 
             div.innerHTML=`
@@ -2314,13 +2336,9 @@ function renderComparison(
                     </div>
 
                     <div class="goal-percent">
-
                         ${
-                            improvement>=0
-                            ?"+"
-                            :""
+                            improvement>=0?"+":""
                         }${improvement.toFixed(2)}%
-
                     </div>
 
                 </div>
@@ -2346,6 +2364,7 @@ function renderComparison(
             `;
 
             container.appendChild(div);
+
         }
     );
 }
@@ -2355,9 +2374,7 @@ function renderComparison(
    DAMAGE
 ========================= */
 
-function calculateDamage(
-    deficit
-){
+function calculateDamage(deficit){
 
     const container=
         document.getElementById(
@@ -2396,21 +2413,13 @@ function calculateDamage(
         cause=>{
 
             const contribution=
-                Number(
-                    cause.percentage||0
-                );
-
+                Number(cause.percentage||0);
 
             const damage=
-                contribution/
-                100*
-                deficit;
-
+                contribution/100*deficit;
 
             const div=
-                document.createElement(
-                    "div"
-                );
+                document.createElement("div");
 
 
             if(damage<0){
@@ -2438,11 +2447,8 @@ function calculateDamage(
 
                     Surplus:
                     <span class="surplus-number">
-                        ${Math.abs(
-                            damage
-                        ).toFixed(2)}
+                        ${Math.abs(damage).toFixed(2)}
                     </span>
-
                 `;
 
             }else{
@@ -2472,10 +2478,8 @@ function calculateDamage(
                     <span class="damage-number">
                         ${damage.toFixed(2)}
                     </span>
-
                 `;
             }
-
 
             container.appendChild(div);
 
@@ -2487,10 +2491,7 @@ function calculateDamage(
         causes.reduce(
             (sum,cause)=>
                 sum+
-                Number(
-                    cause.percentage||0
-                )/
-                100*
+                Number(cause.percentage||0)/100*
                 deficit,
             0
         );
@@ -2502,28 +2503,20 @@ function calculateDamage(
 
     total.className=
         totalDamage<0
-        ?
-        "damage-total surplus"
-        :
-        "damage-total damage";
+        ?"damage-total surplus"
+        :"damage-total damage";
 
 
     total.innerHTML=
         totalDamage<0
-
         ?
-
         `
             Total Surplus:
             <span class="surplus-number">
-                ${Math.abs(
-                    totalDamage
-                ).toFixed(2)}
+                ${Math.abs(totalDamage).toFixed(2)}
             </span>
         `
-
         :
-
         `
             Total Damage:
             <span class="damage-number">
@@ -2557,9 +2550,7 @@ function calculateAccumulatedDamage(){
         week=>{
 
             const weekNumber=
-                Number(
-                    week.weekNumber
-                );
+                Number(week.weekNumber);
 
 
             const previousWeeks=
@@ -2570,12 +2561,8 @@ function calculateAccumulatedDamage(){
                 );
 
 
-            if(
-                previousWeeks.length===0
-            ){
-
+            if(previousWeeks.length===0)
                 return;
-            }
 
 
             previousWeeks.sort(
@@ -2590,22 +2577,17 @@ function calculateAccumulatedDamage(){
 
 
             const average=
-                Number(
-                    week.average
-                );
+                Number(week.average);
 
 
             const savedTotalWeeks=
-                Number(
-                    week.totalWeeks
-                )||
+                Number(week.totalWeeks)||
                 totalWeeks;
 
 
             const remaining=
                 Math.max(
-                    savedTotalWeeks-
-                    weekNumber,
+                    savedTotalWeeks-weekNumber,
                     0
                 );
 
@@ -2613,19 +2595,14 @@ function calculateAccumulatedDamage(){
             let idealImprove=0;
 
 
-            if(remaining>0){
-
+            if(remaining>0)
                 idealImprove=
-                    (100-average)/
-                    remaining;
-            }
+                    (100-average)/remaining;
 
 
             const improveAverage=
                 average-
-                Number(
-                    previousWeek.average
-                );
+                Number(previousWeek.average);
 
 
             const deficit=
@@ -2633,9 +2610,7 @@ function calculateAccumulatedDamage(){
                 improveAverage;
 
 
-            (
-                week.causes||[]
-            ).forEach(
+            (week.causes||[]).forEach(
                 cause=>{
 
                     const name=
@@ -2644,9 +2619,7 @@ function calculateAccumulatedDamage(){
 
 
                     const damage=
-                        Number(
-                            cause.percentage||0
-                        )/
+                        Number(cause.percentage||0)/
                         100*
                         deficit;
 
@@ -2665,9 +2638,7 @@ function calculateAccumulatedDamage(){
 
 
     const names=
-        Object.keys(
-            accumulated
-        );
+        Object.keys(accumulated);
 
 
     if(names.length===0){
@@ -2684,22 +2655,17 @@ function calculateAccumulatedDamage(){
 
     names.sort(
         (a,b)=>
-            accumulated[b]-
-            accumulated[a]
+            accumulated[b]-accumulated[a]
     );
 
 
     names.forEach(
         name=>{
 
-            const value=
-                accumulated[name];
-
+            const value=accumulated[name];
 
             const div=
-                document.createElement(
-                    "div"
-                );
+                document.createElement("div");
 
 
             if(value<0){
@@ -2719,7 +2685,6 @@ function calculateAccumulatedDamage(){
                     <span class="surplus-number">
                         ${Math.abs(value).toFixed(2)}
                     </span>
-
                 `;
 
             }else{
@@ -2739,10 +2704,8 @@ function calculateAccumulatedDamage(){
                     <span class="damage-number">
                         ${value.toFixed(2)}
                     </span>
-
                 `;
             }
-
 
             container.appendChild(div);
 
@@ -2752,20 +2715,16 @@ function calculateAccumulatedDamage(){
 
 
 /* =========================
-   RADAR CHART
+   CHARTS
 ========================= */
 
 function drawRadarChart(){
 
     const canvas=
-        document.getElementById(
-            "radarChart"
-        );
-
+        document.getElementById("radarChart");
 
     if(radarChart)
         radarChart.destroy();
-
 
     if(goals.length===0)
         return;
@@ -2775,11 +2734,9 @@ function drawRadarChart(){
         new Chart(
             canvas,
             {
-
                 type:"radar",
 
                 data:{
-
                     labels:
                         goals.map(
                             g=>
@@ -2788,10 +2745,7 @@ function drawRadarChart(){
                         ),
 
                     datasets:[{
-
-                        label:
-                            "Current Week",
-
+                        label:"Current Week",
                         data:
                             goals.map(
                                 g=>
@@ -2799,58 +2753,38 @@ function drawRadarChart(){
                                         g.percentage||0
                                     )
                             ),
-
                         borderWidth:2,
-
                         pointRadius:4
                     }]
                 },
 
-
                 options:{
-
                     responsive:true,
-
-                    animation:{
-                        duration:800
-                    },
+                    animation:{duration:800},
 
                     scales:{
-
                         r:{
-
                             min:0,
                             max:100,
 
                             ticks:{
-                                backdropColor:
-                                    "transparent"
+                                backdropColor:"transparent"
                             }
-
                         }
-
                     },
 
                     plugins:{
-
                         legend:{
                             labels:{
                                 color:"#f4f6f8"
                             }
                         }
-
                     }
-
                 }
-
             }
         );
 }
 
-
-/* =========================
-   AVERAGE TREND CHART
-========================= */
 
 function drawAverageTrendChart(){
 
@@ -2858,7 +2792,6 @@ function drawAverageTrendChart(){
         document.getElementById(
             "averageTrendChart"
         );
-
 
     if(averageTrendChart)
         averageTrendChart.destroy();
@@ -2880,53 +2813,35 @@ function drawAverageTrendChart(){
         new Chart(
             canvas,
             {
-
                 type:"line",
 
                 data:{
-
                     labels:
                         sorted.map(
-                            w=>
-                                "Week "+
-                                w.weekNumber
+                            w=>"Week "+w.weekNumber
                         ),
 
                     datasets:[{
-
-                        label:
-                            "Average",
+                        label:"Average",
 
                         data:
                             sorted.map(
                                 w=>
-                                    Number(
-                                        w.average
-                                    )
+                                    Number(w.average)
                             ),
 
                         tension:.35,
-
                         borderWidth:2,
-
                         pointRadius:4
-
                     }]
                 },
 
-
                 options:{
-
                     responsive:true,
-
-                    animation:{
-                        duration:800
-                    },
+                    animation:{duration:800},
 
                     scales:{
-
                         y:{
-
                             min:0,
                             max:100,
 
@@ -2937,11 +2852,9 @@ function drawAverageTrendChart(){
                             grid:{
                                 color:"#343a42"
                             }
-
                         },
 
                         x:{
-
                             ticks:{
                                 color:"#9da5ae"
                             },
@@ -2949,31 +2862,21 @@ function drawAverageTrendChart(){
                             grid:{
                                 color:"#343a42"
                             }
-
                         }
-
                     },
 
                     plugins:{
-
                         legend:{
                             labels:{
                                 color:"#f4f6f8"
                             }
                         }
-
                     }
-
                 }
-
             }
         );
 }
 
-
-/* =========================
-   IMPROVE VS IDEAL CHART
-========================= */
 
 function drawImproveCompareChart(){
 
@@ -2981,7 +2884,6 @@ function drawImproveCompareChart(){
         document.getElementById(
             "improveCompareChart"
         );
-
 
     if(improveCompareChart)
         improveCompareChart.destroy();
@@ -3014,31 +2916,23 @@ function drawImproveCompareChart(){
 
 
             const average=
-                Number(
-                    week.average
-                );
+                Number(week.average);
 
 
             const improveAverage=
                 average-
-                Number(
-                    previousWeek.average
-                );
+                Number(previousWeek.average);
 
 
             const savedTotalWeeks=
-                Number(
-                    week.totalWeeks
-                )||
+                Number(week.totalWeeks)||
                 totalWeeks;
 
 
             const remaining=
                 Math.max(
                     savedTotalWeeks-
-                    Number(
-                        week.weekNumber
-                    ),
+                    Number(week.weekNumber),
                     0
                 );
 
@@ -3046,26 +2940,20 @@ function drawImproveCompareChart(){
             let idealImprove=0;
 
 
-            if(remaining>0){
-
+            if(remaining>0)
                 idealImprove=
-                    (100-average)/
-                    remaining;
-            }
+                    (100-average)/remaining;
 
 
             labels.push(
-                "Week "+
-                week.weekNumber
+                "Week "+week.weekNumber
             );
-
 
             actual.push(
                 Number(
                     improveAverage.toFixed(2)
                 )
             );
-
 
             ideal.push(
                 Number(
@@ -3085,63 +2973,38 @@ function drawImproveCompareChart(){
         new Chart(
             canvas,
             {
-
                 type:"line",
 
                 data:{
-
                     labels:labels,
 
                     datasets:[
 
                         {
-
-                            label:
-                                "Improve Average",
-
+                            label:"Improve Average",
                             data:actual,
-
                             tension:.35,
-
                             borderWidth:2,
-
                             pointRadius:4
-
                         },
 
-
                         {
-
-                            label:
-                                "Ideal Improve Average",
-
+                            label:"Ideal Improve Average",
                             data:ideal,
-
                             tension:.35,
-
                             borderWidth:2,
-
                             pointRadius:4
-
                         }
 
                     ]
-
                 },
 
-
                 options:{
-
                     responsive:true,
-
-                    animation:{
-                        duration:800
-                    },
+                    animation:{duration:800},
 
                     scales:{
-
                         y:{
-
                             ticks:{
                                 color:"#9da5ae"
                             },
@@ -3149,11 +3012,9 @@ function drawImproveCompareChart(){
                             grid:{
                                 color:"#343a42"
                             }
-
                         },
 
                         x:{
-
                             ticks:{
                                 color:"#9da5ae"
                             },
@@ -3161,38 +3022,28 @@ function drawImproveCompareChart(){
                             grid:{
                                 color:"#343a42"
                             }
-
                         }
-
                     },
 
                     plugins:{
-
                         legend:{
                             labels:{
                                 color:"#f4f6f8"
                             }
                         }
-
                     }
-
                 }
-
             }
         );
 }
 
 
-function getHistoricalPreviousWeek(
-    currentWeek
-){
+function getHistoricalPreviousWeek(currentWeek){
 
     const previous=
         weeks.filter(
             week=>
-                Number(
-                    week.weekNumber
-                )<
+                Number(week.weekNumber)<
                 Number(currentWeek)
         );
 
@@ -3216,15 +3067,14 @@ function getHistoricalPreviousWeek(
    SAVE
 ========================= */
 
-function saveWeek(){
+function saveWeek(silent=false){
 
     if(goals.length===0){
 
-        alert(
-            "Add at least one goal."
-        );
+        if(!silent)
+            alert("Add at least one goal.");
 
-        return;
+        return false;
     }
 
 
@@ -3254,7 +3104,7 @@ function saveWeek(){
             `Week number must be between 1 and ${totalWeeks}.`
         );
 
-        return;
+        return false;
     }
 
 
@@ -3285,7 +3135,7 @@ function saveWeek(){
             "Rating must be between 0 and 10."
         );
 
-        return;
+        return false;
     }
 
 
@@ -3293,46 +3143,37 @@ function saveWeek(){
         goals.reduce(
             (sum,g)=>
                 sum+
-                Number(
-                    g.percentage||0
-                ),
+                Number(g.percentage||0),
             0
-        )/
-        goals.length;
+        )/goals.length;
 
 
     const causeTotal=
         causes.reduce(
             (sum,c)=>
                 sum+
-                Number(
-                    c.percentage||0
-                ),
+                Number(c.percentage||0),
             0
         );
 
 
     if(
         causes.length>0&&
-        Math.abs(
-            causeTotal-100
-        )>.01
+        Math.abs(causeTotal-100)>.01
     ){
 
         alert(
             "Cause percentages must total 100% before saving."
         );
 
-        return;
+        return false;
     }
 
 
     goals.forEach(
         goal=>{
-
             if(!goal.id)
                 goal.id=createId();
-
         }
     );
 
@@ -3340,44 +3181,40 @@ function saveWeek(){
     const existingIndex=
         weeks.findIndex(
             week=>
-                Number(
-                    week.weekNumber
-                )===
+                Number(week.weekNumber)===
                 weekNumber
         );
 
 
-    if(existingIndex>=0){
+    if(
+        existingIndex>=0 &&
+        !silent
+    ){
 
         if(
             !confirm(
                 `Week ${weekNumber} already exists. Replace it?`
             )
         ){
-
-            return;
+            return false;
         }
     }
 
 
     const weekData={
 
-        weekNumber:
-            weekNumber,
+        weekNumber:weekNumber,
 
-        totalWeeks:
-            totalWeeks,
+        totalWeeks:totalWeeks,
 
-        rating:
-            rating,
+        rating:rating,
 
         goals:
             JSON.parse(
                 JSON.stringify(goals)
             ),
 
-        average:
-            average,
+        average:average,
 
         reflection:
             document.getElementById(
@@ -3398,14 +3235,12 @@ function saveWeek(){
 
     if(existingIndex>=0){
 
-        weeks[existingIndex]=
-            weekData;
+        weeks[existingIndex]=weekData;
 
     }else{
 
-        weeks.push(
-            weekData
-        );
+        weeks.push(weekData);
+
     }
 
 
@@ -3429,24 +3264,24 @@ function saveWeek(){
 
 
     renderHistory();
-
     calculate();
 
-    alert(
-        "Week saved."
-    );
+
+    if(!silent)
+        alert("Week saved.");
+
+
+    return true;
 }
 
 
 /* =========================
-   LOAD
+   LOAD / VIEW PREVIOUS
 ========================= */
 
-function loadWeek(index){
+function loadWeek(index,readOnly=false){
 
-    const week=
-        weeks[index];
-
+    const week=weeks[index];
 
     if(!week)
         return;
@@ -3460,25 +3295,17 @@ function loadWeek(index){
 
     if(
         Number.isFinite(
-            Number(
-                week.totalWeeks
-            )
+            Number(week.totalWeeks)
         )&&
-        Number(
-            week.totalWeeks
-        )>0
+        Number(week.totalWeeks)>0
     ){
 
         totalWeeks=
-            Number(
-                week.totalWeeks
-            );
-
+            Number(week.totalWeeks);
 
         document.getElementById(
             "totalWeeks"
-        ).value=
-            totalWeeks;
+        ).value=totalWeeks;
     }
 
 
@@ -3496,8 +3323,7 @@ function loadWeek(index){
     document.getElementById(
         "reflection"
     ).value=
-        week.reflection||
-        "";
+        week.reflection||"";
 
 
     goals=
@@ -3510,10 +3336,8 @@ function loadWeek(index){
 
     goals.forEach(
         goal=>{
-
             if(!goal.id)
                 goal.id=createId();
-
         }
     );
 
@@ -3526,8 +3350,10 @@ function loadWeek(index){
         );
 
 
-    renderGoals();
+    sessionActive=!readOnly;
 
+
+    renderGoals();
     renderCauses();
 
 
@@ -3540,7 +3366,6 @@ function loadWeek(index){
             "causeChartCard"
         );
 
-
     const button=
         document.getElementById(
             "causeChartButton"
@@ -3549,23 +3374,100 @@ function loadWeek(index){
 
     if(showChart){
 
-        card.style.display=
-            "block";
-
-        button.textContent=
-            "Hide pie chart";
+        card.style.display="block";
+        button.textContent="Hide pie chart";
 
     }else{
 
-        card.style.display=
-            "none";
-
-        button.textContent=
-            "Show pie chart";
+        card.style.display="none";
+        button.textContent="Show pie chart";
     }
 
 
     calculate();
+
+
+    if(readOnly){
+
+        document.querySelectorAll(
+            "#appInterface input,#appInterface textarea"
+        ).forEach(
+            element=>{
+                element.disabled=true;
+            }
+        );
+
+
+        document.querySelectorAll(
+            "#appInterface button"
+        ).forEach(
+            button=>{
+                if(
+                    !button.classList.contains(
+                        "secondary-button"
+                    ) &&
+                    !button.classList.contains(
+                        "remove"
+                    )
+                ){
+                    button.disabled=true;
+                }
+            }
+        );
+
+
+        document.querySelectorAll(
+            "#appInterface .end-session-button"
+        ).forEach(
+            button=>{
+                button.disabled=true;
+            }
+        );
+
+
+        const finishCard=
+            document.querySelector(
+                ".end-session-button"
+            )?.closest(".card");
+
+
+        if(finishCard)
+            finishCard.style.display="none";
+
+
+        const returnButton=
+            document.createElement("button");
+
+        returnButton.className=
+            "secondary-button";
+
+        returnButton.textContent=
+            "Back to Home";
+
+        returnButton.style.marginTop="12px";
+
+        returnButton.onclick=
+            returnHome;
+
+        document.querySelector(
+            "#appInterface main"
+        ).appendChild(returnButton);
+    }
+
+
+    document.getElementById(
+        "appInterface"
+    ).style.display="block";
+
+
+    document.getElementById(
+        "homeScreen"
+    ).style.display="none";
+
+
+    document.getElementById(
+        "previousWeekScreen"
+    ).style.display="none";
 
 
     window.scrollTo({
@@ -3586,15 +3488,11 @@ function deleteWeek(index){
             "Delete this saved week?"
         )
     ){
-
         return;
     }
 
 
-    weeks.splice(
-        index,
-        1
-    );
+    weeks.splice(index,1);
 
 
     localStorage.setItem(
@@ -3604,9 +3502,8 @@ function deleteWeek(index){
 
 
     renderHistory();
-
     calculate();
-
+    updateHomeScreen();
 }
 
 
@@ -3648,12 +3545,9 @@ function renderHistory(){
 
 
     const timeline=
-        document.createElement(
-            "div"
-        );
+        document.createElement("div");
 
-    timeline.className=
-        "timeline";
+    timeline.className="timeline";
 
 
     sorted.forEach(
@@ -3662,12 +3556,8 @@ function renderHistory(){
             const originalIndex=
                 weeks.findIndex(
                     w=>
-                        Number(
-                            w.weekNumber
-                        )===
-                        Number(
-                            week.weekNumber
-                        )
+                        Number(w.weekNumber)===
+                        Number(week.weekNumber)
                 );
 
 
@@ -3686,9 +3576,7 @@ function renderHistory(){
                 ?
                 "Unrated"
                 :
-                Number(
-                    week.rating
-                ).toFixed(1)+
+                Number(week.rating).toFixed(1)+
                 "/10";
 
 
@@ -3712,29 +3600,20 @@ function renderHistory(){
 
                     </div>
 
-
                     <div class="small">
-
-                        Rating:
-                        ${ratingText}
-
+                        Rating: ${ratingText}
                     </div>
 
-
-                    <div
-                        class="history-actions">
+                    <div class="history-actions">
 
                         <button
                             onclick="
-                                loadWeek(
+                                viewPreviousWeek(
                                     ${originalIndex}
                                 )
                             ">
-
-                            Load
-
+                            View
                         </button>
-
 
                         <button
                             class="remove"
@@ -3743,30 +3622,22 @@ function renderHistory(){
                                     ${originalIndex}
                                 )
                             ">
-
                             Delete
-
                         </button>
 
                     </div>
 
                 </div>
-
             `;
 
 
-            timeline.appendChild(
-                div
-            );
+            timeline.appendChild(div);
 
         }
     );
 
 
-    container.appendChild(
-        timeline
-    );
-
+    container.appendChild(timeline);
 
     drawAverageTrendChart();
 }
@@ -3780,22 +3651,16 @@ function exportData(){
 
     const data={
 
-        app:
-            "Weekly Growth Tracker",
+        app:"Weekly Growth Tracker",
 
-        version:
-            3,
+        version:4,
 
         exportedAt:
-            new Date()
-                .toISOString(),
+            new Date().toISOString(),
 
-        totalWeeks:
-            totalWeeks,
+        totalWeeks:totalWeeks,
 
-        weeks:
-            weeks
-
+        weeks:weeks
     };
 
 
@@ -3808,23 +3673,16 @@ function exportData(){
                     2
                 )
             ],
-            {
-                type:
-                    "application/json"
-            }
+            {type:"application/json"}
         );
 
 
     const url=
-        URL.createObjectURL(
-            blob
-        );
+        URL.createObjectURL(blob);
 
 
     const link=
-        document.createElement(
-            "a"
-        );
+        document.createElement("a");
 
 
     const date=
@@ -3841,20 +3699,13 @@ function exportData(){
         ".json";
 
 
-    document.body.appendChild(
-        link
-    );
-
+    document.body.appendChild(link);
 
     link.click();
 
-
     link.remove();
 
-
-    URL.revokeObjectURL(
-        url
-    );
+    URL.revokeObjectURL(url);
 }
 
 
@@ -3876,94 +3727,138 @@ function importData(event){
         new FileReader();
 
 
-    reader.onload=
-        function(){
+    reader.onload=function(){
 
-            try{
+        try{
 
-                const data=
-                    JSON.parse(
-                        reader.result
-                    );
-
-
-                if(
-                    !data||
-                    !Array.isArray(
-                        data.weeks
-                    )||
-                    !Number.isInteger(
-                        Number(
-                            data.totalWeeks
-                        )
-                    )||
-                    Number(
-                        data.totalWeeks
-                    )<1
-                ){
-
-                    throw new Error(
-                        "Invalid backup format."
-                    );
-                }
+            const data=
+                JSON.parse(
+                    reader.result
+                );
 
 
-                const importedWeeks=
-                    data.weeks.map(
-                        week=>{
+            if(
+                !data||
+                !Array.isArray(data.weeks)||
+                !Number.isInteger(
+                    Number(data.totalWeeks)
+                )||
+                Number(data.totalWeeks)<1
+            ){
+                throw new Error(
+                    "Invalid backup format."
+                );
+            }
 
-                            if(
-                                !week||
-                                !Number.isInteger(
-                                    Number(
-                                        week.weekNumber
-                                    )
-                                )||
+
+            const importedWeeks=
+                data.weeks.map(
+                    week=>{
+
+                        if(
+                            !week||
+                            !Number.isInteger(
+                                Number(week.weekNumber)
+                            )||
+                            Number(week.weekNumber)<1||
+                            !Array.isArray(week.goals)
+                        ){
+                            throw new Error(
+                                "Invalid week data."
+                            );
+                        }
+
+
+                        const importedTotalWeeks=
+                            Number.isInteger(
+                                Number(week.totalWeeks)
+                            )&&
+                            Number(week.totalWeeks)>=1
+                            ?
+                            Number(week.totalWeeks)
+                            :
+                            Number(data.totalWeeks);
+
+
+                        const importedGoals=
+                            week.goals.map(
+                                goal=>({
+
+                                    id:
+                                        goal.id||
+                                        createId(),
+
+                                    name:
+                                        String(
+                                            goal.name||""
+                                        ),
+
+                                    percentage:
+                                        Math.max(
+                                            0,
+                                            Math.min(
+                                                100,
+                                                Number.isFinite(
+                                                    Number(
+                                                        goal.percentage
+                                                    )
+                                                )
+                                                ?
+                                                Number(
+                                                    goal.percentage
+                                                )
+                                                :
+                                                0
+                                            )
+                                        )
+                                })
+                            );
+
+
+                        return{
+
+                            weekNumber:
                                 Number(
                                     week.weekNumber
-                                )<1||
-                                !Array.isArray(
-                                    week.goals
-                                )
-                            ){
+                                ),
 
-                                throw new Error(
-                                    "Invalid week data."
-                                );
-                            }
+                            totalWeeks:
+                                importedTotalWeeks,
 
-
-                            const importedTotalWeeks=
-                                Number.isInteger(
-                                    Number(
-                                        week.totalWeeks
-                                    )
-                                )&&
-                                Number(
-                                    week.totalWeeks
-                                )>=1
+                            rating:
+                                week.rating===null||
+                                week.rating===undefined||
+                                week.rating===""
                                 ?
-                                Number(
-                                    week.totalWeeks
-                                )
+                                null
                                 :
                                 Number(
-                                    data.totalWeeks
-                                );
+                                    week.rating
+                                ),
 
+                            goals:importedGoals,
 
-                            const importedGoals=
-                                week.goals.map(
-                                    goal=>({
+                            average:
+                                Number(
+                                    week.average
+                                )||0,
 
-                                        id:
-                                            goal.id||
-                                            createId(),
+                            reflection:
+                                String(
+                                    week.reflection||""
+                                ),
+
+                            causes:
+                                Array.isArray(
+                                    week.causes
+                                )
+                                ?
+                                week.causes.map(
+                                    cause=>({
 
                                         name:
                                             String(
-                                                goal.name||
-                                                ""
+                                                cause.name||""
                                             ),
 
                                         percentage:
@@ -3973,223 +3868,134 @@ function importData(event){
                                                     100,
                                                     Number.isFinite(
                                                         Number(
-                                                            goal.percentage
+                                                            cause.percentage
                                                         )
                                                     )
                                                     ?
                                                     Number(
-                                                        goal.percentage
+                                                        cause.percentage
                                                     )
                                                     :
                                                     0
                                                 )
                                             )
-
                                     })
-                                );
+                                )
+                                :
+                                [],
+
+                            showCauseChart:
+                                week.showCauseChart===true
+                        };
+                    }
+                );
 
 
-                            return{
+            for(
+                const week of importedWeeks
+            ){
 
-                                weekNumber:
-                                    Number(
-                                        week.weekNumber
-                                    ),
-
-                                totalWeeks:
-                                    importedTotalWeeks,
-
-                                rating:
-                                    week.rating===null||
-                                    week.rating===undefined||
-                                    week.rating===""
-                                    ?
-                                    null
-                                    :
-                                    Number(
-                                        week.rating
-                                    ),
-
-                                goals:
-                                    importedGoals,
-
-                                average:
-                                    Number(
-                                        week.average
-                                    )||0,
-
-                                reflection:
-                                    String(
-                                        week.reflection||
-                                        ""
-                                    ),
-
-                                causes:
-                                    Array.isArray(
-                                        week.causes
-                                    )
-                                    ?
-                                    week.causes.map(
-                                        cause=>({
-
-                                            name:
-                                                String(
-                                                    cause.name||
-                                                    ""
-                                                ),
-
-                                            percentage:
-                                                Math.max(
-                                                    0,
-                                                    Math.min(
-                                                        100,
-                                                        Number.isFinite(
-                                                            Number(
-                                                                cause.percentage
-                                                            )
-                                                        )
-                                                        ?
-                                                        Number(
-                                                            cause.percentage
-                                                        )
-                                                        :
-                                                        0
-                                                    )
-                                                )
-
-                                        })
-                                    )
-                                    :
-                                    [],
-
-                                showCauseChart:
-                                    week.showCauseChart===true
-
-                            };
-
-                        }
-                    );
-
-
-                for(
-                    const week
-                    of importedWeeks
+                if(
+                    week.weekNumber>
+                    week.totalWeeks
                 ){
-
-                    if(
-                        week.weekNumber>
-                        week.totalWeeks
-                    ){
-
-                        throw new Error(
-                            "A saved week is outside its tracking period."
-                        );
-                    }
+                    throw new Error(
+                        "A saved week is outside its tracking period."
+                    );
+                }
 
 
-                    if(
-                        week.goals.length>6
-                    ){
+                if(week.goals.length>6){
 
-                        throw new Error(
-                            "A saved week contains more than 6 goals."
-                        );
-                    }
-
-
-                    if(
-                        week.rating!==null&&
-                        (
-                            !Number.isFinite(
-                                week.rating
-                            )||
-                            week.rating<0||
-                            week.rating>10
-                        )
-                    ){
-
-                        throw new Error(
-                            "A saved rating is invalid."
-                        );
-                    }
-
+                    throw new Error(
+                        "A saved week contains more than 6 goals."
+                    );
                 }
 
 
                 if(
-                    !confirm(
-                        "Importing will replace the current saved history. Continue?"
+                    week.rating!==null&&
+                    (
+                        !Number.isFinite(week.rating)||
+                        week.rating<0||
+                        week.rating>10
                     )
                 ){
-
-                    event.target.value="";
-                    return;
+                    throw new Error(
+                        "A saved rating is invalid."
+                    );
                 }
-
-
-                weeks=
-                    importedWeeks.sort(
-                        (a,b)=>
-                            a.weekNumber-
-                            b.weekNumber
-                    );
-
-
-                totalWeeks=
-                    Number(
-                        data.totalWeeks
-                    );
-
-
-                localStorage.setItem(
-                    "weeklyTrackerWeeks",
-                    JSON.stringify(weeks)
-                );
-
-
-                localStorage.setItem(
-                    "weeklyTrackerTotalWeeks",
-                    totalWeeks
-                );
-
-
-                document.getElementById(
-                    "totalWeeks"
-                ).value=
-                    totalWeeks;
-
-
-                renderHistory();
-
-                calculateAccumulatedDamage();
-
-                drawImproveCompareChart();
-
-                alert(
-                    "Data imported successfully."
-                );
-
-
-            }catch(error){
-
-                alert(
-                    "Import failed: "+
-                    (
-                        error.message||
-                        "Invalid backup file."
-                    )
-                );
 
             }
 
 
-            event.target.value="";
-        };
+            if(
+                !confirm(
+                    "Importing will replace the current saved history. Continue?"
+                )
+            ){
+                event.target.value="";
+                return;
+            }
 
 
-    reader.readAsText(
-        file
-    );
+            weeks=
+                importedWeeks.sort(
+                    (a,b)=>
+                        a.weekNumber-
+                        b.weekNumber
+                );
+
+
+            totalWeeks=
+                Number(data.totalWeeks);
+
+
+            localStorage.setItem(
+                "weeklyTrackerWeeks",
+                JSON.stringify(weeks)
+            );
+
+
+            localStorage.setItem(
+                "weeklyTrackerTotalWeeks",
+                totalWeeks
+            );
+
+
+            document.getElementById(
+                "totalWeeks"
+            ).value=totalWeeks;
+
+
+            updateHomeScreen();
+            renderHistory();
+            calculateAccumulatedDamage();
+            drawImproveCompareChart();
+
+            alert(
+                "Data imported successfully."
+            );
+
+
+        }catch(error){
+
+            alert(
+                "Import failed: "+
+                (
+                    error.message||
+                    "Invalid backup file."
+                )
+            );
+
+        }
+
+
+        event.target.value="";
+    };
+
+
+    reader.readAsText(file);
 }
 
 
@@ -4204,26 +4010,17 @@ document.getElementById(
     "change",
     function(){
 
-        let value=
-            Number(this.value);
+        if(!sessionActive)
+            return;
 
+        let value=Number(this.value);
 
-        if(
-            !Number.isFinite(value)
-        )
+        if(!Number.isFinite(value))
             value=1;
 
+        value=Math.round(value);
 
-        value=
-            Math.round(value);
-
-
-        value=
-            Math.max(
-                1,
-                value
-            );
-
+        value=Math.max(1,value);
 
         this.value=value;
 
@@ -4243,37 +4040,24 @@ document.getElementById(
 
 
         let week=
-            Number(
-                weekInput.value
-            );
+            Number(weekInput.value);
 
 
-        if(
-            !Number.isFinite(week)
-        )
+        if(!Number.isFinite(week))
             week=1;
 
 
-        week=
-            Math.round(week);
+        week=Math.round(week);
+
+        week=Math.max(
+            1,
+            Math.min(value,week)
+        );
 
 
-        week=
-            Math.max(
-                1,
-                Math.min(
-                    value,
-                    week
-                )
-            );
-
-
-        weekInput.value=
-            week;
-
+        weekInput.value=week;
 
         updateWeekIndicator();
-
         calculate();
 
     }
@@ -4287,39 +4071,26 @@ document.getElementById(
     "change",
     function(){
 
-        let value=
-            Number(this.value);
+        if(!sessionActive)
+            return;
 
+        let value=Number(this.value);
 
-        if(
-            !Number.isFinite(value)
-        )
+        if(!Number.isFinite(value))
             value=1;
 
+        value=Math.round(value);
 
-        value=
-            Math.round(value);
+        value=Math.max(1,value);
 
-
-        value=
-            Math.max(
-                1,
-                value
-            );
-
-
-        value=
-            Math.min(
-                totalWeeks,
-                value
-            );
-
+        value=Math.min(
+            totalWeeks,
+            value
+        );
 
         this.value=value;
 
-
         updateWeekIndicator();
-
         calculate();
 
     }
@@ -4332,6 +4103,9 @@ document.getElementById(
 .addEventListener(
     "input",
     function(){
+
+        if(!sessionActive)
+            return;
 
         const rating=
             this.value.trim()===""
@@ -4349,40 +4123,29 @@ document.getElementById(
             ?
             "Unrated"
             :
-            rating.toFixed(1)+
-            "/10";
+            rating.toFixed(1)+"/10";
 
     }
 );
 
 
 /* =========================
-   INITIAL SETUP
+   INITIAL STATE
 ========================= */
 
-if(goals.length===0){
-
-    addGoal(
-        "Example Goal 1",
-        50
-    );
-
-    addGoal(
-        "Example Goal 2",
-        70
-    );
-}
+document.getElementById(
+    "totalWeeks"
+).value=totalWeeks;
 
 
-renderGoals();
+/*
+   The app now opens on the home screen.
+   It does NOT automatically open the evaluation form.
+*/
 
-renderCauses();
+sessionActive=false;
 
-renderHistory();
-
-updateWeekIndicator();
-
-calculate();
+updateHomeScreen();
 
 </script>
 
