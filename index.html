@@ -137,6 +137,11 @@
         border-top: 2px solid #222;
         font-weight: bold;
     }
+
+    .surplus {
+        background: #e4f5e4;
+        border-left: 5px solid #168316;
+    }
 </style>
 </head>
 
@@ -177,7 +182,7 @@
 
     <button onclick="addGoal()">Add Goal</button>
 
-    <p id="goalLimit" class="small">
+    <p class="small">
         Maximum 6 goals.
     </p>
 </div>
@@ -333,9 +338,7 @@ document.getElementById("totalWeeks").value =
 function addGoal(name = "", percentage = 0) {
 
     if (goals.length >= 6) {
-
         alert("You can have no more than 6 goals.");
-
         return;
     }
 
@@ -379,6 +382,7 @@ function renderGoals() {
             >
 
             <input
+                id="goalPercentage${index}"
                 type="number"
                 min="0"
                 max="100"
@@ -409,11 +413,23 @@ function updateGoalPercentage(index, value) {
 
     let percentage = Number(value);
 
-    if (percentage < 0) percentage = 0;
+    if (!Number.isFinite(percentage)) {
+        percentage = 0;
+    }
 
+    if (percentage < 0) percentage = 0;
     if (percentage > 100) percentage = 100;
 
     goals[index].percentage = percentage;
+
+    const input =
+        document.getElementById(
+            `goalPercentage${index}`
+        );
+
+    if (input) {
+        input.value = percentage;
+    }
 }
 
 
@@ -463,6 +479,7 @@ function renderCauses() {
             >
 
             <input
+                id="causePercentage${index}"
                 type="number"
                 min="0"
                 max="100"
@@ -495,11 +512,23 @@ function updateCausePercentage(index, value) {
 
     let percentage = Number(value);
 
-    if (percentage < 0) percentage = 0;
+    if (!Number.isFinite(percentage)) {
+        percentage = 0;
+    }
 
+    if (percentage < 0) percentage = 0;
     if (percentage > 100) percentage = 100;
 
     causes[index].percentage = percentage;
+
+    const input =
+        document.getElementById(
+            `causePercentage${index}`
+        );
+
+    if (input) {
+        input.value = percentage;
+    }
 
     updateCauseTotal();
 }
@@ -514,11 +543,22 @@ function updateCauseTotal() {
             0
         );
 
-    document.getElementById("causeTotal").textContent =
-        total.toFixed(1) + "%";
+    const totalElement =
+        document.getElementById("causeTotal");
 
     const warning =
         document.getElementById("causeWarning");
+
+    totalElement.textContent =
+        total.toFixed(1) + "%";
+
+    /*
+        Reset the class first.
+        This prevents an old "success" class
+        from remaining after all causes are deleted.
+    */
+
+    totalElement.className = "";
 
     if (causes.length === 0) {
 
@@ -528,18 +568,16 @@ function updateCauseTotal() {
 
         warning.textContent = "";
 
-        document
-            .getElementById("causeTotal")
-            .className = "success";
+        totalElement.className =
+            "success";
 
     } else {
 
         warning.textContent =
             "Cause percentages must total 100%.";
 
-        document
-            .getElementById("causeTotal")
-            .className = "warning";
+        totalElement.className =
+            "warning";
     }
 }
 
@@ -551,10 +589,14 @@ function updateCauseTotal() {
 function toggleCauseChart() {
 
     const card =
-        document.getElementById("causeChartCard");
+        document.getElementById(
+            "causeChartCard"
+        );
 
     const button =
-        document.getElementById("causeChartButton");
+        document.getElementById(
+            "causeChartButton"
+        );
 
     if (card.style.display === "none") {
 
@@ -578,48 +620,48 @@ function toggleCauseChart() {
 function drawCauseChart() {
 
     const canvas =
-        document.getElementById("causeChart");
+        document.getElementById(
+            "causeChart"
+        );
 
     if (causeChart) {
-
         causeChart.destroy();
     }
 
     if (causes.length === 0) {
-
         return;
     }
 
     causeChart =
-        new Chart(canvas, {
+        new Chart(
+            canvas,
+            {
+                type: "pie",
 
-            type: "pie",
-
-            data: {
-
-                labels:
-                    causes.map(
-                        cause =>
-                            cause.name ||
-                            "Unnamed cause"
-                    ),
-
-                datasets: [{
-
-                    data:
+                data: {
+                    labels:
                         causes.map(
                             cause =>
-                                cause.percentage
+                                cause.name ||
+                                "Unnamed cause"
                         ),
 
-                    borderWidth: 1
-                }]
-            },
+                    datasets: [{
+                        data:
+                            causes.map(
+                                cause =>
+                                    cause.percentage
+                            ),
 
-            options: {
-                responsive: true
+                        borderWidth: 1
+                    }]
+                },
+
+                options: {
+                    responsive: true
+                }
             }
-        });
+        );
 }
 
 
@@ -639,7 +681,8 @@ function calculate() {
     const average =
         goals.reduce(
             (sum, goal) =>
-                sum + Number(goal.percentage || 0),
+                sum +
+                Number(goal.percentage || 0),
             0
         ) / goals.length;
 
@@ -650,13 +693,17 @@ function calculate() {
 
     const weekNumber =
         Number(
-            document.getElementById("weekNumber").value
+            document.getElementById(
+                "weekNumber"
+            ).value
         );
 
 
     totalWeeks =
         Number(
-            document.getElementById("totalWeeks").value
+            document.getElementById(
+                "totalWeeks"
+            ).value
         );
 
 
@@ -675,7 +722,6 @@ function calculate() {
 
     let idealImprove = 0;
 
-
     if (weeksRemaining > 0) {
 
         idealImprove =
@@ -684,16 +730,19 @@ function calculate() {
     }
 
 
-    document.getElementById("idealImprove").textContent =
+    document.getElementById(
+        "idealImprove"
+    ).textContent =
         idealImprove.toFixed(2) + "%";
 
 
     const previousWeek =
-        getPreviousWeek(weekNumber);
+        getPreviousWeek(
+            weekNumber
+        );
 
 
     let improveAverage = null;
-
 
     if (previousWeek) {
 
@@ -713,12 +762,12 @@ function calculate() {
 
         document.getElementById(
             "improveAverage"
-        ).textContent = "N/A";
+        ).textContent =
+            "N/A";
     }
 
 
     let deficit = null;
-
 
     if (improveAverage !== null) {
 
@@ -727,22 +776,24 @@ function calculate() {
             improveAverage;
 
 
-        document.getElementById("deficit").textContent =
+        document.getElementById(
+            "deficit"
+        ).textContent =
             (deficit >= 0 ? "+" : "") +
             deficit.toFixed(2) +
             "%";
 
     } else {
 
-        document.getElementById("deficit").textContent =
+        document.getElementById(
+            "deficit"
+        ).textContent =
             "N/A";
     }
 
 
     renderResults(
-        average,
-        idealImprove,
-        previousWeek
+        average
     );
 
 
@@ -752,7 +803,9 @@ function calculate() {
     );
 
 
-    calculateDamage(deficit);
+    calculateDamage(
+        deficit
+    );
 
 
     calculateAccumulatedDamage();
@@ -776,14 +829,12 @@ function calculate() {
    RESULTS
 ========================= */
 
-function renderResults(
-    average,
-    idealImprove,
-    previousWeek
-) {
+function renderResults(average) {
 
     const container =
-        document.getElementById("results");
+        document.getElementById(
+            "results"
+        );
 
     container.innerHTML = "";
 
@@ -809,7 +860,9 @@ function renderResults(
                 </strong>
                 <br>
                 ${goal.percentage}% —
-                ${Math.abs(difference).toFixed(2)}%
+                ${Math.abs(
+                    difference
+                ).toFixed(2)}%
                 below average
             `;
 
@@ -838,13 +891,14 @@ function getPreviousWeek(currentWeek) {
     const previousWeeks =
         weeks.filter(
             week =>
-                Number(week.weekNumber) <
+                Number(
+                    week.weekNumber
+                ) <
                 Number(currentWeek)
         );
 
 
     if (previousWeeks.length === 0) {
-
         return null;
     }
 
@@ -892,7 +946,9 @@ function renderComparison(
 
 
         const div =
-            document.createElement("div");
+            document.createElement(
+                "div"
+            );
 
         div.className = "goal";
 
@@ -915,12 +971,16 @@ function renderComparison(
 
         const improvement =
             goal.percentage -
-            Number(previousGoal.percentage);
+            Number(
+                previousGoal.percentage
+            );
 
 
         if (improvement < idealImprove) {
 
-            div.classList.add("below");
+            div.classList.add(
+                "below"
+            );
         }
 
 
@@ -991,7 +1051,9 @@ function calculateDamage(deficit) {
     causes.forEach(cause => {
 
         const contribution =
-            Number(cause.percentage || 0);
+            Number(
+                cause.percentage || 0
+            );
 
 
         const damage =
@@ -1000,30 +1062,61 @@ function calculateDamage(deficit) {
 
 
         const div =
-            document.createElement("div");
+            document.createElement(
+                "div"
+            );
 
-        div.className =
-            "damage-row";
 
+        if (damage < 0) {
 
-        div.innerHTML = `
-            <strong>
-                ${escapeHTML(
-                    cause.name ||
-                    "Unnamed cause"
-                )}
-            </strong>
+            div.className =
+                "damage-row surplus";
 
-            <br>
+            div.innerHTML = `
+                <strong>
+                    ${escapeHTML(
+                        cause.name ||
+                        "Unnamed cause"
+                    )}
+                </strong>
 
-            Cause contribution:
-            ${contribution.toFixed(2)}%
+                <br>
 
-            <br>
+                Cause contribution:
+                ${contribution.toFixed(2)}%
 
-            Damage:
-            ${damage.toFixed(2)}
-        `;
+                <br>
+
+                Surplus:
+                ${Math.abs(
+                    damage
+                ).toFixed(2)}
+            `;
+
+        } else {
+
+            div.className =
+                "damage-row";
+
+            div.innerHTML = `
+                <strong>
+                    ${escapeHTML(
+                        cause.name ||
+                        "Unnamed cause"
+                    )}
+                </strong>
+
+                <br>
+
+                Cause contribution:
+                ${contribution.toFixed(2)}%
+
+                <br>
+
+                Damage:
+                ${damage.toFixed(2)}
+            `;
+        }
 
 
         container.appendChild(div);
@@ -1035,8 +1128,9 @@ function calculateDamage(deficit) {
             (sum, cause) =>
                 sum +
                 (
-                    Number(cause.percentage || 0) /
-                    100
+                    Number(
+                        cause.percentage || 0
+                    ) / 100
                 ) *
                 deficit,
             0
@@ -1044,16 +1138,32 @@ function calculateDamage(deficit) {
 
 
     const total =
-        document.createElement("div");
+        document.createElement(
+            "div"
+        );
 
     total.className =
-        "damage-total";
+        totalDamage < 0
+            ? "damage-total surplus"
+            : "damage-total";
 
 
-    total.innerHTML = `
-        Total Damage:
-        ${totalDamage.toFixed(2)}
-    `;
+    if (totalDamage < 0) {
+
+        total.innerHTML = `
+            Total Surplus:
+            ${Math.abs(
+                totalDamage
+            ).toFixed(2)}
+        `;
+
+    } else {
+
+        total.innerHTML = `
+            Total Damage:
+            ${totalDamage.toFixed(2)}
+        `;
+    }
 
 
     container.appendChild(total);
@@ -1080,13 +1190,17 @@ function calculateAccumulatedDamage() {
     weeks.forEach(week => {
 
         const weekNumber =
-            Number(week.weekNumber);
+            Number(
+                week.weekNumber
+            );
 
 
         const previousWeeks =
             weeks.filter(
                 w =>
-                    Number(w.weekNumber) <
+                    Number(
+                        w.weekNumber
+                    ) <
                     weekNumber
             );
 
@@ -1108,18 +1222,38 @@ function calculateAccumulatedDamage() {
 
 
         if (!previousWeek) {
-
             return;
         }
 
 
         const average =
-            Number(week.average);
+            Number(
+                week.average
+            );
+
+
+        /*
+            IMPORTANT FIX:
+
+            Use the tracking-period length
+            saved with THAT week.
+
+            Older saved weeks from the buggy
+            version may not have this property,
+            so they fall back to the current
+            setting.
+        */
+
+        const savedTotalWeeks =
+            Number(
+                week.totalWeeks
+            ) ||
+            totalWeeks;
 
 
         const weeksRemaining =
             Math.max(
-                totalWeeks -
+                savedTotalWeeks -
                 weekNumber,
                 0
             );
@@ -1131,14 +1265,19 @@ function calculateAccumulatedDamage() {
         if (weeksRemaining > 0) {
 
             idealImprove =
-                (100 - average) /
+                (
+                    100 -
+                    average
+                ) /
                 weeksRemaining;
         }
 
 
         const improveAverage =
             average -
-            Number(previousWeek.average);
+            Number(
+                previousWeek.average
+            );
 
 
         const deficit =
@@ -1146,8 +1285,8 @@ function calculateAccumulatedDamage() {
             improveAverage;
 
 
-        (week.causes || []).forEach(
-            cause => {
+        (week.causes || [])
+            .forEach(cause => {
 
                 const name =
                     cause.name ||
@@ -1157,7 +1296,8 @@ function calculateAccumulatedDamage() {
                 const damage =
                     (
                         Number(
-                            cause.percentage || 0
+                            cause.percentage ||
+                            0
                         ) / 100
                     ) *
                     deficit;
@@ -1169,14 +1309,16 @@ function calculateAccumulatedDamage() {
                 }
 
 
-                accumulated[name] += damage;
-            }
-        );
+                accumulated[name] +=
+                    damage;
+            });
     });
 
 
     const names =
-        Object.keys(accumulated);
+        Object.keys(
+            accumulated
+        );
 
 
     if (names.length === 0) {
@@ -1200,21 +1342,46 @@ function calculateAccumulatedDamage() {
 
     names.forEach(name => {
 
+        const value =
+            accumulated[name];
+
+
         const div =
-            document.createElement("div");
+            document.createElement(
+                "div"
+            );
 
-        div.className =
-            "damage-row";
 
+        if (value < 0) {
 
-        div.innerHTML = `
-            <strong>
-                ${escapeHTML(name)}
-            </strong>
-            <br>
-            Accumulated Damage:
-            ${accumulated[name].toFixed(2)}
-        `;
+            div.className =
+                "damage-row surplus";
+
+            div.innerHTML = `
+                <strong>
+                    ${escapeHTML(name)}
+                </strong>
+                <br>
+                Accumulated Surplus:
+                ${Math.abs(
+                    value
+                ).toFixed(2)}
+            `;
+
+        } else {
+
+            div.className =
+                "damage-row";
+
+            div.innerHTML = `
+                <strong>
+                    ${escapeHTML(name)}
+                </strong>
+                <br>
+                Accumulated Damage:
+                ${value.toFixed(2)}
+            `;
+        }
 
 
         container.appendChild(div);
@@ -1235,13 +1402,11 @@ function drawRadarChart() {
 
 
     if (radarChart) {
-
         radarChart.destroy();
     }
 
 
     if (goals.length === 0) {
-
         return;
     }
 
@@ -1250,7 +1415,6 @@ function drawRadarChart() {
         new Chart(
             canvas,
             {
-
                 type: "radar",
 
                 data: {
@@ -1281,9 +1445,7 @@ function drawRadarChart() {
                     scales: {
 
                         r: {
-
                             min: 0,
-
                             max: 100
                         }
                     }
@@ -1301,7 +1463,80 @@ function saveWeek() {
 
     if (goals.length === 0) {
 
-        alert("Add at least one goal.");
+        alert(
+            "Add at least one goal."
+        );
+
+        return;
+    }
+
+
+    /*
+        FIX 2:
+        Validate the week number.
+    */
+
+    const weekNumber =
+        Number(
+            document.getElementById(
+                "weekNumber"
+            ).value
+        );
+
+
+    totalWeeks =
+        Number(
+            document.getElementById(
+                "totalWeeks"
+            ).value
+        );
+
+
+    if (
+        !Number.isInteger(
+            weekNumber
+        ) ||
+        weekNumber < 1 ||
+        weekNumber > totalWeeks
+    ) {
+
+        alert(
+            `Week number must be between 1 and ${totalWeeks}.`
+        );
+
+        return;
+    }
+
+
+    /*
+        FIX 1:
+        Preserve an empty rating as null.
+    */
+
+    const ratingInput =
+        document.getElementById(
+            "rating"
+        ).value;
+
+
+    const rating =
+        ratingInput.trim() === ""
+            ? null
+            : Number(ratingInput);
+
+
+    if (
+        rating !== null &&
+        (
+            !Number.isFinite(rating) ||
+            rating < 0 ||
+            rating > 10
+        )
+    ) {
+
+        alert(
+            "Rating must be between 0 and 10."
+        );
 
         return;
     }
@@ -1316,14 +1551,6 @@ function saveWeek() {
                 ),
             0
         ) / goals.length;
-
-
-    const weekNumber =
-        Number(
-            document.getElementById(
-                "weekNumber"
-            ).value
-        );
 
 
     const causeTotal =
@@ -1352,42 +1579,10 @@ function saveWeek() {
     }
 
 
-    const weekData = {
-
-        weekNumber:
-            weekNumber,
-
-        rating:
-            Number(
-                document.getElementById(
-                    "rating"
-                ).value
-            ),
-
-        goals:
-            JSON.parse(
-                JSON.stringify(goals)
-            ),
-
-        average:
-            average,
-
-        reflection:
-            document.getElementById(
-                "reflection"
-            ).value,
-
-        causes:
-            JSON.parse(
-                JSON.stringify(causes)
-            ),
-
-        showCauseChart:
-            document.getElementById(
-                "causeChartCard"
-            ).style.display !== "none"
-    };
-
+    /*
+        FIX 3:
+        Confirm before overwriting an existing week.
+    */
 
     const existingIndex =
         weeks.findIndex(
@@ -1400,29 +1595,105 @@ function saveWeek() {
 
     if (existingIndex >= 0) {
 
+        const replace =
+            confirm(
+                `Week ${weekNumber} already exists. Replace it?`
+            );
+
+
+        if (!replace) {
+            return;
+        }
+    }
+
+
+    /*
+        FIX 5:
+        Store the tracking period with
+        the week itself.
+    */
+
+    const weekData = {
+
+        weekNumber:
+            weekNumber,
+
+        totalWeeks:
+            totalWeeks,
+
+        rating:
+            rating,
+
+        goals:
+            JSON.parse(
+                JSON.stringify(
+                    goals
+                )
+            ),
+
+        average:
+            average,
+
+        reflection:
+            document.getElementById(
+                "reflection"
+            ).value,
+
+        causes:
+            JSON.parse(
+                JSON.stringify(
+                    causes
+                )
+            ),
+
+        showCauseChart:
+            document.getElementById(
+                "causeChartCard"
+            ).style.display !== "none"
+    };
+
+
+    if (existingIndex >= 0) {
+
         weeks[existingIndex] =
             weekData;
 
     } else {
 
-        weeks.push(weekData);
+        weeks.push(
+            weekData
+        );
     }
 
 
     weeks.sort(
         (a, b) =>
-            Number(a.weekNumber) -
-            Number(b.weekNumber)
+            Number(
+                a.weekNumber
+            ) -
+            Number(
+                b.weekNumber
+            )
     );
 
 
     localStorage.setItem(
         "weeklyTrackerWeeks",
-        JSON.stringify(weeks)
+        JSON.stringify(
+            weeks
+        )
     );
 
 
-    alert("Week saved.");
+    localStorage.setItem(
+        "weeklyTrackerTotalWeeks",
+        totalWeeks
+    );
+
+
+    alert(
+        "Week saved."
+    );
 
 
     renderHistory();
@@ -1441,7 +1712,9 @@ function loadWeek(index) {
         weeks[index];
 
 
-    if (!week) return;
+    if (!week) {
+        return;
+    }
 
 
     document.getElementById(
@@ -1450,10 +1723,47 @@ function loadWeek(index) {
         week.weekNumber;
 
 
+    /*
+        When loading a saved week,
+        restore the tracking period that
+        belonged to that week.
+    */
+
+    if (
+        Number.isFinite(
+            Number(
+                week.totalWeeks
+            )
+        ) &&
+        Number(
+            week.totalWeeks
+        ) > 0
+    ) {
+
+        totalWeeks =
+            Number(
+                week.totalWeeks
+            );
+
+        document.getElementById(
+            "totalWeeks"
+        ).value =
+            totalWeeks;
+    }
+
+
+    /*
+        FIX 1:
+        Restore null as an empty rating field.
+    */
+
     document.getElementById(
         "rating"
     ).value =
-        week.rating ?? "";
+        week.rating === null ||
+        week.rating === undefined
+            ? ""
+            : week.rating;
 
 
     document.getElementById(
@@ -1532,7 +1842,6 @@ function deleteWeek(index) {
             "Delete this saved week?"
         )
     ) {
-
         return;
     }
 
@@ -1545,7 +1854,9 @@ function deleteWeek(index) {
 
     localStorage.setItem(
         "weeklyTrackerWeeks",
-        JSON.stringify(weeks)
+        JSON.stringify(
+            weeks
+        )
     );
 
 
@@ -1590,6 +1901,13 @@ function renderHistory() {
                 "history-item";
 
 
+            const ratingText =
+                week.rating === null ||
+                week.rating === undefined
+                    ? "Unrated"
+                    : `${week.rating}/10`;
+
+
             div.innerHTML = `
                 <strong>
                     Week ${week.weekNumber}
@@ -1604,7 +1922,7 @@ function renderHistory() {
                 <br>
 
                 Rating:
-                ${week.rating ?? "N/A"}/10
+                ${ratingText}
 
                 <br><br>
 
@@ -1666,20 +1984,78 @@ function escapeHTML(text) {
 ========================= */
 
 document
-    .getElementById("totalWeeks")
+    .getElementById(
+        "totalWeeks"
+    )
     .addEventListener(
         "change",
         function() {
 
-            totalWeeks =
+            let value =
                 Number(
                     this.value
                 );
+
+
+            if (
+                !Number.isInteger(value) ||
+                value < 1
+            ) {
+
+                value = 1;
+
+                this.value = 1;
+            }
+
+
+            totalWeeks = value;
+
 
             localStorage.setItem(
                 "weeklyTrackerTotalWeeks",
                 totalWeeks
             );
+
+
+            calculate();
+        }
+    );
+
+
+/*
+    Validate the week number when it changes,
+    but don't prevent normal typing.
+*/
+
+document
+    .getElementById(
+        "weekNumber"
+    )
+    .addEventListener(
+        "change",
+        function() {
+
+            const value =
+                Number(
+                    this.value
+                );
+
+
+            if (
+                !Number.isInteger(value) ||
+                value < 1
+            ) {
+
+                this.value = 1;
+
+            } else if (
+                value > totalWeeks
+            ) {
+
+                this.value =
+                    totalWeeks;
+            }
+
 
             calculate();
         }
