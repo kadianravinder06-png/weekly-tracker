@@ -147,7 +147,8 @@ button{cursor:pointer}
     letter-spacing:.8px;
 }
 
-.home-mode .topbar{
+.home-mode .topbar,
+.previous-mode .topbar{
     display:none;
 }
 
@@ -283,6 +284,12 @@ button:hover{
 }
 
 button:active{transform:translateY(0)}
+
+button:disabled{
+    opacity:.5;
+    cursor:default;
+    transform:none;
+}
 
 .secondary-button,
 .toggle-button{
@@ -533,6 +540,7 @@ canvas{width:100%!important}
 }
 
 .timeline-week{font-weight:700}
+
 .timeline-average{
     color:var(--blue-soft);
     font-weight:700;
@@ -618,6 +626,42 @@ hr{
 </head>
 
 <body class="home-mode">
+
+<!-- =========================
+     TOP BAR
+========================= -->
+
+<header class="topbar">
+
+    <div class="topbar-inner">
+
+        <div class="brand">
+            WEEKLY GROWTH TRACKER
+        </div>
+
+        <div
+            id="currentWeekIndicator"
+            class="current-week">
+
+            WEEK 1 / 5
+
+        </div>
+
+    </div>
+
+    <nav class="nav">
+
+        <a href="#dashboard">Dashboard</a>
+        <a href="#goalsSection">Goals</a>
+        <a href="#reflectionSection">Reflection</a>
+        <a href="#analysisSection">Analysis</a>
+        <a href="#historySection">History</a>
+        <a href="#backupSection">Backup</a>
+
+    </nav>
+
+</header>
+
 
 <!-- =========================
      HOME
@@ -948,18 +992,10 @@ hr{
 
         <div
             id="calculationButtons"
-            style="margin-top:16px;display:flex;gap:8px;flex-wrap:wrap">
+            style="margin-top:16px">
 
             <button onclick="calculate()">
                 Calculate
-            </button>
-
-            <button
-                class="secondary-button"
-                onclick="saveWeek()">
-
-                Save Week
-
             </button>
 
         </div>
@@ -1337,6 +1373,7 @@ function returnHome(){
         "homeScreen"
     ).style.display="flex";
 
+    document.body.classList.remove("previous-mode");
     document.body.classList.add("home-mode");
 
     updateHomeScreen();
@@ -1435,7 +1472,10 @@ function startNewWeek(){
         "appInterface"
     ).style.display="block";
 
-    document.body.classList.remove("home-mode");
+    document.body.classList.remove(
+        "home-mode",
+        "previous-mode"
+    );
 
     document.getElementById(
         "sessionTitle"
@@ -1525,6 +1565,7 @@ function viewPreviousWeek(index){
     ).style.display="block";
 
     document.body.classList.remove("home-mode");
+    document.body.classList.add("previous-mode");
 
     document.getElementById(
         "sessionTitle"
@@ -1602,22 +1643,34 @@ function updateWeekIndicator(){
             document.getElementById(
                 "weekNumber"
             ).value
+        )||1;
+
+    const indicator=
+        document.getElementById(
+            "currentWeekIndicator"
         );
 
-    document.getElementById(
-        "currentWeekIndicator"
-    ).textContent=
-        "WEEK "+
-        week+
-        " / "+
-        totalWeeks;
+    if(indicator){
 
-    document.getElementById(
-        "dashboardWeek"
-    ).textContent=
-        week+
-        " / "+
-        totalWeeks;
+        indicator.textContent=
+            "WEEK "+
+            week+
+            " / "+
+            totalWeeks;
+    }
+
+    const dashboard=
+        document.getElementById(
+            "dashboardWeek"
+        );
+
+    if(dashboard){
+
+        dashboard.textContent=
+            week+
+            " / "+
+            totalWeeks;
+    }
 }
 
 
@@ -2483,15 +2536,18 @@ function renderComparison(
     goals.forEach(
         goal=>{
 
+            const previousGoals=
+                previousWeek.goals||[];
+
             const previousGoal=
-                previousWeek.goals.find(
+                previousGoals.find(
                     g=>
                         g.id &&
                         goal.id &&
                         g.id===goal.id
                 )
                 ||
-                previousWeek.goals.find(
+                previousGoals.find(
                     g=>
                         !g.id &&
                         g.name===goal.name
@@ -3423,10 +3479,9 @@ function saveWeek(
         )>.01
     ){
 
-        if(!silent)
-            alert(
-                "Cause percentages must total 100% before saving."
-            );
+        alert(
+            "Cause percentages must total 100% before ending the session."
+        );
 
         return false;
     }
@@ -4176,6 +4231,7 @@ function importData(event){
                 calculateAccumulatedDamage();
                 drawImproveCompareChart();
                 updateHomeScreen();
+                updateWeekIndicator();
 
                 alert(
                     "Data imported successfully."
@@ -4299,14 +4355,6 @@ document.getElementById(
    INITIAL SETUP
 ========================= */
 
-renderGoals();
-renderCauses();
-renderHistory();
-updateHomeScreen();
-updateWeekIndicator();
-updateRatingButtons();
-calculate();
-
 document.getElementById(
     "appInterface"
 ).style.display="none";
@@ -4316,6 +4364,14 @@ document.getElementById(
 ).style.display="flex";
 
 document.body.classList.add("home-mode");
+
+renderGoals();
+renderCauses();
+renderHistory();
+updateHomeScreen();
+updateWeekIndicator();
+updateRatingButtons();
+calculate();
 
 </script>
 
