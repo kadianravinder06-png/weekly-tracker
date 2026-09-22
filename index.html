@@ -116,6 +116,14 @@ button{cursor:pointer}
     text-align:center;
 }
 
+.home-brand{
+    font-size:clamp(18px,4vw,24px);
+    font-weight:700;
+    letter-spacing:2px;
+    margin-bottom:30px;
+    color:var(--blue-soft);
+}
+
 .home-week{
     font-size:clamp(38px,9vw,76px);
     line-height:1;
@@ -570,6 +578,10 @@ canvas{width:100%!important}
     font-size:13px;
 }
 
+.completed-note{
+    border-left:4px solid var(--blue);
+}
+
 hr{
     border:0;
     border-top:1px solid var(--border);
@@ -627,10 +639,6 @@ hr{
 
 <body class="home-mode">
 
-<!-- =========================
-     TOP BAR
-========================= -->
-
 <header class="topbar">
 
     <div class="topbar-inner">
@@ -669,17 +677,26 @@ hr{
 
 <section id="homeScreen" class="home-screen">
 
+    <div class="home-brand">
+        WEEKLY GROWTH TRACKER
+    </div>
+
     <div id="homeWeek" class="home-week">
         NO WEEK COMPLETED YET
     </div>
 
     <div class="home-actions">
 
-        <button onclick="startNewWeek()">
+        <button
+            id="homePrimaryButton"
+            onclick="startNewWeek()">
+
             Evaluate New Week
+
         </button>
 
         <button
+            id="homeSecondaryButton"
             class="secondary-button"
             onclick="showPreviousWeeks()">
 
@@ -1282,10 +1299,17 @@ let improveCompareChart=null;
 
 let sessionActive=false;
 let readOnlyMode=false;
+let completedReviewMode=false;
+let editingSavedWeek=false;
 
 let weeks=
 JSON.parse(
     localStorage.getItem("weeklyTrackerWeeks")
+)||[];
+
+let archivedPeriods=
+JSON.parse(
+    localStorage.getItem("weeklyTrackerArchivedPeriods")
 )||[];
 
 let totalWeeks=
@@ -1329,6 +1353,50 @@ function escapeHTML(text){
 }
 
 
+function isPeriodCompleted(){
+
+    if(totalWeeks<1)
+        return false;
+
+    for(let i=1;i<=totalWeeks;i++){
+
+        if(
+            !weeks.some(
+                week=>
+                    Number(week.weekNumber)===i
+            )
+        ){
+            return false;
+        }
+    }
+
+    return true;
+}
+
+
+function saveArchivedPeriods(){
+
+    localStorage.setItem(
+        "weeklyTrackerArchivedPeriods",
+        JSON.stringify(archivedPeriods)
+    );
+}
+
+
+function saveCurrentPeriod(){
+
+    localStorage.setItem(
+        "weeklyTrackerWeeks",
+        JSON.stringify(weeks)
+    );
+
+    localStorage.setItem(
+        "weeklyTrackerTotalWeeks",
+        totalWeeks
+    );
+}
+
+
 /* =========================
    HOME
 ========================= */
@@ -1338,10 +1406,32 @@ function updateHomeScreen(){
     const homeWeek=
         document.getElementById("homeWeek");
 
+    const primary=
+        document.getElementById(
+            "homePrimaryButton"
+        );
+
+    const secondary=
+        document.getElementById(
+            "homeSecondaryButton"
+        );
+
     if(weeks.length===0){
 
         homeWeek.textContent=
             "NO WEEK COMPLETED YET";
+
+        primary.textContent=
+            "Evaluate New Week";
+
+        primary.onclick=
+            startNewWeek;
+
+        secondary.textContent=
+            "View Previous Week";
+
+        secondary.onclick=
+            showPreviousWeeks;
 
         return;
     }
@@ -1353,10 +1443,54 @@ function updateHomeScreen(){
                 Number(a.weekNumber)
         );
 
-    homeWeek.textContent=
-        "WEEK "+
-        sorted[0].weekNumber+
-        " PASSED";
+    if(isPeriodCompleted()){
+
+        homeWeek.innerHTML=
+            "PERIOD COMPLETED"+
+            `<div style="
+                font-size:clamp(16px,3vw,24px);
+                letter-spacing:1px;
+                color:var(--muted);
+                margin-top:18px;
+                font-weight:600;
+            ">`+
+            totalWeeks+
+            " / "+
+            totalWeeks+
+            " WEEKS"+
+            `</div>`;
+
+        primary.textContent=
+            "Review Completed Period";
+
+        primary.onclick=
+            reviewCompletedPeriod;
+
+        secondary.textContent=
+            "Start New Period";
+
+        secondary.onclick=
+            startNewPeriod;
+
+    }else{
+
+        homeWeek.textContent=
+            "WEEK "+
+            sorted[0].weekNumber+
+            " PASSED";
+
+        primary.textContent=
+            "Evaluate New Week";
+
+        primary.onclick=
+            startNewWeek;
+
+        secondary.textContent=
+            "View Previous Week";
+
+        secondary.onclick=
+            showPreviousWeeks;
+    }
 }
 
 
@@ -1364,6 +1498,8 @@ function returnHome(){
 
     sessionActive=false;
     readOnlyMode=false;
+    completedReviewMode=false;
+    editingSavedWeek=false;
 
     document.getElementById(
         "appInterface"
@@ -1373,8 +1509,13 @@ function returnHome(){
         "homeScreen"
     ).style.display="flex";
 
-    document.body.classList.remove("previous-mode");
-    document.body.classList.add("home-mode");
+    document.body.classList.remove(
+        "previous-mode"
+    );
+
+    document.body.classList.add(
+        "home-mode"
+    );
 
     updateHomeScreen();
 
@@ -1390,6 +1531,15 @@ function returnHome(){
 ========================= */
 
 function startNewWeek(){
+
+    if(isPeriodCompleted()){
+
+        alert(
+            "This tracking period is complete. Start a new period from the Home screen."
+        );
+
+        return;
+    }
 
     const sorted=
         [...weeks].sort(
@@ -1463,6 +1613,8 @@ function startNewWeek(){
 
     sessionActive=true;
     readOnlyMode=false;
+    completedReviewMode=false;
+    editingSavedWeek=false;
 
     document.getElementById(
         "homeScreen"
@@ -1491,6 +1643,11 @@ function startNewWeek(){
     ).style.display="block";
 
     document.getElementById(
+        "endSessionButton"
+    ).textContent=
+        "End This Session";
+
+    document.getElementById(
         "readonlyNote"
     ).style.display="none";
 
@@ -1505,6 +1662,163 @@ function startNewWeek(){
         top:0,
         behavior:"smooth"
     });
+}
+
+
+/* =========================
+   COMPLETED PERIOD
+========================= */
+
+function reviewCompletedPeriod(){
+
+    if(!isPeriodCompleted()){
+        startNewWeek();
+        return;
+    }
+
+    completedReviewMode=true;
+    sessionActive=false;
+    readOnlyMode=true;
+    editingSavedWeek=false;
+
+    const sorted=
+        [...weeks].sort(
+            (a,b)=>
+                Number(b.weekNumber)-
+                Number(a.weekNumber)
+        );
+
+    const latestIndex=
+        weeks.findIndex(
+            week=>
+                Number(
+                    week.weekNumber
+                )===
+                Number(
+                    sorted[0].weekNumber
+                )
+        );
+
+    document.getElementById(
+        "homeScreen"
+    ).style.display="none";
+
+    document.getElementById(
+        "appInterface"
+    ).style.display="block";
+
+    document.body.classList.remove(
+        "home-mode"
+    );
+
+    document.body.classList.add(
+        "previous-mode"
+    );
+
+    document.getElementById(
+        "sessionTitle"
+    ).textContent=
+        "Completed Period Review";
+
+    document.getElementById(
+        "sessionHomeButton"
+    ).style.display="inline-block";
+
+    document.getElementById(
+        "endSessionButton"
+    ).style.display="none";
+
+    document.getElementById(
+        "readonlyNote"
+    ).style.display="block";
+
+    document.getElementById(
+        "readonlyNote"
+    ).className=
+        "readonly-note completed-note";
+
+    document.getElementById(
+        "readonlyNote"
+    ).textContent=
+        "This tracking period is complete. Review the full period below, or use the Edit option in the timeline to correct a saved week.";
+
+    loadWeek(
+        latestIndex,
+        true
+    );
+
+    applyReadOnly(true);
+
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
+}
+
+
+/* =========================
+   START NEW PERIOD
+========================= */
+
+function startNewPeriod(){
+
+    if(weeks.length>0){
+
+        const archive={
+
+            id:createId(),
+
+            completedAt:
+                new Date().toISOString(),
+
+            totalWeeks:totalWeeks,
+
+            weeks:
+                JSON.parse(
+                    JSON.stringify(weeks)
+                )
+        };
+
+        archivedPeriods.push(
+            archive
+        );
+
+        saveArchivedPeriods();
+    }
+
+    weeks=[];
+    goals=[];
+    causes=[];
+    totalWeeks=5;
+
+    localStorage.removeItem(
+        "weeklyTrackerWeeks"
+    );
+
+    localStorage.setItem(
+        "weeklyTrackerTotalWeeks",
+        totalWeeks
+    );
+
+    document.getElementById(
+        "totalWeeks"
+    ).value=totalWeeks;
+
+    document.getElementById(
+        "weekNumber"
+    ).value=1;
+
+    document.getElementById(
+        "rating"
+    ).value="";
+
+    document.getElementById(
+        "reflection"
+    ).value="";
+
+    updateHomeScreen();
+
+    startNewWeek();
 }
 
 
@@ -1555,6 +1869,8 @@ function viewPreviousWeek(index){
 
     sessionActive=false;
     readOnlyMode=true;
+    completedReviewMode=false;
+    editingSavedWeek=false;
 
     document.getElementById(
         "homeScreen"
@@ -1564,8 +1880,13 @@ function viewPreviousWeek(index){
         "appInterface"
     ).style.display="block";
 
-    document.body.classList.remove("home-mode");
-    document.body.classList.add("previous-mode");
+    document.body.classList.remove(
+        "home-mode"
+    );
+
+    document.body.classList.add(
+        "previous-mode"
+    );
 
     document.getElementById(
         "sessionTitle"
@@ -1581,12 +1902,89 @@ function viewPreviousWeek(index){
     ).style.display="block";
 
     document.getElementById(
+        "readonlyNote"
+    ).className=
+        "readonly-note";
+
+    document.getElementById(
+        "readonlyNote"
+    ).textContent=
+        "Previous weeks are read-only. Use Edit in the timeline if you need to correct a saved week.";
+
+    document.getElementById(
         "endSessionButton"
     ).style.display="none";
 
     loadWeek(index,true);
 
     applyReadOnly(true);
+
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
+}
+
+
+/* =========================
+   EDIT SAVED WEEK
+========================= */
+
+function editSavedWeek(index){
+
+    if(!weeks[index])
+        return;
+
+    const week=
+        weeks[index];
+
+    sessionActive=true;
+    readOnlyMode=false;
+    completedReviewMode=false;
+    editingSavedWeek=true;
+
+    document.getElementById(
+        "homeScreen"
+    ).style.display="none";
+
+    document.getElementById(
+        "appInterface"
+    ).style.display="block";
+
+    document.body.classList.remove(
+        "home-mode",
+        "previous-mode"
+    );
+
+    document.getElementById(
+        "sessionTitle"
+    ).textContent=
+        "Editing Week "+
+        week.weekNumber;
+
+    document.getElementById(
+        "sessionHomeButton"
+    ).style.display="inline-block";
+
+    document.getElementById(
+        "readonlyNote"
+    ).style.display="none";
+
+    document.getElementById(
+        "endSessionButton"
+    ).style.display="block";
+
+    document.getElementById(
+        "endSessionButton"
+    ).textContent=
+        "Save Changes";
+
+    applyReadOnly(false);
+
+    loadWeek(
+        index,
+        false
+    );
 
     window.scrollTo({
         top:0,
@@ -2259,12 +2657,15 @@ function calculate(){
     ).textContent=
         average.toFixed(2)+"%";
 
-    totalWeeks=
-        Number(
-            document.getElementById(
-                "totalWeeks"
-            ).value
-        )||1;
+    if(!readOnlyMode){
+
+        totalWeeks=
+            Number(
+                document.getElementById(
+                    "totalWeeks"
+                ).value
+            )||1;
+    }
 
     const weekNumber=
         Number(
@@ -3504,7 +3905,10 @@ function saveWeek(
                 weekNumber
         );
 
-    if(existingIndex>=0){
+    if(
+        existingIndex>=0 &&
+        !editingSavedWeek
+    ){
 
         if(
             !confirm(
@@ -3564,22 +3968,20 @@ function saveWeek(
             Number(b.weekNumber)
     );
 
-    localStorage.setItem(
-        "weeklyTrackerWeeks",
-        JSON.stringify(weeks)
-    );
-
-    localStorage.setItem(
-        "weeklyTrackerTotalWeeks",
-        totalWeeks
-    );
+    saveCurrentPeriod();
 
     renderHistory();
     calculate();
     updateHomeScreen();
 
     if(!silent)
-        alert("Week saved.");
+        alert(
+            editingSavedWeek
+            ?
+            "Changes saved."
+            :
+            "Week saved."
+        );
 
     return true;
 }
@@ -3594,11 +3996,32 @@ function endSession(){
     if(readOnlyMode)
         return;
 
+    const wasEditing=
+        editingSavedWeek;
+
     const saved=
         saveWeek(true);
 
     if(!saved)
         return;
+
+    editingSavedWeek=false;
+
+    if(wasEditing){
+
+        alert("Changes saved.");
+
+        if(isPeriodCompleted()){
+
+            reviewCompletedPeriod();
+
+        }else{
+
+            returnHome();
+        }
+
+        return;
+    }
 
     returnHome();
 }
@@ -3745,10 +4168,7 @@ function deleteWeek(index){
         1
     );
 
-    localStorage.setItem(
-        "weeklyTrackerWeeks",
-        JSON.stringify(weeks)
-    );
+    saveCurrentPeriod();
 
     renderHistory();
     calculate();
@@ -3862,6 +4282,18 @@ function renderHistory(){
                         </button>
 
                         <button
+                            class="secondary-button"
+                            onclick="
+                                editSavedWeek(
+                                    ${originalIndex}
+                                )
+                            ">
+
+                            Edit
+
+                        </button>
+
+                        <button
                             class="remove"
                             onclick="
                                 deleteWeek(
@@ -3900,16 +4332,22 @@ function exportData(){
             "Weekly Growth Tracker",
 
         version:
-            4,
+            5,
 
         exportedAt:
             new Date().toISOString(),
 
-        totalWeeks:
-            totalWeeks,
+        currentPeriod:{
 
-        weeks:
-            weeks
+            totalWeeks:
+                totalWeeks,
+
+            weeks:
+                weeks
+        },
+
+        archivedPeriods:
+            archivedPeriods
     };
 
     const blob=
@@ -3980,13 +4418,61 @@ function importData(event){
                         reader.result
                     );
 
+                let importedWeeks=[];
+                let importedTotalWeeks=0;
+                let importedArchives=[];
+
+                /*
+                    Supports both:
+                    - new version 5 backups
+                    - old version 4 backups
+                */
+
                 if(
-                    !data||
-                    !Array.isArray(data.weeks)||
-                    !Number.isInteger(
-                        Number(data.totalWeeks)
+                    data.currentPeriod &&
+                    Array.isArray(
+                        data.currentPeriod.weeks
+                    )
+                ){
+
+                    importedWeeks=
+                        data.currentPeriod.weeks;
+
+                    importedTotalWeeks=
+                        Number(
+                            data.currentPeriod.totalWeeks
+                        );
+
+                    importedArchives=
+                        Array.isArray(
+                            data.archivedPeriods
+                        )
+                        ?
+                        data.archivedPeriods
+                        :
+                        [];
+
+                }else{
+
+                    importedWeeks=
+                        data.weeks;
+
+                    importedTotalWeeks=
+                        Number(
+                            data.totalWeeks
+                        );
+
+                    importedArchives=[];
+                }
+
+                if(
+                    !Array.isArray(
+                        importedWeeks
                     )||
-                    Number(data.totalWeeks)<1
+                    !Number.isInteger(
+                        importedTotalWeeks
+                    )||
+                    importedTotalWeeks<1
                 ){
 
                     throw new Error(
@@ -3994,129 +4480,58 @@ function importData(event){
                     );
                 }
 
-                const importedWeeks=
-                    data.weeks.map(
-                        week=>{
+                const validateWeeks=
+                    sourceWeeks=>
+                        sourceWeeks.map(
+                            week=>{
 
-                            if(
-                                !week||
-                                !Number.isInteger(
+                                if(
+                                    !week||
+                                    !Number.isInteger(
+                                        Number(
+                                            week.weekNumber
+                                        )
+                                    )||
                                     Number(
                                         week.weekNumber
+                                    )<1||
+                                    !Array.isArray(
+                                        week.goals
                                     )
-                                )||
-                                Number(
-                                    week.weekNumber
-                                )<1||
-                                !Array.isArray(
-                                    week.goals
-                                )
-                            ){
+                                ){
 
-                                throw new Error(
-                                    "Invalid week data."
-                                );
-                            }
+                                    throw new Error(
+                                        "Invalid week data."
+                                    );
+                                }
 
-                            const importedTotalWeeks=
-                                Number.isInteger(
+                                const importedWeekTotal=
+                                    Number.isInteger(
+                                        Number(
+                                            week.totalWeeks
+                                        )
+                                    )&&
+                                    Number(
+                                        week.totalWeeks
+                                    )>=1
+                                    ?
                                     Number(
                                         week.totalWeeks
                                     )
-                                )&&
-                                Number(
-                                    week.totalWeeks
-                                )>=1
-                                ?
-                                Number(
-                                    week.totalWeeks
-                                )
-                                :
-                                Number(
-                                    data.totalWeeks
-                                );
-
-                            const importedGoals=
-                                week.goals.map(
-                                    goal=>({
-
-                                        id:
-                                            goal.id||
-                                            createId(),
-
-                                        name:
-                                            String(
-                                                goal.name||
-                                                ""
-                                            ),
-
-                                        percentage:
-                                            Math.max(
-                                                0,
-                                                Math.min(
-                                                    100,
-                                                    Number.isFinite(
-                                                        Number(
-                                                            goal.percentage
-                                                        )
-                                                    )
-                                                    ?
-                                                    Number(
-                                                        goal.percentage
-                                                    )
-                                                    :
-                                                    0
-                                                )
-                                            )
-                                    })
-                                );
-
-                            return{
-
-                                weekNumber:
-                                    Number(
-                                        week.weekNumber
-                                    ),
-
-                                totalWeeks:
-                                    importedTotalWeeks,
-
-                                rating:
-                                    week.rating===null||
-                                    week.rating===undefined||
-                                    week.rating===""
-                                    ?
-                                    null
                                     :
-                                    Number(
-                                        week.rating
-                                    ),
+                                    importedTotalWeeks;
 
-                                goals:
-                                    importedGoals,
+                                const importedGoals=
+                                    week.goals.map(
+                                        goal=>({
 
-                                average:
-                                    Number(
-                                        week.average
-                                    )||0,
-
-                                reflection:
-                                    String(
-                                        week.reflection||
-                                        ""
-                                    ),
-
-                                causes:
-                                    Array.isArray(
-                                        week.causes
-                                    )
-                                    ?
-                                    week.causes.map(
-                                        cause=>({
+                                            id:
+                                                goal.id||
+                                                createId(),
 
                                             name:
                                                 String(
-                                                    cause.name||
+                                                    goal.name||
                                                     ""
                                                 ),
 
@@ -4127,31 +4542,106 @@ function importData(event){
                                                         100,
                                                         Number.isFinite(
                                                             Number(
-                                                                cause.percentage
+                                                                goal.percentage
                                                             )
                                                         )
                                                         ?
                                                         Number(
-                                                            cause.percentage
+                                                            goal.percentage
                                                         )
                                                         :
                                                         0
                                                     )
                                                 )
                                         })
-                                    )
-                                    :
-                                    [],
+                                    );
 
-                                showCauseChart:
-                                    week.showCauseChart===true
-                            };
-                        }
+                                return{
+
+                                    weekNumber:
+                                        Number(
+                                            week.weekNumber
+                                        ),
+
+                                    totalWeeks:
+                                        importedWeekTotal,
+
+                                    rating:
+                                        week.rating===null||
+                                        week.rating===undefined||
+                                        week.rating===""
+                                        ?
+                                        null
+                                        :
+                                        Number(
+                                            week.rating
+                                        ),
+
+                                    goals:
+                                        importedGoals,
+
+                                    average:
+                                        Number(
+                                            week.average
+                                        )||0,
+
+                                    reflection:
+                                        String(
+                                            week.reflection||
+                                            ""
+                                        ),
+
+                                    causes:
+                                        Array.isArray(
+                                            week.causes
+                                        )
+                                        ?
+                                        week.causes.map(
+                                            cause=>({
+
+                                                name:
+                                                    String(
+                                                        cause.name||
+                                                        ""
+                                                    ),
+
+                                                percentage:
+                                                    Math.max(
+                                                        0,
+                                                        Math.min(
+                                                            100,
+                                                            Number.isFinite(
+                                                                Number(
+                                                                    cause.percentage
+                                                                )
+                                                            )
+                                                            ?
+                                                            Number(
+                                                                cause.percentage
+                                                            )
+                                                            :
+                                                            0
+                                                        )
+                                                    )
+                                            })
+                                        )
+                                        :
+                                        [],
+
+                                    showCauseChart:
+                                        week.showCauseChart===true
+                                };
+                            }
+                        );
+
+                const validatedWeeks=
+                    validateWeeks(
+                        importedWeeks
                     );
 
                 for(
                     const week
-                    of importedWeeks
+                    of validatedWeeks
                 ){
 
                     if(
@@ -4190,9 +4680,45 @@ function importData(event){
                     }
                 }
 
+                const validatedArchives=
+                    Array.isArray(
+                        importedArchives
+                    )
+                    ?
+                    importedArchives.map(
+                        archive=>({
+
+                            id:
+                                archive.id||
+                                createId(),
+
+                            completedAt:
+                                archive.completedAt||
+                                null,
+
+                            totalWeeks:
+                                Number(
+                                    archive.totalWeeks
+                                )||1,
+
+                            weeks:
+                                Array.isArray(
+                                    archive.weeks
+                                )
+                                ?
+                                validateWeeks(
+                                    archive.weeks
+                                )
+                                :
+                                []
+                        })
+                    )
+                    :
+                    [];
+
                 if(
                     !confirm(
-                        "Importing will replace the current saved history. Continue?"
+                        "Importing will replace the current saved period and archived periods. Continue?"
                     )
                 ){
 
@@ -4201,26 +4727,20 @@ function importData(event){
                 }
 
                 weeks=
-                    importedWeeks.sort(
+                    validatedWeeks.sort(
                         (a,b)=>
                             a.weekNumber-
                             b.weekNumber
                     );
 
                 totalWeeks=
-                    Number(
-                        data.totalWeeks
-                    );
+                    importedTotalWeeks;
 
-                localStorage.setItem(
-                    "weeklyTrackerWeeks",
-                    JSON.stringify(weeks)
-                );
+                archivedPeriods=
+                    validatedArchives;
 
-                localStorage.setItem(
-                    "weeklyTrackerTotalWeeks",
-                    totalWeeks
-                );
+                saveCurrentPeriod();
+                saveArchivedPeriods();
 
                 document.getElementById(
                     "totalWeeks"
