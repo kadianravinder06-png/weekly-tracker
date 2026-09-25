@@ -814,7 +814,7 @@ canvas{width:100%!important}
         <h2>Goals</h2>
 
         <div id="goalLockNotice" class="goal-lock-notice" style="display:none">
-            Goal structure is locked after Week 1. You cannot add, remove, or rename goals from Week 2 onward.
+            Goal structure will lock after Week 1. You won't be able to add, remove, or rename goals from Week 2 onward.
         </div>
 
         <div id="goals"></div>
@@ -1987,6 +1987,13 @@ function renderGoalLockState(){
     const locked=
         goalStructureLocked();
 
+    const currentWeek=
+        Number(
+            document.getElementById(
+                "weekNumber"
+            ).value
+        )||1;
+
     const notice=
         document.getElementById(
             "goalLockNotice"
@@ -1997,15 +2004,41 @@ function renderGoalLockState(){
             "addGoalButton"
         );
 
-    if(locked){
+    /*
+        FIX:
+        The banner is only useful as a heads-up
+        BEFORE the structure actually locks — i.e.
+        while actively working on Week 1, before it
+        has been ended.
 
-        notice.style.display="block";
+        It should NOT show:
+        - on any week after Week 1 (it's already
+          locked there; the disabled inputs already
+          make that obvious, and the confirm dialog
+          at end-of-Week-1 already delivered the
+          warning once)
+        - while viewing/reviewing a saved week in
+          read-only mode (nothing is editable there,
+          so a warning about editing is irrelevant)
+    */
+
+    const showNotice=
+        currentWeek===1 &&
+        !locked &&
+        !readOnlyMode;
+
+    notice.style.display=
+        showNotice
+        ?
+        "block"
+        :
+        "none";
+
+    if(locked){
 
         addButton.style.display="none";
 
     }else{
-
-        notice.style.display="none";
 
         addButton.style.display="inline-block";
 
@@ -3367,17 +3400,6 @@ function getHistoricalPreviousWeek(
    PROGRESS VALIDATION
 ========================= */
 
-/*
-    Progress represents cumulative completion.
-
-    Therefore:
-        current percentage >= previous percentage
-
-    must always be true.
-
-    This checks every goal in the current week
-    before the session can be ended.
-*/
 function validateProgressAgainstPrevious(){
 
     const weekNumber=
@@ -3409,10 +3431,6 @@ function validateProgressAgainstPrevious(){
                         g.id===goal.id
                 );
 
-            /*
-                Compatibility with very old saved data
-                that may not have stable IDs.
-            */
             if(!previousGoal){
 
                 previousGoal=
@@ -3480,14 +3498,6 @@ function validateProgressAgainstPrevious(){
 }
 
 
-/*
-    When editing an older week, the entire saved
-    period must still obey the same rule.
-
-    This prevents someone from changing Week 1
-    downward after Week 2 has already been saved
-    and creating an impossible later comparison.
-*/
 function validateEntirePeriodProgress(
     candidateWeeks
 ){
@@ -3646,11 +3656,6 @@ function saveWeek(
     }
 
 
-    /*
-        NEW RULE:
-        Current week's progress may never be lower
-        than the previous week's progress.
-    */
     if(
         !validateProgressAgainstPrevious()
     ){
@@ -3658,11 +3663,6 @@ function saveWeek(
     }
 
 
-    /*
-        Week 1 warning:
-        once Week 1 is ended, the goal structure
-        becomes permanently fixed for this period.
-    */
     if(
         weekNumber===1 &&
         !editingSavedWeek
@@ -3713,9 +3713,10 @@ function saveWeek(
         )>.01
     ){
 
-        alert(
-            "Cause percentages must total 100% before ending the session."
-        );
+        if(!silent)
+            alert(
+                "Cause percentages must total 100% before ending the session."
+            );
 
         return false;
     }
@@ -3800,11 +3801,6 @@ function saveWeek(
     }
 
 
-    /*
-        Extra protection for editing saved weeks.
-        The entire period must remain logically
-        non-decreasing.
-    */
     const periodCheck=
         validateEntirePeriodProgress(
             candidateWeeks
@@ -4679,11 +4675,6 @@ document.getElementById(
         value=Math.round(value);
         value=Math.max(1,value);
 
-        /*
-            Never allow the tracking period to become
-            shorter than a week that has already been
-            saved.
-        */
         const highestSavedWeek=
             weeks.length===0
             ?
