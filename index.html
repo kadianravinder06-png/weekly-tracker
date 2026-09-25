@@ -17,13 +17,8 @@
     --muted:#9da5ae;
     --blue:#67b8ef;
     --blue-soft:#8fcdf3;
-    --black:#0c0d0f;
     --warning:#e8c58e;
     --warning-bg:#3a3226;
-    --damage:#cf7d7d;
-    --damage-bg:#382729;
-    --surplus:#9ed0a1;
-    --surplus-bg:#28372b;
     --border:#343a42;
     --radius:14px;
 }
@@ -223,10 +218,6 @@ main{
     letter-spacing:1px;
 }
 
-.previous-title{
-    color:var(--blue-soft);
-}
-
 .stats-grid{
     display:grid;
     grid-template-columns:repeat(4,minmax(0,1fr));
@@ -345,7 +336,6 @@ button:disabled{
     color:var(--muted);
     border:1px solid var(--border);
     font-size:13px;
-    transition:all .18s ease;
 }
 
 .rating-button:hover{
@@ -429,8 +419,19 @@ button:disabled{
 }
 
 .success{
-    color:var(--surplus);
+    color:#9ed0a1;
     font-weight:700;
+}
+
+.goal-lock-notice{
+    margin:0 0 15px;
+    padding:12px 14px;
+    border-radius:10px;
+    background:var(--warning-bg);
+    border:1px solid rgba(232,197,142,.25);
+    border-left:4px solid var(--warning);
+    color:var(--warning);
+    font-size:13px;
 }
 
 .reflection-area{
@@ -464,43 +465,6 @@ button:disabled{
 .radar-container{max-width:620px}
 
 canvas{width:100%!important}
-
-.damage-row{
-    padding:13px;
-    margin:9px 0;
-    background:var(--surface-2);
-    border:1px solid var(--border);
-    border-radius:10px;
-}
-
-.damage-row strong{font-size:14px}
-
-.damage-total{
-    padding:15px;
-    margin-top:14px;
-    border-top:1px solid var(--border);
-    font-weight:700;
-}
-
-.damage{
-    background:var(--damage-bg);
-    border-left:4px solid var(--damage);
-}
-
-.surplus{
-    background:var(--surplus-bg);
-    border-left:4px solid var(--surplus);
-}
-
-.damage-number{
-    color:var(--damage);
-    font-weight:700;
-}
-
-.surplus-number{
-    color:var(--surplus);
-    font-weight:700;
-}
 
 .timeline{
     position:relative;
@@ -582,12 +546,6 @@ canvas{width:100%!important}
     border-left:4px solid var(--blue);
 }
 
-hr{
-    border:0;
-    border-top:1px solid var(--border);
-    margin:22px 0;
-}
-
 #importFile{display:none}
 
 @media(max-width:850px){
@@ -647,33 +605,25 @@ hr{
             WEEKLY GROWTH TRACKER
         </div>
 
-        <div
-            id="currentWeekIndicator"
-            class="current-week">
-
+        <div id="currentWeekIndicator" class="current-week">
             WEEK 1 / 5
-
         </div>
 
     </div>
 
     <nav class="nav">
-
         <a href="#dashboard">Dashboard</a>
         <a href="#goalsSection">Goals</a>
         <a href="#reflectionSection">Reflection</a>
         <a href="#analysisSection">Analysis</a>
         <a href="#historySection">History</a>
         <a href="#backupSection">Backup</a>
-
     </nav>
 
 </header>
 
 
-<!-- =========================
-     HOME
-========================= -->
+<!-- HOME -->
 
 <section id="homeScreen" class="home-screen">
 
@@ -687,12 +637,8 @@ hr{
 
     <div class="home-actions">
 
-        <button
-            id="homePrimaryButton"
-            onclick="startNewWeek()">
-
+        <button id="homePrimaryButton" onclick="startNewWeek()">
             Evaluate New Week
-
         </button>
 
         <button
@@ -713,9 +659,7 @@ hr{
 </section>
 
 
-<!-- =========================
-     APP INTERFACE
-========================= -->
+<!-- APP -->
 
 <main id="appInterface" style="display:none">
 
@@ -765,62 +709,23 @@ hr{
         <div class="stats-grid">
 
             <div class="stat stat-blue">
-
-                <div class="stat-label">
-                    CURRENT WEEK
-                </div>
-
-                <div
-                    id="dashboardWeek"
-                    class="stat-value">
-                    1 / 5
-                </div>
-
+                <div class="stat-label">CURRENT WEEK</div>
+                <div id="dashboardWeek" class="stat-value">1 / 5</div>
             </div>
 
-
             <div class="stat">
-
-                <div class="stat-label">
-                    AVERAGE
-                </div>
-
-                <div
-                    id="dashboardAverage"
-                    class="stat-value">
-                    0%
-                </div>
-
+                <div class="stat-label">AVERAGE</div>
+                <div id="dashboardAverage" class="stat-value">0%</div>
             </div>
 
-
             <div class="stat">
-
-                <div class="stat-label">
-                    IMPROVE AVERAGE
-                </div>
-
-                <div
-                    id="dashboardImprove"
-                    class="stat-value">
-                    N/A
-                </div>
-
+                <div class="stat-label">IMPROVE AVERAGE</div>
+                <div id="dashboardImprove" class="stat-value">N/A</div>
             </div>
 
-
             <div class="stat">
-
-                <div class="stat-label">
-                    WEEKLY RATING
-                </div>
-
-                <div
-                    id="dashboardRating"
-                    class="stat-value">
-                    Unrated
-                </div>
-
+                <div class="stat-label">WEEKLY RATING</div>
+                <div id="dashboardRating" class="stat-value">Unrated</div>
             </div>
 
         </div>
@@ -872,9 +777,7 @@ hr{
 
             <div class="field">
 
-                <label>
-                    Weekly rating
-                </label>
+                <label>Weekly rating</label>
 
                 <div class="rating-picker">
 
@@ -891,10 +794,7 @@ hr{
 
                 </div>
 
-                <input
-                    type="hidden"
-                    id="rating"
-                    value="">
+                <input type="hidden" id="rating" value="">
 
             </div>
 
@@ -913,14 +813,14 @@ hr{
 
         <h2>Goals</h2>
 
+        <div id="goalLockNotice" class="goal-lock-notice" style="display:none">
+            Goal structure is locked after Week 1. You cannot add, remove, or rename goals from Week 2 onward.
+        </div>
+
         <div id="goals"></div>
 
-        <button
-            id="addGoalButton"
-            onclick="addGoal()">
-
+        <button id="addGoalButton" onclick="addGoal()">
             Add Goal
-
         </button>
 
         <p class="small">
@@ -947,69 +847,28 @@ hr{
         <div class="stats-grid">
 
             <div class="stat">
-
-                <div class="stat-label">
-                    Average
-                </div>
-
-                <div
-                    id="average"
-                    class="stat-value">
-                    0%
-                </div>
-
+                <div class="stat-label">Average</div>
+                <div id="average" class="stat-value">0%</div>
             </div>
 
-
             <div class="stat">
-
-                <div class="stat-label">
-                    Ideal Improve Average
-                </div>
-
-                <div
-                    id="idealImprove"
-                    class="stat-value">
-                    0%
-                </div>
-
+                <div class="stat-label">Ideal Improve Average</div>
+                <div id="idealImprove" class="stat-value">0%</div>
             </div>
 
-
             <div class="stat">
-
-                <div class="stat-label">
-                    Improve Average
-                </div>
-
-                <div
-                    id="improveAverage"
-                    class="stat-value">
-                    N/A
-                </div>
-
+                <div class="stat-label">Improve Average</div>
+                <div id="improveAverage" class="stat-value">N/A</div>
             </div>
 
-
             <div class="stat">
-
-                <div class="stat-label">
-                    Deficit
-                </div>
-
-                <div
-                    id="deficit"
-                    class="stat-value">
-                    N/A
-                </div>
-
+                <div class="stat-label">Deficit</div>
+                <div id="deficit" class="stat-value">N/A</div>
             </div>
 
         </div>
 
-        <div
-            id="calculationButtons"
-            style="margin-top:16px">
+        <div id="calculationButtons" style="margin-top:16px">
 
             <button onclick="calculate()">
                 Calculate
@@ -1022,9 +881,7 @@ hr{
 
     <!-- REFLECTION -->
 
-    <section
-        id="reflectionSection"
-        class="card">
+    <section id="reflectionSection" class="card">
 
         <div class="section-label">
             Reflection
@@ -1057,27 +914,16 @@ hr{
 
         <div id="causes"></div>
 
-        <button
-            id="addCauseButton"
-            onclick="addCause()">
-
+        <button id="addCauseButton" onclick="addCause()">
             Add Cause
-
         </button>
 
         <div class="cause-total">
-
             Cause total:
-            <strong id="causeTotal">
-                0%
-            </strong>
-
+            <strong id="causeTotal">0%</strong>
         </div>
 
-        <p
-            id="causeWarning"
-            class="warning">
-        </p>
+        <p id="causeWarning" class="warning"></p>
 
         <button
             id="causeChartButton"
@@ -1111,9 +957,7 @@ hr{
 
     <!-- ANALYSIS -->
 
-    <section
-        id="analysisSection"
-        class="card">
+    <section id="analysisSection" class="card">
 
         <div class="section-label">
             Analysis
@@ -1161,60 +1005,9 @@ hr{
     </section>
 
 
-    <!-- DAMAGE -->
-
-    <section class="card">
-
-        <div class="section-label">
-            Root-cause impact
-        </div>
-
-        <h2>Damage Analysis</h2>
-
-        <p class="small">
-            Damage = Cause Percentage × Deficit
-        </p>
-
-        <div id="damageResults">
-
-            <p class="small">
-                No damage calculated yet.
-            </p>
-
-        </div>
-
-    </section>
-
-
-    <section class="card">
-
-        <div class="section-label">
-            Across weeks
-        </div>
-
-        <h2>Accumulated Damage</h2>
-
-        <p class="small">
-            Total impact attributed to each root cause
-            across saved weeks.
-        </p>
-
-        <div id="accumulatedDamage">
-
-            <p class="small">
-                No saved damage data yet.
-            </p>
-
-        </div>
-
-    </section>
-
-
     <!-- HISTORY -->
 
-    <section
-        id="historySection"
-        class="card">
+    <section id="historySection" class="card">
 
         <div class="section-label">
             History
@@ -1233,9 +1026,7 @@ hr{
 
     <!-- BACKUP -->
 
-    <section
-        id="backupSection"
-        class="card">
+    <section id="backupSection" class="card">
 
         <div class="section-label">
             Data
@@ -1353,10 +1144,42 @@ function escapeHTML(text){
 }
 
 
+/*
+    Goal structure becomes locked once:
+    - the current week is greater than Week 1, OR
+    - Week 2 or any later week already exists.
+
+    This also means that after Week 2 has been
+    completed, going back to edit Week 1 cannot
+    change the structure anymore.
+*/
+function goalStructureLocked(){
+
+    const currentWeek=
+        Number(
+            document.getElementById(
+                "weekNumber"
+            ).value
+        )||1;
+
+    if(currentWeek>1)
+        return true;
+
+    return weeks.some(
+        week=>
+            Number(week.weekNumber)>1
+    );
+}
+
+
 function isPeriodCompleted(){
 
-    if(totalWeeks<1)
+    if(
+        !Number.isInteger(totalWeeks)||
+        totalWeeks<1
+    ){
         return false;
+    }
 
     for(let i=1;i<=totalWeeks;i++){
 
@@ -1740,7 +1563,7 @@ function reviewCompletedPeriod(){
     document.getElementById(
         "readonlyNote"
     ).textContent=
-        "This tracking period is complete. Review the full period below, or use the Edit option in the timeline to correct a saved week.";
+        "This tracking period is complete. Review the full period below, or use Edit in the timeline to correct a saved week.";
 
     loadWeek(
         latestIndex,
@@ -1861,11 +1684,8 @@ function showPreviousWeeks(){
 
 function viewPreviousWeek(index){
 
-    if(
-        !weeks[index]
-    ){
+    if(!weeks[index])
         return;
-    }
 
     sessionActive=false;
     readOnlyMode=true;
@@ -2024,9 +1844,25 @@ function applyReadOnly(readOnly){
                 return;
             }
 
+            /*
+                Edit buttons inside History must
+                remain usable even while viewing
+                a previous week.
+            */
+            if(
+                button.classList.contains(
+                    "edit-week-button"
+                )
+            ){
+                button.disabled=false;
+                return;
+            }
+
             button.disabled=readOnly;
         }
     );
+
+    renderGoalLockState();
 }
 
 
@@ -2086,7 +1922,6 @@ function selectRating(value){
     ).value=value;
 
     updateRatingButtons();
-
     updateDashboardRating();
 }
 
@@ -2144,6 +1979,74 @@ function updateDashboardRating(){
 
 
 /* =========================
+   GOAL LOCKING
+========================= */
+
+function renderGoalLockState(){
+
+    const locked=
+        goalStructureLocked();
+
+    const notice=
+        document.getElementById(
+            "goalLockNotice"
+        );
+
+    const addButton=
+        document.getElementById(
+            "addGoalButton"
+        );
+
+    if(locked){
+
+        notice.style.display="block";
+
+        addButton.style.display="none";
+
+    }else{
+
+        notice.style.display="none";
+
+        addButton.style.display="inline-block";
+
+        addButton.disabled=
+            readOnlyMode;
+    }
+
+    document
+        .querySelectorAll(
+            ".goal-name-input"
+        )
+        .forEach(
+            input=>{
+                input.disabled=
+                    readOnlyMode||
+                    locked;
+            }
+        );
+
+    document
+        .querySelectorAll(
+            ".goal-remove-button"
+        )
+        .forEach(
+            button=>{
+                button.style.display=
+                    locked
+                    ?
+                    "none"
+                    :
+                    "inline-block";
+
+                button.disabled=
+                    readOnlyMode||
+                    locked;
+            }
+        );
+}
+
+
+/* =========================
    GOALS
 ========================= */
 
@@ -2154,6 +2057,15 @@ function addGoal(
 
     if(readOnlyMode)
         return;
+
+    if(goalStructureLocked()){
+
+        alert(
+            "Goal structure is locked after Week 1. You cannot add another goal."
+        );
+
+        return;
+    }
 
     if(goals.length>=6){
 
@@ -2181,6 +2093,15 @@ function removeGoal(index){
     if(readOnlyMode)
         return;
 
+    if(goalStructureLocked()){
+
+        alert(
+            "Goal structure is locked after Week 1. Goals cannot be removed."
+        );
+
+        return;
+    }
+
     goals.splice(index,1);
 
     renderGoals();
@@ -2195,6 +2116,13 @@ function updateGoalName(
 
     if(readOnlyMode)
         return;
+
+    if(goalStructureLocked()){
+
+        renderGoals();
+
+        return;
+    }
 
     goals[index].name=value;
 }
@@ -2291,6 +2219,7 @@ function renderGoals(){
                     <span>
 
                         <input
+                            class="goal-name-input"
                             type="text"
                             placeholder="Goal name"
                             value="${escapeHTML(
@@ -2325,7 +2254,7 @@ function renderGoals(){
                         %
 
                         <button
-                            class="remove"
+                            class="remove goal-remove-button"
                             onclick="
                                 removeGoal(${index})
                             ">
@@ -2342,6 +2271,8 @@ function renderGoals(){
             container.appendChild(div);
         }
     );
+
+    renderGoalLockState();
 
     if(readOnlyMode)
         applyReadOnly(true);
@@ -2361,10 +2292,8 @@ function addCause(
         return;
 
     causes.push({
-
         name:name,
         percentage:percentage
-
     });
 
     renderCauses();
@@ -2534,7 +2463,6 @@ function updateCauseTotal(){
 
         warning.textContent=
             "Cause percentages must total 100%.";
-
         totalElement.className="warning";
     }
 }
@@ -2749,8 +2677,6 @@ function calculate(){
         idealImprove
     );
 
-    calculateDamage(deficit);
-    calculateAccumulatedDamage();
     drawRadarChart();
     drawAverageTrendChart();
     drawImproveCompareChart();
@@ -2851,7 +2777,6 @@ function renderResults(
                 <div class="goal-meta">
 
                     <span>
-
                         ${
                             difference<0
                             ?
@@ -2862,7 +2787,6 @@ function renderResults(
                             :
                             "At or above average"
                         }
-
                     </span>
 
                     <span>
@@ -2880,7 +2804,7 @@ function renderResults(
 
 
 /* =========================
-   PREVIOUS WEEK CALC
+   PREVIOUS WEEK
 ========================= */
 
 function getPreviousWeek(
@@ -3034,336 +2958,6 @@ function renderComparison(
 
                 </div>
             `;
-
-            container.appendChild(div);
-        }
-    );
-}
-
-
-/* =========================
-   DAMAGE
-========================= */
-
-function calculateDamage(deficit){
-
-    const container=
-        document.getElementById(
-            "damageResults"
-        );
-
-    container.innerHTML="";
-
-    if(deficit===null){
-
-        container.innerHTML=`
-            <p class="small">
-                Damage cannot be calculated
-                until there is a previous week.
-            </p>
-        `;
-
-        return;
-    }
-
-    if(causes.length===0){
-
-        container.innerHTML=`
-            <p class="small">
-                Add root causes to calculate damage.
-            </p>
-        `;
-
-        return;
-    }
-
-    causes.forEach(
-        cause=>{
-
-            const contribution=
-                Number(
-                    cause.percentage||0
-                );
-
-            const damage=
-                contribution/
-                100*
-                deficit;
-
-            const div=
-                document.createElement("div");
-
-            if(damage<0){
-
-                div.className=
-                    "damage-row surplus";
-
-                div.innerHTML=`
-
-                    <strong>
-                        ${escapeHTML(
-                            cause.name||
-                            "Unnamed cause"
-                        )}
-                    </strong>
-
-                    <br>
-
-                    <span class="small">
-                        Contribution:
-                        ${contribution.toFixed(2)}%
-                    </span>
-
-                    <br>
-
-                    Surplus:
-                    <span class="surplus-number">
-                        ${Math.abs(
-                            damage
-                        ).toFixed(2)}
-                    </span>
-                `;
-
-            }else{
-
-                div.className=
-                    "damage-row damage";
-
-                div.innerHTML=`
-
-                    <strong>
-                        ${escapeHTML(
-                            cause.name||
-                            "Unnamed cause"
-                        )}
-                    </strong>
-
-                    <br>
-
-                    <span class="small">
-                        Contribution:
-                        ${contribution.toFixed(2)}%
-                    </span>
-
-                    <br>
-
-                    Damage:
-                    <span class="damage-number">
-                        ${damage.toFixed(2)}
-                    </span>
-                `;
-            }
-
-            container.appendChild(div);
-        }
-    );
-
-    const totalDamage=
-        causes.reduce(
-            (sum,cause)=>
-                sum+
-                Number(
-                    cause.percentage||0
-                )/
-                100*
-                deficit,
-            0
-        );
-
-    const total=
-        document.createElement("div");
-
-    total.className=
-        totalDamage<0
-        ?
-        "damage-total surplus"
-        :
-        "damage-total damage";
-
-    total.innerHTML=
-        totalDamage<0
-        ?
-        `
-            Total Surplus:
-            <span class="surplus-number">
-                ${Math.abs(
-                    totalDamage
-                ).toFixed(2)}
-            </span>
-        `
-        :
-        `
-            Total Damage:
-            <span class="damage-number">
-                ${totalDamage.toFixed(2)}
-            </span>
-        `;
-
-    container.appendChild(total);
-}
-
-
-/* =========================
-   ACCUMULATED DAMAGE
-========================= */
-
-function calculateAccumulatedDamage(){
-
-    const container=
-        document.getElementById(
-            "accumulatedDamage"
-        );
-
-    container.innerHTML="";
-
-    const accumulated={};
-
-    weeks.forEach(
-        week=>{
-
-            const weekNumber=
-                Number(week.weekNumber);
-
-            const previousWeeks=
-                weeks.filter(
-                    w=>
-                        Number(w.weekNumber)<
-                        weekNumber
-                );
-
-            if(previousWeeks.length===0)
-                return;
-
-            previousWeeks.sort(
-                (a,b)=>
-                    Number(b.weekNumber)-
-                    Number(a.weekNumber)
-            );
-
-            const previousWeek=
-                previousWeeks[0];
-
-            const average=
-                Number(week.average);
-
-            const savedTotalWeeks=
-                Number(week.totalWeeks)||
-                totalWeeks;
-
-            const remaining=
-                Math.max(
-                    savedTotalWeeks-
-                    weekNumber,
-                    0
-                );
-
-            let idealImprove=0;
-
-            if(remaining>0){
-
-                idealImprove=
-                    (100-average)/
-                    remaining;
-            }
-
-            const improveAverage=
-                average-
-                Number(previousWeek.average);
-
-            const deficit=
-                idealImprove-
-                improveAverage;
-
-            (week.causes||[]).forEach(
-                cause=>{
-
-                    const name=
-                        cause.name||
-                        "Unnamed cause";
-
-                    const damage=
-                        Number(
-                            cause.percentage||0
-                        )/
-                        100*
-                        deficit;
-
-                    if(!accumulated[name])
-                        accumulated[name]=0;
-
-                    accumulated[name]+=damage;
-                }
-            );
-        }
-    );
-
-    const names=
-        Object.keys(accumulated);
-
-    if(names.length===0){
-
-        container.innerHTML=`
-            <p class="small">
-                No accumulated damage available yet.
-            </p>
-        `;
-
-        return;
-    }
-
-    names.sort(
-        (a,b)=>
-            accumulated[b]-
-            accumulated[a]
-    );
-
-    names.forEach(
-        name=>{
-
-            const value=
-                accumulated[name];
-
-            const div=
-                document.createElement("div");
-
-            if(value<0){
-
-                div.className=
-                    "damage-row surplus";
-
-                div.innerHTML=`
-
-                    <strong>
-                        ${escapeHTML(name)}
-                    </strong>
-
-                    <br>
-
-                    Accumulated Surplus:
-                    <span class="surplus-number">
-                        ${Math.abs(value).toFixed(2)}
-                    </span>
-                `;
-
-            }else{
-
-                div.className=
-                    "damage-row damage";
-
-                div.innerHTML=`
-
-                    <strong>
-                        ${escapeHTML(name)}
-                    </strong>
-
-                    <br>
-
-                    Accumulated Damage:
-                    <span class="damage-number">
-                        ${value.toFixed(2)}
-                    </span>
-                `;
-            }
 
             container.appendChild(div);
         }
@@ -3677,27 +3271,17 @@ function drawImproveCompareChart(){
                     datasets:[
 
                         {
-
-                            label:
-                                "Improve Average",
-
+                            label:"Improve Average",
                             data:actual,
-
                             tension:.35,
                             borderWidth:2,
                             pointRadius:4,
-
                             spanGaps:false
                         },
 
-
                         {
-
-                            label:
-                                "Ideal Improve Average",
-
+                            label:"Ideal Improve Average",
                             data:ideal,
-
                             tension:.35,
                             borderWidth:2,
                             pointRadius:4
@@ -3780,6 +3364,215 @@ function getHistoricalPreviousWeek(
 
 
 /* =========================
+   PROGRESS VALIDATION
+========================= */
+
+/*
+    Progress represents cumulative completion.
+
+    Therefore:
+        current percentage >= previous percentage
+
+    must always be true.
+
+    This checks every goal in the current week
+    before the session can be ended.
+*/
+function validateProgressAgainstPrevious(){
+
+    const weekNumber=
+        Number(
+            document.getElementById(
+                "weekNumber"
+            ).value
+        );
+
+    const previousWeek=
+        getPreviousWeek(weekNumber);
+
+    if(!previousWeek)
+        return true;
+
+    const previousGoals=
+        previousWeek.goals||[];
+
+    const invalid=[];
+
+    goals.forEach(
+        goal=>{
+
+            let previousGoal=
+                previousGoals.find(
+                    g=>
+                        g.id &&
+                        goal.id &&
+                        g.id===goal.id
+                );
+
+            /*
+                Compatibility with very old saved data
+                that may not have stable IDs.
+            */
+            if(!previousGoal){
+
+                previousGoal=
+                    previousGoals.find(
+                        g=>
+                            !g.id &&
+                            g.name===goal.name
+                    );
+            }
+
+            if(!previousGoal)
+                return;
+
+            const current=
+                Number(
+                    goal.percentage||0
+                );
+
+            const previous=
+                Number(
+                    previousGoal.percentage||0
+                );
+
+            if(current<previous){
+
+                invalid.push({
+
+                    name:
+                        goal.name||
+                        "Unnamed goal",
+
+                    previous:previous,
+
+                    current:current
+
+                });
+            }
+        }
+    );
+
+    if(invalid.length===0)
+        return true;
+
+    let message=
+        "Cannot end session.\n\n"+
+        "Invalid percentage entered in one or more goals. "+
+        "A goal's completed percentage cannot decrease from its previous week.\n\n";
+
+    invalid.forEach(
+        item=>{
+
+            message+=
+                item.name+
+                ": "+
+                item.previous+
+                "% → "+
+                item.current+
+                "%\n";
+        }
+    );
+
+    alert(message);
+
+    return false;
+}
+
+
+/*
+    When editing an older week, the entire saved
+    period must still obey the same rule.
+
+    This prevents someone from changing Week 1
+    downward after Week 2 has already been saved
+    and creating an impossible later comparison.
+*/
+function validateEntirePeriodProgress(
+    candidateWeeks
+){
+
+    const sorted=
+        [...candidateWeeks].sort(
+            (a,b)=>
+                Number(a.weekNumber)-
+                Number(b.weekNumber)
+        );
+
+    for(let i=1;i<sorted.length;i++){
+
+        const previous=
+            sorted[i-1];
+
+        const current=
+            sorted[i];
+
+        const previousGoals=
+            previous.goals||[];
+
+        for(
+            const goal
+            of current.goals||[]
+        ){
+
+            let previousGoal=
+                previousGoals.find(
+                    g=>
+                        g.id &&
+                        goal.id &&
+                        g.id===goal.id
+                );
+
+            if(!previousGoal){
+
+                previousGoal=
+                    previousGoals.find(
+                        g=>
+                            !g.id &&
+                            g.name===goal.name
+                    );
+            }
+
+            if(!previousGoal)
+                continue;
+
+            if(
+                Number(goal.percentage||0)<
+                Number(previousGoal.percentage||0)
+            ){
+
+                return{
+
+                    valid:false,
+
+                    currentWeek:
+                        current.weekNumber,
+
+                    goal:
+                        goal.name||
+                        "Unnamed goal",
+
+                    previous:
+                        Number(
+                            previousGoal.percentage||0
+                        ),
+
+                    current:
+                        Number(
+                            goal.percentage||0
+                        )
+                };
+            }
+        }
+    }
+
+    return{
+        valid:true
+    };
+}
+
+
+/* =========================
    SAVE
 ========================= */
 
@@ -3851,6 +3644,46 @@ function saveWeek(
 
         return false;
     }
+
+
+    /*
+        NEW RULE:
+        Current week's progress may never be lower
+        than the previous week's progress.
+    */
+    if(
+        !validateProgressAgainstPrevious()
+    ){
+        return false;
+    }
+
+
+    /*
+        Week 1 warning:
+        once Week 1 is ended, the goal structure
+        becomes permanently fixed for this period.
+    */
+    if(
+        weekNumber===1 &&
+        !editingSavedWeek
+    ){
+
+        const confirmed=
+            confirm(
+                "Before you finish Week 1:\n\n"+
+                "Your goal structure will be locked after Week 1.\n\n"+
+                "From Week 2 onward, you will NOT be able to:\n"+
+                "• rename a goal\n"+
+                "• add a goal\n"+
+                "• remove a goal\n\n"+
+                "Make sure your goals are final before continuing.\n\n"+
+                "End Week 1?"
+            );
+
+        if(!confirmed)
+            return false;
+    }
+
 
     const average=
         goals.reduce(
@@ -3950,17 +3783,55 @@ function saveWeek(
             ).style.display!=="none"
     };
 
+
+    const candidateWeeks=
+        [...weeks];
+
     if(existingIndex>=0){
 
-        weeks[existingIndex]=
+        candidateWeeks[existingIndex]=
             weekData;
 
     }else{
 
-        weeks.push(
+        candidateWeeks.push(
             weekData
         );
     }
+
+
+    /*
+        Extra protection for editing saved weeks.
+        The entire period must remain logically
+        non-decreasing.
+    */
+    const periodCheck=
+        validateEntirePeriodProgress(
+            candidateWeeks
+        );
+
+    if(!periodCheck.valid){
+
+        alert(
+            "Changes cannot be saved.\n\n"+
+            "They would make progress decrease between saved weeks.\n\n"+
+            "Week "+
+            periodCheck.currentWeek+
+            " — "+
+            periodCheck.goal+
+            ": "+
+            periodCheck.previous+
+            "% → "+
+            periodCheck.current+
+            "%\n\n"+
+            "The current value must be greater than or equal to the previous week's value."
+        );
+
+        return false;
+    }
+
+
+    weeks=candidateWeeks;
 
     weeks.sort(
         (a,b)=>
@@ -4282,7 +4153,7 @@ function renderHistory(){
                         </button>
 
                         <button
-                            class="secondary-button"
+                            class="secondary-button edit-week-button"
                             onclick="
                                 editSavedWeek(
                                     ${originalIndex}
@@ -4421,12 +4292,6 @@ function importData(event){
                 let importedWeeks=[];
                 let importedTotalWeeks=0;
                 let importedArchives=[];
-
-                /*
-                    Supports both:
-                    - new version 5 backups
-                    - old version 4 backups
-                */
 
                 if(
                     data.currentPeriod &&
@@ -4716,6 +4581,23 @@ function importData(event){
                     :
                     [];
 
+
+                const periodCheck=
+                    validateEntirePeriodProgress(
+                        validatedWeeks
+                    );
+
+                if(!periodCheck.valid){
+
+                    throw new Error(
+                        "The backup contains a decrease in goal progress between Week "+
+                        periodCheck.currentWeek+
+                        " and the previous week for "+
+                        periodCheck.goal+"."
+                    );
+                }
+
+
                 if(
                     !confirm(
                         "Importing will replace the current saved period and archived periods. Continue?"
@@ -4748,7 +4630,6 @@ function importData(event){
                     totalWeeks;
 
                 renderHistory();
-                calculateAccumulatedDamage();
                 drawImproveCompareChart();
                 updateHomeScreen();
                 updateWeekIndicator();
@@ -4798,6 +4679,35 @@ document.getElementById(
         value=Math.round(value);
         value=Math.max(1,value);
 
+        /*
+            Never allow the tracking period to become
+            shorter than a week that has already been
+            saved.
+        */
+        const highestSavedWeek=
+            weeks.length===0
+            ?
+            0
+            :
+            Math.max(
+                ...weeks.map(
+                    w=>
+                        Number(
+                            w.weekNumber
+                        )||0
+                )
+            );
+
+        if(value<highestSavedWeek){
+
+            value=
+                highestSavedWeek;
+
+            alert(
+                "Total weeks cannot be lower than a week that has already been saved."
+            );
+        }
+
         this.value=value;
         totalWeeks=value;
 
@@ -4832,6 +4742,7 @@ document.getElementById(
 
         weekInput.value=week;
 
+        renderGoalLockState();
         updateWeekIndicator();
         calculate();
     }
@@ -4865,6 +4776,7 @@ document.getElementById(
 
         this.value=value;
 
+        renderGoalLockState();
         updateWeekIndicator();
         calculate();
     }
